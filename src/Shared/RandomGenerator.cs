@@ -11,7 +11,7 @@ namespace Meshmakers.Common.Shared;
 // ReSharper disable once UnusedType.Global
 public static class RandomGenerator
 {
-    private static readonly RandomNumberGenerator Rng = new RNGCryptoServiceProvider();
+    private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
     private static readonly object Locker = new();
 
     /// <summary>
