@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SignAssembly>false</SignAssembly>
+        <RootNamespace>Meshmakers.Common.Shared</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>Meshmakers.Common.Shared</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <LangVersion>latestmajor</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0"/>
+        <PackageReference Include="System.Composition.TypedParts" Version="6.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>LICENSE</Link>
+        </None>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>meshmakers64.png</Link>
+        </None>
+    </ItemGroup>
+
+</Project>

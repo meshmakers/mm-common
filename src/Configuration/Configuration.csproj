@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SignAssembly>false</SignAssembly>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RootNamespace>Meshmakers.Common.Configuration</RootNamespace>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageId>Meshmakers.Common.Configuration</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <LangVersion>latestmajor</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="System.IO.Abstractions" Version="17.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>LICENSE</Link>
+        </None>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>meshmakers64.png</Link>
+        </None>
+    </ItemGroup>
+
+</Project>

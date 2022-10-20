@@ -1,0 +1,73 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- master
+
+name: $(MajorVersion).$(MinorVersion).$(date:yyMM).$(DayOfMonth)$(rev:rrr)
+
+pool:
+  name: Gerald-Local-Linux
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  Company: "meshmakers GmbH"
+  Copyright: "(c) meshmakers GmbH 2022"
+
+steps:
+- task: Assembly-Info-NetCore@2
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **/*.csproj
+      !**Tests/*
+    InsertAttributes: true
+    FileEncoding: 'auto'
+    GeneratePackageOnBuild: true
+    WriteBOM: false
+    Authors: 'Gerald Lochner'
+    Company: '$(Company)'
+    Product: '$(Build.SourceBranchName) - $(Build.SourceVersion) (release)'
+    Copyright: '$(Copyright)'
+    VersionNumber: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
+    InformationalVersion: '$(Build.BuildNumber)'
+    PackageVersion: '$(Build.BuildNumber)'
+    LogLevel: 'verbose'
+    FailOnWarning: true
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)' 
+    projects: '$(solution)'
+- task: DotNetCoreCLI@2
+  displayName: Tests
+  inputs:
+    command: 'test'
+    arguments: '--configuration $(buildConfiguration)' 
+    projects: '$(solution)'
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+      **/bin/$(buildConfiguration)/**
+      **/bin/$(buildConfiguration)/*.nupkg
+      !**Tests/**
+      !.git/**/*
+    TargetFolder: $(build.artifactstagingdirectory)
+- task: DotNetCoreCLI@2
+  displayName: Push Nuget Package
+  inputs:
+    command: custom
+    custom: nuget
+    arguments: >
+      push $(Build.ArtifactStagingDirectory)/**/*.nupkg
+      -s https://api.nuget.org/v3/index.json
+      -k $(NuGetApiKey) 

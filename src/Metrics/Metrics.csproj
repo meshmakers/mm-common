@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>Meshmakers.Common.Metrics</PackageId>
+        <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
+        <LangVersion>latestmajor</LangVersion>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <TargetFramework>net6.0</TargetFramework>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="MetricsTests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="prometheus-net" Version="7.0.0-pre-000305-75cc817"/>
+        <PackageReference Include="prometheus-net.AspNetCore" Version="7.0.0-pre-000305-75cc817"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>LICENSE</Link>
+        </None>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath/>
+            <Link>meshmakers64.png</Link>
+        </None>
+    </ItemGroup>
+
+</Project>
