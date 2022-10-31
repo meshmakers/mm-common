@@ -25,8 +25,7 @@ public class DateTimeExtensionTests
     {
         Assert.Equal(DateTime.MaxValue, DateTime.MaxValue.ToUtc());
     }
-    
-    [Fact]
+
     public void ToUtc_Utc_OK()
     {
         Assert.Equal(_testDateTime, _testDateTime.ToUtc());
