@@ -1,24 +1,22 @@
 ﻿using System;
 using Meshmakers.Common.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Meshmakers.Common.SharedTests;
 
-[TestClass]
 public class ArgumentValidationTests
 {
     private const string TestArgument = "test";
 
-    [TestMethod]
+    [Fact]
     public void ValidateTyped_OK()
     {
         ArgumentValidation.Validate<int>(TestArgument, 5);
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [Fact]
     public void ValidateTyped_Fail()
     {
-        ArgumentValidation.Validate<int>(TestArgument, "string");
+        Assert.Throws<ArgumentOutOfRangeException>(() => ArgumentValidation.Validate<int>(TestArgument, "string"));
     }
 }
