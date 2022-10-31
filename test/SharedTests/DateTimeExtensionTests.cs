@@ -30,7 +30,7 @@ public class DateTimeExtensionTests
     [Fact]
     public void ToUtc_Local_OK()
     {
-        Assert.Equal(new DateTime(2022, 12, 31, 22,59,59,999, DateTimeKind.Utc), _TestDateTimeLocal.ToUtc());
+        Assert.Equal(new DateTime(2022, 12, 31, 22,59,59,999, DateTimeKind.Local), _TestDateTimeLocal.ToUtc());
     }
     
     [Fact]
