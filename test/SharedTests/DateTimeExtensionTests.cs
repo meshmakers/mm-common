@@ -13,7 +13,6 @@ public class DateTimeExtensionTests
     private readonly DateTime _epocDateTime = new(1970, 1, 1, 0, 0, 0, millisecond: 0, DateTimeKind.Utc);
     private readonly DateTime _maxDateTimeWithoutMilliSeconds = new(9999, 12, 31, 23, 59, 59, millisecond: 0, DateTimeKind.Utc);
     private readonly DateTime _maxDateTimeWithoutTicks = new(9999, 12, 31, 23, 59, 59, millisecond: 999, DateTimeKind.Utc);
-    private readonly DateTime _TestDateTimeLocal = new(2022, 12, 31, 23, 59, 59, millisecond: 999, DateTimeKind.Local);
     
     [Fact]
     public void ToUtc_MinValue_OK()
@@ -25,12 +24,6 @@ public class DateTimeExtensionTests
     public void ToUtc_MaxValue_OK()
     {
         Assert.Equal(DateTime.MaxValue, DateTime.MaxValue.ToUtc());
-    }
-    
-    [Fact]
-    public void ToUtc_Local_OK()
-    {
-        Assert.Equal(new DateTime(2022, 12, 31, 22,59,59,999, DateTimeKind.Utc), _TestDateTimeLocal.ToUtc());
     }
     
     [Fact]
