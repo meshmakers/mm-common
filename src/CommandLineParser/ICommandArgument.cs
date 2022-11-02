@@ -4,9 +4,9 @@ namespace Meshmakers.Common.CommandLineParser;
 
 public interface ICommandArgument : IArgument
 {
-    IEnumerable<CommandArgumentValue> CommandValues { get; }
+    IEnumerable<ICommandArgumentValue> CommandValues { get; }
 
-    ICommandArgumentValue AddCommandValue(string commandValue, string commandDescription);
+    void AddCommandValue(ICommandArgumentValue commandArgumentValue);
 
     bool TryGetCommandValue(string value, out ICommandArgumentValue? commandArgumentValue);
 }

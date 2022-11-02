@@ -5,28 +5,30 @@ namespace Meshmakers.Common.CommandLineParser;
 
 internal class CommandArgument : Argument, ICommandArgument
 {
-    private readonly Dictionary<string, CommandArgumentValue> _commandArgumentValues;
+    private readonly Dictionary<string, ICommandArgumentValue> _commandArgumentValues;
 
     internal CommandArgument(string shortTerm, string longTerm, string[] description, bool isMandatoryArgument)
         : base(shortTerm, longTerm, description, isMandatoryArgument, 1, false)
     {
-        _commandArgumentValues = new Dictionary<string, CommandArgumentValue>();
+        _commandArgumentValues = new Dictionary<string, ICommandArgumentValue>();
     }
 
-    public IEnumerable<CommandArgumentValue> CommandValues => _commandArgumentValues.Values;
+    public IEnumerable<ICommandArgumentValue> CommandValues => _commandArgumentValues.Values;
 
-    public ICommandArgumentValue AddCommandValue(string commandValue, string commandDescription)
+    public void AddCommandValue(ICommandArgumentValue commandArgumentValue)
     {
-        var commandArgumentValue = new CommandArgumentValue(commandValue, commandDescription);
-        _commandArgumentValues.Add(commandValue, commandArgumentValue);
-        return commandArgumentValue;
+        if (_commandArgumentValues.ContainsKey(commandArgumentValue.Value))
+            throw new InvalidParameterException(
+                $"Command value ‘{commandArgumentValue.Value}' already defined.");
+
+        _commandArgumentValues.Add(commandArgumentValue.Value, commandArgumentValue);
     }
 
     public bool TryGetCommandValue(string value, out ICommandArgumentValue? commandArgumentValue)
     {
         commandArgumentValue = null;
 
-        foreach (ICommandArgumentValue argumentValue in _commandArgumentValues.Values)
+        foreach (var argumentValue in _commandArgumentValues.Values)
             if (argumentValue.Compare(value))
             {
                 commandArgumentValue = argumentValue;
@@ -46,8 +48,8 @@ internal class CommandArgument : Argument, ICommandArgument
 
         foreach (var argumentValue in _commandArgumentValues.Values)
         {
-            consoleService.WriteColumnLine($"{prefix}{argumentValue.CommandValue}:", Constants.UsageNameLength,
-                argumentValue.CommandDescription);
+            consoleService.WriteColumnLine($"{prefix}{argumentValue.Value}:", Constants.UsageNameLength,
+                argumentValue.Description);
 
             argumentValue.ShowLayerUsage(newEmptySpacesOnStartCount + Constants.TabCount, consoleService);
             consoleService.WriteLine("");

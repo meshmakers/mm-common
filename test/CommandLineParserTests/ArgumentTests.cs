@@ -1,70 +1,69 @@
 ﻿using Meshmakers.Common.CommandLineParser;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Meshmakers.Common.CommandLineParserTests;
 
-[TestClass]
 public class ArgumentTests
 {
-    [TestMethod]
+    [Fact]
     public void Creation_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 67, true);
-        Assert.AreEqual("a", argDefinition.ShortTerm);
-        Assert.AreEqual("longterm", argDefinition.LongTerm);
-        Assert.AreEqual(67, argDefinition.MandatoryValuesCount);
-        Assert.AreEqual(true, argDefinition.AreOptionalValuesAllowed);
-        Assert.AreEqual(1, argDefinition.Description.Length);
-        Assert.AreEqual("description", argDefinition.Description[0]);
+        Assert.Equal("a", argDefinition.ShortTerm);
+        Assert.Equal("longterm", argDefinition.LongTerm);
+        Assert.Equal(67, argDefinition.MandatoryValuesCount);
+        Assert.True(argDefinition.AreOptionalValuesAllowed);
+        Assert.Single(argDefinition.Description);
+        Assert.Equal("description", argDefinition.Description[0]);
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_UnknownSign_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsFalse(argDefinition.Compare("%a"));
+        Assert.False(argDefinition.Compare("%a"));
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_ShortTerm_Match_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsTrue(argDefinition.Compare("-a"));
+        Assert.True(argDefinition.Compare("-a"));
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_ShortTerm_DoesNotMatch_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsFalse(argDefinition.Compare("-b"));
+        Assert.False(argDefinition.Compare("-b"));
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_LongTerm_Match_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsTrue(argDefinition.Compare("--longterm"));
+        Assert.True(argDefinition.Compare("--longterm"));
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_LongTerm_DoesNotMatch_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsFalse(argDefinition.Compare("--unknown"));
+        Assert.False(argDefinition.Compare("--unknown"));
     }
 
 
-    [TestMethod]
+    [Fact]
     public void Compare_LongTerm_Slash_Match_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsTrue(argDefinition.Compare("/longterm"));
+        Assert.True(argDefinition.Compare("/longterm"));
     }
 
-    [TestMethod]
+    [Fact]
     public void Compare_LongTerm_Slash_DoesNotMatch_OK()
     {
         var argDefinition = new Argument("a", "longterm", new[] { "description" }, true, 0, true);
-        Assert.IsFalse(argDefinition.Compare("/unknown"));
+        Assert.False(argDefinition.Compare("/unknown"));
     }
 }
