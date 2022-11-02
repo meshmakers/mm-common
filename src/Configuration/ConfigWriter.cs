@@ -53,7 +53,10 @@ public class ConfigWriter : IConfigWriter
 
         //write string to file
         if (!_fileSystem.Directory.Exists(directoryPath))
+        {
             _fileSystem.Directory.CreateDirectory(directoryPath);
+        }
+
         _fileSystem.File.WriteAllText(filePath, json);
     }
 }

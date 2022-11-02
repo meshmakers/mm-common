@@ -15,7 +15,10 @@ public static class DateTimeExtensions
     public static DateTime ToUniversalTime(this DateTime dateTime)
     {
         if (dateTime == DateTime.MinValue)
+        {
             return DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+        }
+
         return dateTime == DateTime.MaxValue
             ? DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc)
             : dateTime.ToUniversalTime();

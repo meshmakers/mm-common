@@ -74,7 +74,9 @@ public class TaskEngine : INotifyPropertyChanged
         WaitHandle.WaitAll(lstHandles.ToArray());
 
         if (IsCanceling)
+        {
             IsCanceled = true;
+        }
 
         HasWarnings = _taskList.Keys.Any(x => x.HasWarnings);
         HasErrors = _taskList.Values.Any(x => x.HasError);
@@ -225,9 +227,14 @@ public class TaskEngine : INotifyPropertyChanged
     public void AddAncestorOfTask(TaskBase ancestorTask, TaskBase dependentTask)
     {
         if (!_taskList.ContainsKey(ancestorTask))
+        {
             throw new InvalidOperationException("Ancestor task hasn't been added to the task list");
+        }
+
         if (!_taskList.ContainsKey(dependentTask))
+        {
             throw new InvalidOperationException("Dependent task hasn't been added to the task list");
+        }
 
         _taskList[dependentTask].AddAncestor(ancestorTask);
     }
@@ -255,7 +262,10 @@ public class TaskEngine : INotifyPropertyChanged
     {
         IsCanceling = true;
 
-        foreach (var task in _taskList.Keys) task.SetTermination();
+        foreach (var task in _taskList.Keys)
+        {
+            task.SetTermination();
+        }
     }
 
     /// <summary>
@@ -272,7 +282,9 @@ public class TaskEngine : INotifyPropertyChanged
             foreach (var executionController in taskExecutionControllers)
             {
                 if (executionController.Exception == null)
+                {
                     continue;
+                }
 
                 message += executionController.Exception.ToString();
                 message += Environment.NewLine;

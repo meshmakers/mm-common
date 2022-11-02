@@ -53,7 +53,10 @@ public class RuntimeResult
     {
         var cpr = _checkpointResults.Find(cpr => cpr.Name.Equals(checkpointName));
         if (cpr == null)
+        {
             throw new MeasurementException($"There is no checkpoint with the name '{checkpointName}'");
+        }
+
         return cpr.MinOfTotalInMs;
     }
 
@@ -61,7 +64,10 @@ public class RuntimeResult
     {
         var cpr = _checkpointResults.Find(cpr => cpr.Name.Equals(checkpointName));
         if (cpr == null)
+        {
             throw new MeasurementException($"There is no checkpoint with the name '{checkpointName}'");
+        }
+
         return cpr.MaxOfTotalInMs;
     }
 
@@ -69,7 +75,10 @@ public class RuntimeResult
     {
         var cpr = _checkpointResults.Find(cpr => cpr.Name.Equals(checkpointName));
         if (cpr == null)
+        {
             throw new MeasurementException($"There is no checkpoint with the name '{checkpointName}'");
+        }
+
         return cpr.AvgOfTotalInMs;
     }
 
@@ -80,7 +89,10 @@ public class RuntimeResult
         {
             var name = cpr.Name;
             if (name.Equals(Checkpoint.StartName) || name.Equals(Checkpoint.StopName))
+            {
                 return;
+            }
+
             checkpoints.Add(cpr);
         });
         return checkpoints;
@@ -95,7 +107,10 @@ public class RuntimeResult
     {
         var final = _checkpointResults.Find(cpr => cpr.Name.Equals(Checkpoint.StopName));
         if (final == null)
+        {
             throw new MeasurementException("There is no data available");
+        }
+
         return final;
     }
 
@@ -103,7 +118,10 @@ public class RuntimeResult
     {
         var cpr = _checkpointResults.MinBy(cpr => cpr.FirstStart);
         if (cpr == null)
+        {
             throw new MeasurementException("There is no data available");
+        }
+
         return cpr.FirstStart;
     }
 
@@ -111,7 +129,10 @@ public class RuntimeResult
     {
         var cpr = _checkpointResults.MaxBy(cpr => cpr.LastStop);
         if (cpr == null)
+        {
             throw new MeasurementException("There is no data available");
+        }
+
         return cpr.LastStop;
     }
 

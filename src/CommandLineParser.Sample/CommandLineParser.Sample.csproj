@@ -1,43 +1,43 @@
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup >
-        <OutputType >Exe</OutputType >
-        <TargetFramework >net6.0</TargetFramework >
-        <ImplicitUsings >enable</ImplicitUsings >
-        <Nullable >enable</Nullable >
-    </PropertyGroup >
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-    <ItemGroup >
+    <ItemGroup>
         <ProjectReference Include="..\CommandLineParser\CommandLineParser.csproj" />
-    </ItemGroup >
+    </ItemGroup>
 
-    <ItemGroup >
+    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
         <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
-    </ItemGroup >
+    </ItemGroup>
 
-    <ItemGroup >
-        <EmbeddedResource Update="Texts.resx" >
-            <Generator >ResXFileCodeGenerator</Generator >
-            <LastGenOutput >Texts.Designer.cs</LastGenOutput >
-        </EmbeddedResource >
-    </ItemGroup >
+    <ItemGroup>
+        <EmbeddedResource Update="Texts.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Texts.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
 
-    <ItemGroup >
-        <Compile Update="Texts.Designer.cs" >
-            <DesignTime >True</DesignTime >
-            <AutoGen >True</AutoGen >
-            <DependentUpon >Texts.resx</DependentUpon >
-        </Compile >
-    </ItemGroup >
+    <ItemGroup>
+        <Compile Update="Texts.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Texts.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-    <ItemGroup >
-        <None Update="nlog.config" >
-            <CopyToOutputDirectory >PreserveNewest</CopyToOutputDirectory >
-        </None >
-    </ItemGroup >
+    <ItemGroup>
+        <None Update="nlog.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-</Project >
+</Project>

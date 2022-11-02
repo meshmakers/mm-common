@@ -24,9 +24,15 @@ public abstract class BaseMeter : IDisposable
     private void Dispose(bool disposing)
     {
         if (Disposed)
+        {
             return;
+        }
+
         if (disposing)
+        {
             DisposingExplicit();
+        }
+
         Disposed = true;
     }
 

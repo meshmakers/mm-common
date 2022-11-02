@@ -23,10 +23,14 @@ public static class RandomGenerator
     public static int NextRandom(int minValue, int maxValue)
     {
         if (minValue > maxValue)
+        {
             throw new ArgumentOutOfRangeException(nameof(minValue));
+        }
 
         if (minValue == maxValue)
+        {
             return minValue;
+        }
 
         lock (Locker)
         {

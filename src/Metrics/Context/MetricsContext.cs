@@ -86,7 +86,10 @@ public class MetricsContext : IMetricsContext
         while (_publishActive)
         {
             foreach (var runtimeResult in _runtimeDataCollection.PopResults())
+            {
                 _runtimePublisher?.Publish(runtimeResult);
+            }
+
             Thread.Sleep(_activePublisherIntervalMs);
         }
     }

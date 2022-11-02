@@ -26,8 +26,12 @@ internal class PrometheusMeasurement
     public void Set(double value, string[]? details = null)
     {
         if (details is null)
+        {
             _measurement.Set(value);
+        }
         else
+        {
             _measurement.WithLabels(details).Set(value);
+        }
     }
 }
