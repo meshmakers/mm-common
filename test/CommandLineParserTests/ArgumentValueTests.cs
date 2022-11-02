@@ -134,7 +134,7 @@ public class ArgumentValueTests
         commandLineValue.AddValue("testUnitTestValue2");
         commandLineValue.AddValue("testUnitTestValue3");
         commandLineValue.AddValue("testUnitTestValue4");
-        
+
         Assert.Throws<FormatException>(() => commandLineValue.GetValue(1, true));
     }
 }

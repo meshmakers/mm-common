@@ -91,15 +91,23 @@ internal class ArgumentValue : IArgumentValue
     private T GetValue<T>(int index, Func<T> notFoundFunction)
     {
         if (Values.Count <= index)
+        {
             return notFoundFunction();
+        }
 
         var converter = TypeDescriptor.GetConverter(typeof(T));
         var value = Values[index];
         if (value == null)
+        {
             throw new ParserException("Unable to convert value");
+        }
+
         var result = converter.ConvertFromString(value);
         if (result == null)
+        {
             throw new ParserException("Unable to convert value");
+        }
+
         return (T)result;
     }
 }

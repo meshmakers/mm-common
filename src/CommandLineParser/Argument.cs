@@ -74,16 +74,29 @@ internal class Argument : IArgument
 
         // check long term
         if (value.StartsWith("--"))
+        {
             if (string.Compare(LongTerm, 0, value, 2, Math.Max(value.Length - 2, ShortTerm.Length), true) == 0)
+            {
                 return true;
+            }
+        }
+
         if (value.StartsWith("/"))
+        {
             if (string.Compare(LongTerm, 0, value, 1, Math.Max(value.Length - 1, ShortTerm.Length), true) == 0)
+            {
                 return true;
+            }
+        }
 
         // check short term
         if (value.StartsWith("-"))
+        {
             if (string.Compare(ShortTerm, 0, value, 1, Math.Max(value.Length - 1, ShortTerm.Length), true) == 0)
+            {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -97,6 +110,8 @@ internal class Argument : IArgument
             $"{usageType}{Description[0]}");
 
         foreach (var description in Description.Skip(1))
+        {
             consoleService.WriteColumnLine("", Constants.UsageNameLength, description);
+        }
     }
 }

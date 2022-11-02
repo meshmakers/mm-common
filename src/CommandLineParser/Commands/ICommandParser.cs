@@ -15,5 +15,5 @@ public interface ICommandParser
     ///     Parses command line parameters and validates them
     /// </summary>
     /// <returns></returns>
-    Task ParseAndValidateAsync();
+    Task ParseAndExecuteAsync();
 }

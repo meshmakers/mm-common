@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var logger = LogManager.GetCurrentClassLogger();
 
@@ -35,24 +36,24 @@ finally
 static IServiceProvider BuildDi()
 {
     var services = new ServiceCollection();
-    
+
     var config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddJsonFile("appsettings.json", true, true)
         .AddJsonFile(
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 $".{Constants.SettingsFolderName}{Path.DirectorySeparatorChar}settings.json"),
-            optional: true, reloadOnChange: true)
+            true, true)
         .Build();
-    
+
     // configure Logging with NLog
     services.AddLogging(loggingBuilder =>
     {
         loggingBuilder.ClearProviders();
-        loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+        loggingBuilder.SetMinimumLevel(LogLevel.Trace);
         loggingBuilder.AddNLog(config);
     });
-    
+
     // The program sequence executor
     services.AddTransient<Runner>();
 
@@ -60,8 +61,8 @@ static IServiceProvider BuildDi()
     services.AddSingleton<IConsoleService, ConsoleService>();
     services.AddSingleton<IEnvironmentService, EnvironmentService>();
     services.AddSingleton<IParserService, ParserService>();
-    services.AddSingleton<ICommandParser, CommandParser<SampleOptions>>();
-    
+    services.AddSingleton<ICommandParser, CommandParser>();
+
     // Add commands
     services.AddTransient<ICommand, ExecuteCommand>();
     services.AddTransient<ICommand, PostCommand>();

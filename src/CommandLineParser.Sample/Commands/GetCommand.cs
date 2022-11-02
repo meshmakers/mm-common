@@ -13,11 +13,11 @@ public class ExecuteCommand : Command<SampleOptions>
 
     public ExecuteCommand(ILogger<ExecuteCommand> logger,
         IConsoleService consoleService,
-        IOptions<SampleOptions> options) 
+        IOptions<SampleOptions> options)
         : base(logger, "get", "Gets content from a given URI", options)
     {
         _consoleService = consoleService;
-        _uri = CommandArgumentValue.AddArgument("u", "uri", new[] {"URI to call"},
+        _uri = CommandArgumentValue.AddArgument("u", "uri", new[] { "URI to call" },
             true, 1);
     }
 
@@ -33,7 +33,7 @@ public class ExecuteCommand : Command<SampleOptions>
     {
         var uriArgData = CommandArgumentValue.GetArgumentValue(_uri);
         var uri = uriArgData.GetValue<string>();
-        
+
         Logger.LogInformation("Getting uri '{Uri}'", uri);
 
         var cli = new HttpClient();

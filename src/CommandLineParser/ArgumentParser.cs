@@ -177,20 +177,25 @@ public class ArgumentParser : IArgumentParser
     public IArgumentValue GetArgumentValue(IArgument argDefinition)
     {
         if (_argumentValues.ContainsKey(argDefinition.LongTerm))
+        {
             return _argumentValues[argDefinition.LongTerm];
+        }
 
         throw new UnknownArgumentException($"Argument '{argDefinition.LongTerm}' is not defined.");
     }
 
     public void ShowLayerUsage(int emptySpacesOnStartCount, IConsoleService consoleService)
     {
-        foreach (var argument in _arguments.Values) argument.ShowUsage(emptySpacesOnStartCount, consoleService);
+        foreach (var argument in _arguments.Values)
+        {
+            argument.ShowUsage(emptySpacesOnStartCount, consoleService);
+        }
     }
 
     /// <summary>
     ///     Parses and validates command line args
     /// </summary>
-    /// <param name="arguments">Value line args as string array</param>
+    /// <param name="arguments">Command line args as string array</param>
     /// <exception cref="InvalidParameterException">
     ///     Thrown, if an argument has been found that is not defined by an argument
     ///     definition.
@@ -221,10 +226,14 @@ public class ArgumentParser : IArgumentParser
             var str = commandLineArguments.Dequeue();
 
             if (string.IsNullOrEmpty(str))
+            {
                 continue;
+            }
 
             if (argumentValue != null)
+            {
                 previousArgumentValue = argumentValue;
+            }
 
             // Is an argument?
             var bFound = TryAddArgumentValue(str, out argumentValue);
@@ -240,22 +249,32 @@ public class ArgumentParser : IArgumentParser
             if (!bFound &&
                 previousArgumentValue != null &&
                 previousArgumentValue.Argument?.MandatoryValuesCount > previousArgumentValue.Values.Count)
+            {
                 previousArgumentValue.AddValue(str);
+            }
             else if (!bFound &&
                      previousArgumentValue != null &&
                      previousArgumentValue.Argument?.AreOptionalValuesAllowed == true)
+            {
                 previousArgumentValue.AddValue(str);
+            }
             else if (!bFound)
+            {
                 throw new InvalidParameterException($"{str} is an unknown parameter");
+            }
 
             if (!bFound && previousArgumentValue?.Argument is ICommandArgument commandArgument)
             {
                 if (commandArgument.TryGetCommandValue(str, out var commandArgumentValue) &&
                     commandArgumentValue != null)
+                {
                     commandLineArguments = new Queue<string>(commandArgumentValue.ParseLayer(commandLineArguments));
+                }
                 else
+                {
                     throw new InvalidParameterException(
                         $"{str} is an unknown command value for argument --'{previousArgumentValue.Argument.LongTerm}'");
+                }
             }
         } while (commandLineArguments.Count > 0);
 
@@ -278,6 +297,7 @@ public class ArgumentParser : IArgumentParser
         argumentValue = null;
 
         foreach (var argument in _arguments.Values)
+        {
             if (argument.Compare(term))
             {
                 _argumentValues.TryGetValue(argument.LongTerm, out argumentValue);
@@ -289,6 +309,7 @@ public class ArgumentParser : IArgumentParser
 
                 return true;
             }
+        }
 
         return false;
     }
@@ -296,10 +317,14 @@ public class ArgumentParser : IArgumentParser
     private void ValidateArgumentValues()
     {
         foreach (var commandLineValueIt in _argumentValues.Values)
+        {
             if (commandLineValueIt.Argument.MandatoryValuesCount > commandLineValueIt.Values.Count)
+            {
                 throw new ArgumentValueMissingException(
                     $"{commandLineValueIt.Argument.LongTerm} is missing mandatory argument values. " +
                     $"Expect count of argument value are '{commandLineValueIt.Argument.MandatoryValuesCount}', passed argument value count was '{commandLineValueIt.Values.Count}'.");
+            }
+        }
     }
 
     private void ValidateMandatoryArguments()
@@ -315,7 +340,9 @@ public class ArgumentParser : IArgumentParser
             {
                 message += $"--{argDefinition.LongTerm} (-{argDefinition.ShortTerm})";
                 if (!string.IsNullOrEmpty(message))
+                {
                     message += Environment.NewLine;
+                }
             }
 
             throw new MandatoryArgumentsMissingException(message);
