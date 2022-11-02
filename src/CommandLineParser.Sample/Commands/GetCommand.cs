@@ -1,5 +1,6 @@
 using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
+using Meshmakers.Common.Shared.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -7,12 +8,15 @@ namespace CommandLineParser.Sample.Commands;
 
 public class ExecuteCommand : Command<SampleOptions>
 {
+    private readonly IConsoleService _consoleService;
     private readonly IArgument _uri;
 
     public ExecuteCommand(ILogger<ExecuteCommand> logger,
+        IConsoleService consoleService,
         IOptions<SampleOptions> options) 
         : base(logger, "get", "Gets content from a given URI", options)
     {
+        _consoleService = consoleService;
         _uri = CommandArgumentValue.AddArgument("u", "uri", new[] {"URI to call"},
             true, 1);
     }
@@ -35,6 +39,8 @@ public class ExecuteCommand : Command<SampleOptions>
         var cli = new HttpClient();
         var response = await cli.GetAsync(uri);
 
-        Logger.LogInformation("{Result}", await response.Content.ReadAsStringAsync());
+        var result = await response.Content.ReadAsStringAsync();
+        Logger.LogInformation("{Result}", result);
+        _consoleService.WriteLine(result);
     }
 }
