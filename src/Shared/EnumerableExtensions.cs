@@ -18,16 +18,27 @@ public static class EnumerableExtensions
 
         // Get start/end indexes, negative numbers start at the end of the collection.
         if (start < 0)
+        {
             start += count;
+        }
+
         if (end < 0)
+        {
             end += count;
+        }
 
         foreach (var item in list)
         {
             if (index >= end)
+            {
                 yield break;
+            }
+
             if (index >= start)
+            {
                 yield return item;
+            }
+
             ++index;
         }
     }

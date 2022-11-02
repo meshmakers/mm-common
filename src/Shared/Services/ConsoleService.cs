@@ -19,7 +19,9 @@ public class ConsoleService : IConsoleService
         try
         {
             if (Console.WindowWidth > _maxLineLength)
+            {
                 _maxLineLength = Console.WindowWidth;
+            }
         }
         catch (IOException)
         {
@@ -95,8 +97,11 @@ public class ConsoleService : IConsoleService
         ArgumentValidation.ValidateInt(nameof(column1Length), column1Length, 1);
 
         if (column1Text.Length >= column1Length)
+        {
             throw new Exception(
                 $"Fatal programming error: The text'{column1Text}' is longer than the defined column length '{column1Length}'!");
+        }
+
         var fullName = column1Text.PadRight(column1Length);
 
         WriteLineRegardSpace($"{fullName}{column2Text}", fragment => $"{"".PadRight(column1Length)}{fragment}");

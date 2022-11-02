@@ -31,7 +31,10 @@ public class CheckpointResult
         get
         {
             if (Calls == 0)
+            {
                 throw new MeasurementException("There is no data available");
+            }
+
             return _firstStart;
         }
     }
@@ -41,7 +44,10 @@ public class CheckpointResult
         get
         {
             if (Calls == 0)
+            {
                 throw new MeasurementException("There is no data available");
+            }
+
             return _lastStop;
         }
     }
@@ -49,7 +55,10 @@ public class CheckpointResult
     internal void Add(Checkpoint checkpoint)
     {
         if (!Name.Equals(checkpoint.Name))
+        {
             throw new MeasurementException($"The data does not fit (Expected: '{Name}', Given: '{checkpoint.Name}')");
+        }
+
         CalcMinOfDelta(checkpoint);
         CalcMaxOfDelta(checkpoint);
         CalcAvgOfDelta(checkpoint);
@@ -64,28 +73,40 @@ public class CheckpointResult
     private void CalcMinOfDelta(Checkpoint checkpoint)
     {
         if (Calls > 0 && checkpoint.DeltaMilliseconds >= MinOfDeltaInMs)
+        {
             return;
+        }
+
         MinOfDeltaInMs = checkpoint.DeltaMilliseconds;
     }
 
     private void CalcMaxOfDelta(Checkpoint checkpoint)
     {
         if (checkpoint.DeltaMilliseconds <= MaxOfDeltaInMs)
+        {
             return;
+        }
+
         MaxOfDeltaInMs = checkpoint.DeltaMilliseconds;
     }
 
     private void CalcMinOfTotal(Checkpoint checkpoint)
     {
         if (Calls > 0 && checkpoint.TotalMilliseconds >= MinOfTotalInMs)
+        {
             return;
+        }
+
         MinOfTotalInMs = checkpoint.TotalMilliseconds;
     }
 
     private void CalcMaxOfTotal(Checkpoint checkpoint)
     {
         if (checkpoint.TotalMilliseconds <= MaxOfTotalInMs)
+        {
             return;
+        }
+
         MaxOfTotalInMs = checkpoint.TotalMilliseconds;
     }
 
@@ -102,21 +123,30 @@ public class CheckpointResult
     private void SetFirstStart(Checkpoint checkpoint)
     {
         if (Calls > 0 && _firstStart <= checkpoint.CreationDateTime)
+        {
             return;
+        }
+
         _firstStart = checkpoint.CreationDateTime;
     }
 
     private void SetLastStop(Checkpoint checkpoint)
     {
         if (Calls > 0 && _lastStop >= checkpoint.CreationDateTime)
+        {
             return;
+        }
+
         _lastStop = checkpoint.CreationDateTime;
     }
 
     private static long CalcAvg(long avg, int count, long newValue)
     {
         if (count == 0)
+        {
             return newValue;
+        }
+
         return (avg * count + newValue) / (count + 1);
     }
 }

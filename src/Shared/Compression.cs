@@ -15,14 +15,18 @@ public static class Compression
         string fileExtension, string targetFile)
     {
         if (contentType.ToLower() != "application/zip")
+        {
             throw new NotSupportedException($"'{contentType}' not a supported content type.");
+        }
 
         using (var zipArchive = new ZipArchive(zipStream))
         {
             var entry = zipArchive.Entries.FirstOrDefault(x =>
                 Path.GetExtension(x.Name).ToLower() == fileExtension.ToLower());
             if (entry == null)
+            {
                 throw new NotSupportedException($"No file extension '{fileExtension}' was found in zip archive.");
+            }
 
             var archiveFileStream = entry.Open();
 

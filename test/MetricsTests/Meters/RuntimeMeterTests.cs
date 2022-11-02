@@ -16,7 +16,9 @@ public class RuntimeMeterTest
 
         RuntimeHelper.Simulate(meter);
         while (checkpoints.Count < 3)
+        {
             await Task.Delay(10);
+        }
 
         Assert.Equal(3, checkpoints.Count);
 
@@ -66,7 +68,10 @@ public class RuntimeMeterTest
         meter.Start();
         meter.Stop();
         while (checkpointsArgs is null)
+        {
             await Task.Delay(10);
+        }
+
         Assert.Equal(RuntimeHelper.DefaultRuntimeName, checkpointsArgs.Name);
         Assert.Equal(2, checkpointsArgs.RuntimeData.GetCheckpoints().Count);
     }

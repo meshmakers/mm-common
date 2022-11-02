@@ -28,7 +28,10 @@ internal class RuntimePublisher
     public void Publish(RuntimeResult result)
     {
         if (!result.IsValid())
+        {
             return;
+        }
+
         PublishCalls(result.Name, result.Runs);
         PublishMethod(result);
         PublishCheckpoints(result);
@@ -43,7 +46,10 @@ internal class RuntimePublisher
     private void PublishMethod(RuntimeResult result)
     {
         if (!Runtimes.TryGetValue(result.Name, out var measurement))
+        {
             measurement = CreateAndAddMethodMeasurement(result.Name);
+        }
+
         measurement.Set(result.GetMinTotalInMs(), new[] { "min" });
         measurement.Set(result.GetMaxTotalInMs(), new[] { "max" });
         measurement.Set(result.GetAverageTotalInMs(), new[] { "avg" });
@@ -52,11 +58,20 @@ internal class RuntimePublisher
     private void PublishCheckpoints(RuntimeResult result)
     {
         if (result.NumCustomCheckpoints == 0)
+        {
             return;
+        }
+
         if (!Checkpoints.TryGetValue(result.Name, out var measurement))
+        {
             measurement = CreateAndAddCheckpointsMeasurement(result.Name);
+        }
+
         foreach (var checkpoint in result.GetCustomCheckpoints())
+        {
             SetCheckpointMeasurements(measurement, checkpoint);
+        }
+
         var stop = result.GetStopCheckpoint();
         SetCheckpointMeasurements(
             measurement,

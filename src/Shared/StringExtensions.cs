@@ -21,7 +21,10 @@ public static class StringExtensions
     public static byte[] ParseHexString(this string s)
     {
         if (!s.TryParseHexString(out var bytes) || bytes == null)
+        {
             throw new FormatException("String should contain only hexadecimal digits.");
+        }
+
         return bytes;
     }
 
@@ -38,7 +41,10 @@ public static class StringExtensions
         if (s.Length % 2 == 1)
         {
             if (!TryParseHexChar(s[num1++], out var num3))
+            {
                 return false;
+            }
+
             numArray[num2++] = (byte)num3;
         }
 
@@ -48,12 +54,18 @@ public static class StringExtensions
             var index1 = num1;
             var num3 = index1 + 1;
             if (!TryParseHexChar(str1[index1], out var num4))
+            {
                 return false;
+            }
+
             var str2 = s;
             var index2 = num3;
             num1 = index2 + 1;
             if (!TryParseHexChar(str2[index2], out var num5))
+            {
                 return false;
+            }
+
             numArray[num2++] = (byte)((num4 << 4) | num5);
         }
 
@@ -64,7 +76,9 @@ public static class StringExtensions
     public static string EnsureEndsWith(this string s, string value)
     {
         if (!s.EndsWith(value))
+        {
             return s + value;
+        }
 
         return s;
     }
@@ -98,7 +112,10 @@ public static class StringExtensions
         var str1 = "";
         var num = 0;
         foreach (var word in ToWords(s))
+        {
             str1 = str1 + (num == 0 ? "" : separator) + composer(word, num++);
+        }
+
         return str1;
     }
 
@@ -111,7 +128,9 @@ public static class StringExtensions
     public static IEnumerable<string> ToWords(this string s)
     {
         foreach (Capture match in ReWords.Matches(s))
+        {
             yield return match.Value;
+        }
     }
 
     private static bool TryParseHexChar(char c, out int value)

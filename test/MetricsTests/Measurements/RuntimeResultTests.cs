@@ -21,7 +21,9 @@ public class RuntimeResultTests
         Assert.Equal(DefaultNumCheckpoints, result.NumCustomCheckpoints);
         Assert.True(result.IsValid());
         for (var cp = 1; cp <= DefaultNumCheckpoints; cp++)
+        {
             Assert.Contains(RuntimeHelper.CheckpointName(cp), result.GetCustomCheckpointNames());
+        }
 
         const int lastCheckpoint = 1;
         const long total = DefaultNumCheckpoints * RuntimeHelper.DefaultDelta + lastCheckpoint;
@@ -102,7 +104,9 @@ public class RuntimeResultTests
     {
         _checkpoints.Clear();
         for (var run = 1; run <= numRuns; run++)
+        {
             await AddCheckpoints(numCustomCheckpoints, delta);
+        }
     }
 
     private async Task AddCheckpoints(int numCustomCheckpoints = DefaultNumCheckpoints,
@@ -110,14 +114,20 @@ public class RuntimeResultTests
     {
         await AddCheckpoint(Checkpoint.StartName, 0, 0);
         for (var cp = 1; cp <= numCustomCheckpoints; cp++)
+        {
             await AddCheckpoint(RuntimeHelper.CheckpointName(cp), delta, delta * cp);
+        }
+
         await AddCheckpoint(Checkpoint.StopName, delta, delta * numCustomCheckpoints + 1);
     }
 
     private async Task AddCheckpoint(string name, int delta, int total)
     {
         if (!name.Equals(Checkpoint.StartName))
+        {
             await Task.Delay(1);
+        }
+
         _checkpoints.Add(new Checkpoint(name, delta, total));
     }
 }

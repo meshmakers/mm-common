@@ -13,12 +13,17 @@ public static class AssemblyExtensions
     {
         var codeBase = assembly.Location;
         if (string.IsNullOrWhiteSpace(codeBase))
+        {
             throw new InvalidOperationException($"Assembly '{assembly.FullName}' has no location.");
+        }
 
         var path = Path.GetDirectoryName(codeBase);
         if (string.IsNullOrWhiteSpace(path))
+        {
             throw new InvalidOperationException($"Assembly '{assembly.FullName}' location '{codeBase}' directory" +
                                                 " cannot be determined.");
+        }
+
         return path;
     }
 }

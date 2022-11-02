@@ -18,7 +18,10 @@ public class RuntimeMeter : BaseMeter
     public void Start()
     {
         if (IsRunning())
+        {
             Stop();
+        }
+
         _totalTime.Reset();
         CreateCheckpoint(Checkpoint.StartName);
         _totalTime.Start();
@@ -27,7 +30,10 @@ public class RuntimeMeter : BaseMeter
     public void SetCheckpoint(string name)
     {
         if (!IsRunning())
+        {
             throw new MeterException("RuntimeMeter has not yet been started");
+        }
+
         _totalTime.Stop();
         CreateCheckpoint(name);
         _totalTime.Start();
@@ -36,7 +42,10 @@ public class RuntimeMeter : BaseMeter
     public void Stop()
     {
         if (!IsRunning())
+        {
             throw new MeterException("RuntimeMeter has not yet been started");
+        }
+
         _totalTime.Stop();
         CreateCheckpoint(Checkpoint.StopName);
         EmitCheckpoints();
@@ -66,6 +75,8 @@ public class RuntimeMeter : BaseMeter
     protected override void DisposingExplicit()
     {
         if (IsRunning())
+        {
             Stop();
+        }
     }
 }

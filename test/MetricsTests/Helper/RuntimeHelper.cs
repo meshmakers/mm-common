@@ -25,7 +25,10 @@ internal static class RuntimeHelper
     {
         var checkpoints = new List<Checkpoint>();
         for (var cp = 0; cp < numCheckpoints; cp++)
+        {
             checkpoints.Add(new Checkpoint(CheckpointName(cp), DefaultDelta, _total(cp)));
+        }
+
         return checkpoints;
     }
 
