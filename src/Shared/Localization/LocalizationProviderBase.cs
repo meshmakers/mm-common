@@ -33,7 +33,9 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
         {
             using var resourceStream = assembly.GetManifestResourceStream(xamlResourceName);
             if (resourceStream != null)
+            {
                 _resourceSet = new ResourceSet(resourceStream);
+            }
         }
     }
 
@@ -78,7 +80,9 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
     public virtual bool TryGet(string keyName, out object? resource)
     {
         if (TryGetProductResources(keyName, out resource))
+        {
             return true;
+        }
 
         if (ResourceExist(keyName))
         {
@@ -99,7 +103,9 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
     public string GetString(string keyName)
     {
         if (TryGet(keyName, out var resource) && resource is string resourceString)
+        {
             return resourceString;
+        }
 
         return keyName;
     }
@@ -117,7 +123,10 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
     protected bool ResourceExist(string key)
     {
         if (_resourceSet == null)
+        {
             return false;
+        }
+
         var resourcePath = string.Format(_resourcePath, key).ToLower();
 
         var resourceExists = _resourceSet.Cast<DictionaryEntry>()
@@ -139,8 +148,11 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
             var resourcePath = $"images/{key}".ToLower();
             var resource = _resourceSet.GetObject(resourcePath);
             if (resource == null)
+            {
                 throw new LocalizationException($"Resource '{key}' not found in resource set " +
                                                 $"at assembly '{_assembly.FullName}'.");
+            }
+
             return (Stream)resource;
         }
         else
@@ -148,7 +160,10 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
             var resourcePath = string.Format(_resourcePath, key);
             var resourcesStream = _assembly.GetManifestResourceStream(resourcePath);
             if (resourcesStream == null)
+            {
                 throw new LocalizationException($"Resource '{key}' not found in assembly '{_assembly.FullName}'.");
+            }
+
             return resourcesStream;
         }
     }
@@ -187,7 +202,10 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
     {
         var version = _assembly.GetName().Version;
         if (version != null)
+        {
             return version.ToString();
+        }
+
         throw new InvalidOperationException();
     }
 
@@ -197,7 +215,10 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
         var attributes = _assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
         // If there aren't any Copyright attributes, return an empty string
         if (attributes.Length == 0)
+        {
             return "";
+        }
+
         // If there is a Copyright attribute, return its value
         return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
     }
@@ -208,7 +229,10 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
         var attributes = _assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
         // If there aren't any Company attributes, return an empty string
         if (attributes.Length == 0)
+        {
             return "";
+        }
+
         // If there is a Company attribute, return its value
         return ((AssemblyCompanyAttribute)attributes[0]).Company;
     }

@@ -43,8 +43,12 @@ public class CommandParser<TOptions> : ICommandParser
 
             var samples = command.GetSamples();
             if (samples != null)
+            {
                 foreach (var sample in samples)
+                {
                     _parserService.AddSample(sample);
+                }
+            }
         }
     }
 
@@ -64,7 +68,10 @@ public class CommandParser<TOptions> : ICommandParser
         var command = commandArgData.GetValue<string>()?.ToLower();
 
         var ospCommand = _commands.FirstOrDefault(c => c.CommandArgumentValue.Value.ToLower() == command);
-        if (ospCommand == null) throw new InvalidProgramException($"Command value '{command}' is invalid.");
+        if (ospCommand == null)
+        {
+            throw new InvalidProgramException($"Command value '{command}' is invalid.");
+        }
 
         await ospCommand.PreValidate();
         await ospCommand.Execute();

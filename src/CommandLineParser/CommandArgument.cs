@@ -18,8 +18,10 @@ internal class CommandArgument : Argument, ICommandArgument
     public void AddCommandValue(ICommandArgumentValue commandArgumentValue)
     {
         if (_commandArgumentValues.ContainsKey(commandArgumentValue.Value))
+        {
             throw new InvalidParameterException(
                 $"Command value ‘{commandArgumentValue.Value}' already defined.");
+        }
 
         _commandArgumentValues.Add(commandArgumentValue.Value, commandArgumentValue);
     }
@@ -29,11 +31,13 @@ internal class CommandArgument : Argument, ICommandArgument
         commandArgumentValue = null;
 
         foreach (var argumentValue in _commandArgumentValues.Values)
+        {
             if (argumentValue.Compare(value))
             {
                 commandArgumentValue = argumentValue;
                 return true;
             }
+        }
 
         return false;
     }

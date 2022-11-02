@@ -126,13 +126,20 @@ public class TaskExecutionController : INotifyPropertyChanged
 
             // Wait for other tasks
             if (lstWaitHandles.Count > 0)
+            {
                 WaitHandle.WaitAll(lstWaitHandles.ToArray());
+            }
+
             if (lstCtrl.Any(x => x.HasError))
+            {
                 throw new TaskException(Resource.EXCEPTION_0001);
+            }
 
             // Check: Task is canceled?
             if (_engine.IsCanceling)
+            {
                 throw new TaskException(Resource.EXCEPTION_0002);
+            }
 
             // Define the result object
             _task.SetResultObject(_engine.ResultObjects);
@@ -142,7 +149,9 @@ public class TaskExecutionController : INotifyPropertyChanged
 
             // Check: Task is canceled?
             if (_engine.IsCanceling)
+            {
                 throw new TaskException(Resource.EXCEPTION_0002);
+            }
 
             IsCompleted = true;
         }
@@ -168,7 +177,9 @@ public class TaskExecutionController : INotifyPropertyChanged
     protected void OnPropertyChanged(string propertyName)
     {
         if (PropertyChanged != null)
+        {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     #endregion Protected Member

@@ -39,7 +39,9 @@ public class MetricsRuntimeMeterTests
         await Task.WhenAll(tasks);
 
         while (metrics.GetRuntimeNames().Any())
+        {
             await Task.Delay(1);
+        }
 
         Assert.Empty(metrics.GetRuntimeNames());
     }

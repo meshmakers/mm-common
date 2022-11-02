@@ -27,14 +27,20 @@ internal class RuntimeDataCollection
     public RuntimeData GetByName(string name)
     {
         if (!RuntimeDataSet.TryGetValue(name, out var result))
+        {
             throw new MeterException($"Unable to pop data with name '{name}'");
+        }
+
         return result;
     }
 
     public RuntimeData PopByName(string name)
     {
         if (!RuntimeDataSet.TryRemove(name, out var result))
+        {
             throw new MeterException($"Unable to pop data with name '{name}'");
+        }
+
         return result;
     }
 

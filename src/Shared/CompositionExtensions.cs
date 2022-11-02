@@ -10,7 +10,10 @@ public static class CompositionExtensions
         string filePattern)
     {
         var files = Directory.EnumerateFiles(path, filePattern, SearchOption.TopDirectoryOnly);
-        foreach (var file in files) @this.WithAssembly(Assembly.LoadFrom(file));
+        foreach (var file in files)
+        {
+            @this.WithAssembly(Assembly.LoadFrom(file));
+        }
 
         return @this;
     }

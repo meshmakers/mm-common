@@ -31,8 +31,10 @@ public static class ArgumentValidation
     public static void Validate<T>([InvokerParameterName] string parameterName, object value)
     {
         if (!(value is T))
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The object of argument '{parameterName}' does not match the expected type '{value.GetType().FullName}'. Expected was object type '{typeof(T).FullName}'");
+        }
     }
 
     /// <summary>
@@ -43,7 +45,9 @@ public static class ArgumentValidation
     public static void ValidateString([InvokerParameterName] string parameterName, string value)
     {
         if (string.IsNullOrEmpty(value))
+        {
             throw new ArgumentNullException(parameterName);
+        }
     }
 
     /// <summary>
@@ -69,13 +73,21 @@ public static class ArgumentValidation
         uint? maxLength)
     {
         if (string.IsNullOrEmpty(value))
+        {
             throw new ArgumentNullException(parameterName);
+        }
+
         if (minLength.HasValue && value.Length < minLength)
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The value is limited to a minimum of {minLength} characters");
+        }
+
         if (maxLength.HasValue && value.Length > maxLength)
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The value is limited to a maximum of {maxLength} characters");
+        }
     }
 
     /// <summary>
@@ -88,11 +100,16 @@ public static class ArgumentValidation
     public static void ValidateInt([InvokerParameterName] string parameterName, int value, int minValue, int maxValue)
     {
         if (value < minValue)
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The value is smaller than {minValue} signs");
+        }
+
         if (value > maxValue)
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The value is greater than {maxValue} signs");
+        }
     }
 
     /// <summary>
@@ -104,8 +121,10 @@ public static class ArgumentValidation
     public static void ValidateInt([InvokerParameterName] string parameterName, int value, int minValue)
     {
         if (value < minValue)
+        {
             throw new ArgumentOutOfRangeException(parameterName,
                 $@"The value is smaller than {minValue} signs");
+        }
     }
 
     /// <summary>
@@ -117,7 +136,9 @@ public static class ArgumentValidation
     public static void Validate([InvokerParameterName] string parameterName, Guid value)
     {
         if (value == Guid.Empty)
+        {
             throw new ArgumentOutOfRangeException(parameterName, @"The value is empty");
+        }
     }
 
 
@@ -133,7 +154,9 @@ public static class ArgumentValidation
         ValidateString(parameterName, filePath);
 
         if (!File.Exists(filePath))
+        {
             throw new FileNotFoundException($"The file '{filePath}' does not exist.", parameterName);
+        }
     }
 
     /// <summary>
