@@ -42,7 +42,7 @@ internal class ArgumentValue : IArgumentValue
     /// <returns>The value cast to the defined type.</returns>
     /// <exception cref="KeyNotFoundException">Exception, thrown if no value at the given position hasn't been found.</exception>
     /// <exception cref="FormatException">Exception, thrown if the cast to the given type is not possible</exception>
-    public T GetValue<T>(int index = 0)
+    public T? GetValue<T>(int index = 0)
     {
         ArgumentValidation.ValidateInt(nameof(index), index, 0);
 

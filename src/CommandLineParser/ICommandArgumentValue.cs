@@ -2,8 +2,15 @@
 
 public interface ICommandArgumentValue : IArgumentParser
 {
-    string CommandValue { get; }
-    string CommandDescription { get; }
+    /// <summary>
+    ///     Returns key of command
+    /// </summary>
+    string Value { get; }
+
+    /// <summary>
+    ///     Returns description of command
+    /// </summary>
+    string Description { get; }
 
     /// <summary>
     ///     Compares a string to the short and long parameter value

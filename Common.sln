@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meshmakers.Common.Metrics",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meshmakers.Common.MetricsTests", "test\MetricsTests\MetricsTests.csproj", "{06EA3115-3D63-4427-B6E7-B70117E809EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineParser.Sample", "src\CommandLineParser.Sample\CommandLineParser.Sample.csproj", "{E8E92F09-F5BB-463E-815E-89DC82765B0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{06EA3115-3D63-4427-B6E7-B70117E809EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06EA3115-3D63-4427-B6E7-B70117E809EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06EA3115-3D63-4427-B6E7-B70117E809EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8E92F09-F5BB-463E-815E-89DC82765B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8E92F09-F5BB-463E-815E-89DC82765B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8E92F09-F5BB-463E-815E-89DC82765B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8E92F09-F5BB-463E-815E-89DC82765B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
