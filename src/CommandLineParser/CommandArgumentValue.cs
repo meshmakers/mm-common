@@ -49,9 +49,15 @@ public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
     /// <param name="argument">Argument object</param>
     /// <typeparam name="T">Type of scalar</typeparam>
     /// <returns>The value</returns>
-    public T? GetArgumentScalarValue<T>(IArgument argument)
+    public T GetArgumentScalarValue<T>(IArgument argument)
     {
         var nameArgData = GetArgumentValue(argument);
-        return nameArgData.GetValue<T>();
+        var value = nameArgData.GetValue<T>();
+        if (value == null)
+        {
+            throw new InvalidParameterException($"Value of argument '{argument.LongTerm}' cannot be null.");
+        }
+
+        return value;
     }
 }

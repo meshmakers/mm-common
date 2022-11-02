@@ -33,5 +33,5 @@ public interface ICommandArgumentValue : IArgumentParser
     /// <param name="argument">Argument object</param>
     /// <typeparam name="T">Type of scalar</typeparam>
     /// <returns>The value</returns>
-    T? GetArgumentScalarValue<T>(IArgument argument);
+    T GetArgumentScalarValue<T>(IArgument argument);
 }
