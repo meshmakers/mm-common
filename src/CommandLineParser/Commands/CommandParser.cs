@@ -10,10 +10,8 @@ namespace Meshmakers.Common.CommandLineParser.Commands;
 /// <summary>
 ///     Implements the command based parser
 /// </summary>
-/// <typeparam name="TOptions"></typeparam>
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-public class CommandParser<TOptions> : ICommandParser
-    where TOptions : class
+public class CommandParser : ICommandParser
 {
     private readonly ICommandArgument _commandArg;
     private readonly IEnumerable<ICommand> _commands;

@@ -51,7 +51,7 @@ public class CommandParserTests
     [Fact]
     public void CommandParser_ShowUsageInformation_OK()
     {
-        var commandParser = new CommandParser<object>(_stubParserService.Object, _commandList);
+        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
 
         commandParser.ShowUsageInformation("Demo.exe");
 
@@ -69,7 +69,7 @@ public class CommandParserTests
         _stubParserService.Setup(x => x.GetArgumentValue(It.IsAny<ICommandArgument>()))
             .Returns(argumentValue.Object);
 
-        var commandParser = new CommandParser<object>(_stubParserService.Object, _commandList);
+        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
 
         await commandParser.ParseAndValidateAsync();
 
@@ -90,7 +90,7 @@ public class CommandParserTests
         _stubParserService.Setup(x => x.GetArgumentValue(It.IsAny<ICommandArgument>()))
             .Returns(argumentValue.Object);
 
-        var commandParser = new CommandParser<object>(_stubParserService.Object, _commandList);
+        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
 
         await Assert.ThrowsAsync<InvalidProgramException>(() => commandParser.ParseAndValidateAsync());
     }
