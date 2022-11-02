@@ -15,30 +15,32 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="CommandLineParserTests"/>
+        <InternalsVisibleTo Include="CommandLineParserTests" />
     </ItemGroup>
 
     <ItemGroup>
         <None Include="..\..\LICENSE">
             <Pack>True</Pack>
-            <PackagePath/>
+            <PackagePath />
             <Link>LICENSE</Link>
         </None>
         <None Include="..\..\assets\meshmakers64.png">
             <Pack>True</Pack>
-            <PackagePath/>
+            <PackagePath />
             <Link>meshmakers64.png</Link>
         </None>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Composition.AttributedModel" Version="6.0.0"/>
-        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0"/>
-        <PackageReference Include="System.Security.AccessControl" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="System.Composition.AttributedModel" Version="6.0.0" />
+        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
+        <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Shared\Shared.csproj"/>
+        <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

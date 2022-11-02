@@ -7,12 +7,12 @@ public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
 {
     public CommandArgumentValue(string commandValue, string commandDescription)
     {
-        CommandValue = commandValue;
-        CommandDescription = commandDescription;
+        Value = commandValue;
+        Description = commandDescription;
     }
 
-    public string CommandValue { get; }
-    public string CommandDescription { get; }
+    public string Value { get; }
+    public string Description { get; }
 
     /// <summary>
     ///     Compares a string to the short and long parameter value
@@ -23,7 +23,7 @@ public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
     {
         ArgumentValidation.ValidateString(nameof(value), value);
 
-        return string.Compare(CommandValue, value, StringComparison.OrdinalIgnoreCase) == 0;
+        return string.Compare(Value, value, StringComparison.OrdinalIgnoreCase) == 0;
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
     /// <param name="argument">Argument object</param>
     /// <typeparam name="T">Type of scalar</typeparam>
     /// <returns>The value</returns>
-    public T GetArgumentScalarValue<T>(IArgument argument)
+    public T? GetArgumentScalarValue<T>(IArgument argument)
     {
         var nameArgData = GetArgumentValue(argument);
         return nameArgData.GetValue<T>();

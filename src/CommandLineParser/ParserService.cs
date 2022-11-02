@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -20,7 +19,7 @@ public class ParserService : ArgumentParser, IParserService
     private readonly IConsoleService _consoleService;
 
     private readonly IEnvironmentService _environmentService;
-    private readonly List<Tuple<string, string>> _sampleList;
+    private readonly List<CodeSample> _sampleList;
 
     /// <summary>
     ///     Constructor
@@ -30,7 +29,7 @@ public class ParserService : ArgumentParser, IParserService
     {
         _environmentService = environmentService;
         _consoleService = consoleService;
-        _sampleList = new List<Tuple<string, string>>();
+        _sampleList = new List<CodeSample>();
     }
 
     /// <summary>
@@ -43,26 +42,16 @@ public class ParserService : ArgumentParser, IParserService
         ArgumentValidation.ValidateString(nameof(sample), sample);
         ArgumentValidation.ValidateString(nameof(description), description);
 
-        _sampleList.Add(new Tuple<string, string>(sample, description));
+        _sampleList.Add(new CodeSample(sample, description));
     }
 
-
     /// <summary>
-    ///     Parses and validates command line args
+    ///     Adds a sample for usage information
     /// </summary>
-    /// <param name="arguments">CommandValue line args as string array</param>
-    /// <exception cref="InvalidParameterException">
-    ///     Thrown, if an argument has been found that is not defined by an argument
-    ///     definition.
-    /// </exception>
-    /// <exception cref="MandatoryArgumentsMissingException">Thrown, if an argument is mandatory but not defined.</exception>
-    /// <exception cref="ArgumentValueMissingException">
-    ///     Thrown, if an the argument value count does not match the passed
-    ///     argument values from command line.
-    /// </exception>
-    public void ParseAndValidate(string[] arguments)
+    /// <param name="codeSample">The sample</param>
+    public void AddSample(CodeSample codeSample)
     {
-        ParseLayer(arguments.Skip(1) /* first arg contains name of executable */);
+        _sampleList.Add(codeSample);
     }
 
     /// <summary>
@@ -81,7 +70,6 @@ public class ParserService : ArgumentParser, IParserService
     {
         ParseAndValidate(_environmentService.GetCommandLineArgs());
     }
-
 
     /// <summary>
     ///     Returns the help string
@@ -110,10 +98,15 @@ public class ParserService : ArgumentParser, IParserService
 
             foreach (var sample in _sampleList)
             {
-                _consoleService.WriteLine(sample.Item2);
-                _consoleService.WriteLine("  " + sample.Item1);
+                _consoleService.WriteLine(sample.SampleCode);
+                _consoleService.WriteLine("  " + sample.Description);
                 _consoleService.WriteLine("");
             }
         }
+    }
+
+    private void ParseAndValidate(string[] arguments)
+    {
+        ParseLayer(arguments.Skip(1) /* first arg contains name of executable */);
     }
 }

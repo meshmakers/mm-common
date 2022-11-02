@@ -6,7 +6,7 @@ using Meshmakers.Common.Shared.Services;
 
 namespace Meshmakers.Common.CommandLineParser;
 
-public class ArgumentParser : IArgumentParserInternal
+public class ArgumentParser : IArgumentParser
 {
     private readonly Dictionary<string, IArgument> _arguments;
     private readonly Dictionary<string, ArgumentValue> _argumentValues;
@@ -20,6 +20,14 @@ public class ArgumentParser : IArgumentParserInternal
         _argumentValues = new Dictionary<string, ArgumentValue>();
     }
 
+    /// <summary>
+    ///     Adds a command argument
+    /// </summary>
+    /// <param name="shortTerm">Short term of argument e. g. c</param>
+    /// <param name="longTerm">Long term of argument e. g. create</param>
+    /// <param name="description">The description of the argument. Every array entry creates a single line in usage messages.</param>
+    /// <param name="isMandatoryArgument">True, when argument is mandatory</param>
+    /// <returns>The resulting command argument object.</returns>
     public ICommandArgument AddCommandArgument(string shortTerm, string longTerm, string[] description,
         bool isMandatoryArgument)
     {
@@ -182,7 +190,7 @@ public class ArgumentParser : IArgumentParserInternal
     /// <summary>
     ///     Parses and validates command line args
     /// </summary>
-    /// <param name="arguments">CommandValue line args as string array</param>
+    /// <param name="arguments">Value line args as string array</param>
     /// <exception cref="InvalidParameterException">
     ///     Thrown, if an argument has been found that is not defined by an argument
     ///     definition.
@@ -244,15 +252,10 @@ public class ArgumentParser : IArgumentParserInternal
             {
                 if (commandArgument.TryGetCommandValue(str, out var commandArgumentValue) &&
                     commandArgumentValue != null)
-                {
-                    var parser = (IArgumentParserInternal)commandArgumentValue;
-                    commandLineArguments = new Queue<string>(parser.ParseLayer(commandLineArguments));
-                }
+                    commandLineArguments = new Queue<string>(commandArgumentValue.ParseLayer(commandLineArguments));
                 else
-                {
                     throw new InvalidParameterException(
                         $"{str} is an unknown command value for argument --'{previousArgumentValue.Argument.LongTerm}'");
-                }
             }
         } while (commandLineArguments.Count > 0);
 
