@@ -61,7 +61,7 @@ static IServiceProvider BuildDi()
     services.AddSingleton<IConsoleService, ConsoleService>();
     services.AddSingleton<IEnvironmentService, EnvironmentService>();
     services.AddSingleton<IParserService, ParserService>();
-    services.AddSingleton<ICommandParser, CommandParser<SampleOptions>>();
+    services.AddSingleton<ICommandParser, CommandParser>();
 
     // Add commands
     services.AddTransient<ICommand, ExecuteCommand>();
