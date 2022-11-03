@@ -53,6 +53,7 @@ steps:
     arguments: '--configuration $(buildConfiguration)' 
     projects: '$(solution)'
 - task: CopyFiles@2
+  condition: ne(variables['Build.Reason'], 'PullRequest')
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
@@ -63,6 +64,7 @@ steps:
       !.git/**/*
     TargetFolder: $(build.artifactstagingdirectory)
 - task: DotNetCoreCLI@2
+  condition: ne(variables['Build.Reason'], 'PullRequest')
   displayName: Push Nuget Package
   inputs:
     command: custom
