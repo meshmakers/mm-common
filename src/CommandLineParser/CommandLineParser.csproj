@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <AssemblyName>Meshmakers.Common.CommandLineParser</AssemblyName>
         <TargetFramework>net6.0</TargetFramework>
         <SignAssembly>false</SignAssembly>
         <RootNamespace>Meshmakers.Common.CommandLineParser</RootNamespace>
