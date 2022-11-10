@@ -1,10 +1,9 @@
-using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
 using Meshmakers.Common.Shared.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CommandLineParser.Sample.Commands;
+namespace Meshmakers.Common.CommandLineParser.Sample.Commands;
 
 public class ExecuteCommand : Command<SampleOptions>
 {

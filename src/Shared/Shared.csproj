@@ -13,6 +13,8 @@
         <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
     </PropertyGroup>
 
     <ItemGroup>
