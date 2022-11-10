@@ -9,6 +9,7 @@
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
         <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
         <RootNamespace>Meshmakers.Common.CommandLineParser.Sample</RootNamespace>

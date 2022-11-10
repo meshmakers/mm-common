@@ -9,6 +9,7 @@
         <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageId>Meshmakers.Common.MetricsTests</PackageId>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <Product>Meshmakers.Common.MetricsTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
