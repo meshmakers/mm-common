@@ -1,8 +1,7 @@
-﻿using Meshmakers.Common.CommandLineParser;
-using Meshmakers.Common.CommandLineParser.Commands;
+﻿using Meshmakers.Common.CommandLineParser.Commands;
 using Microsoft.Extensions.Logging;
 
-namespace CommandLineParser.Sample;
+namespace Meshmakers.Common.CommandLineParser.Sample;
 
 internal class Runner
 {

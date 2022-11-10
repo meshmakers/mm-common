@@ -1,10 +1,9 @@
 using System.Text;
-using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CommandLineParser.Sample.Commands;
+namespace Meshmakers.Common.CommandLineParser.Sample.Commands;
 
 public class PostCommand : Command<SampleOptions>
 {

@@ -8,6 +8,12 @@
         <RootNamespace>Meshmakers.Common.CommandLineParserTests</RootNamespace>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
+        <Authors>meshmakers GmbH</Authors>
+        <AssemblyName>Meshmakers.Common.CommandLineParserTests</AssemblyName>
+        <Product>Meshmakers.Common.CommandLineParserTests</Product>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +33,14 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\CommandLineParser\CommandLineParser.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>meshmakers64.png</Link>
+        </None>
     </ItemGroup>
 
 </Project>

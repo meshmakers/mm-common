@@ -10,6 +10,20 @@
         <RootNamespace>Meshmakers.Common.MetricsTests</RootNamespace>
 
         <LangVersion>latestmajor</LangVersion>
+
+        <Authors>meshmakers GmbH</Authors>
+
+        <AssemblyName>Meshmakers.Common.MetricsTests</AssemblyName>
+
+        <PackageId>Meshmakers.Common.MetricsTests</PackageId>
+
+        <Product>Meshmakers.Common.MetricsTests</Product>
+
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+
+        <PackageIcon>meshmakers64.png</PackageIcon>
+
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +41,14 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Metrics\Metrics.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>meshmakers64.png</Link>
+        </None>
     </ItemGroup>
 
 </Project>

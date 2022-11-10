@@ -6,6 +6,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
+        <RootNamespace>Meshmakers.Common.CommandLineParser.Sample</RootNamespace>
+        <LangVersion>latestmajor</LangVersion>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -38,6 +45,11 @@
     <ItemGroup>
         <None Update="nlog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>meshmakers64.png</Link>
         </None>
     </ItemGroup>
 

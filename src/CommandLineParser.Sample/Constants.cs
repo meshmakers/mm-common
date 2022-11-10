@@ -1,4 +1,4 @@
-namespace CommandLineParser.Sample;
+namespace Meshmakers.Common.CommandLineParser.Sample;
 
 internal static class Constants
 {

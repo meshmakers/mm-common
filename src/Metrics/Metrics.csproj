@@ -13,10 +13,12 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <TargetFramework>net6.0</TargetFramework>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="MetricsTests" />
+        <InternalsVisibleTo Include="Meshmakers.Common.MetricsTests" />
     </ItemGroup>
 
     <ItemGroup>

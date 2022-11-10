@@ -13,10 +13,12 @@
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="CommandLineParserTests" />
+        <InternalsVisibleTo Include="Meshmakers.Common.CommandLineParserTests" />
     </ItemGroup>
 
     <ItemGroup>

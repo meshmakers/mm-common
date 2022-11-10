@@ -1,7 +1,7 @@
-﻿using CommandLineParser.Sample;
-using CommandLineParser.Sample.Commands;
-using Meshmakers.Common.CommandLineParser;
+﻿using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
+using Meshmakers.Common.CommandLineParser.Sample;
+using Meshmakers.Common.CommandLineParser.Sample.Commands;
 using Meshmakers.Common.Shared.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
