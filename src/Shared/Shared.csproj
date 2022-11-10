@@ -2,19 +2,19 @@
 
     <PropertyGroup>
         <AssemblyName>Meshmakers.Common.Shared</AssemblyName>
-        <TargetFramework>net6.0</TargetFramework>
-        <SignAssembly>false</SignAssembly>
-        <RootNamespace>Meshmakers.Common.Shared</RootNamespace>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>Meshmakers.Common.Shared</PackageId>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageId>Meshmakers.Common.Shared</PackageId>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
-        <Authors>meshmakers GmbH</Authors>
-        <Company>meshmakers GmbH</Company>
+        <RootNamespace>Meshmakers.Common.Shared</RootNamespace>
+        <SignAssembly>false</SignAssembly>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

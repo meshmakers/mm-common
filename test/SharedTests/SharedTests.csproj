@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <IsPackable>false</IsPackable>
         <AssemblyName>Meshmakers.Common.SharedTests</AssemblyName>
-        <SignAssembly>false</SignAssembly>
-        <RootNamespace>Meshmakers.Common.SharedTests</RootNamespace>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>Meshmakers.Common.SharedTests</Company>
+        <IsPackable>false</IsPackable>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
-        <Authors>meshmakers GmbH</Authors>
-        <PackageId>Meshmakers.Common.SharedTests</PackageId>
-        <Company>Meshmakers.Common.SharedTests</Company>
-        <Product>Meshmakers.Common.SharedTests</Product>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageId>Meshmakers.Common.SharedTests</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <Product>Meshmakers.Common.SharedTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <RootNamespace>Meshmakers.Common.SharedTests</RootNamespace>
+        <SignAssembly>false</SignAssembly>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

@@ -2,19 +2,19 @@
 
     <PropertyGroup>
         <AssemblyName>Meshmakers.Common.Metrics</AssemblyName>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>Meshmakers.Common.Metrics</PackageId>
-        <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
-        <LangVersion>latestmajor</LangVersion>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
-        <PackageIcon>meshmakers64.png</PackageIcon>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <TargetFramework>net6.0</TargetFramework>
-        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
         <Authors>meshmakers GmbH</Authors>
         <Company>meshmakers GmbH</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latestmajor</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageId>Meshmakers.Common.Metrics</PackageId>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
