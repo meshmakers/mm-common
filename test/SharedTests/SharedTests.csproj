@@ -9,6 +9,7 @@
         <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageId>Meshmakers.Common.SharedTests</PackageId>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <Product>Meshmakers.Common.SharedTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
