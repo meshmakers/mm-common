@@ -1,29 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-
-        <IsPackable>false</IsPackable>
-
-        <RootNamespace>Meshmakers.Common.MetricsTests</RootNamespace>
-
-        <LangVersion>latestmajor</LangVersion>
-
-        <Authors>meshmakers GmbH</Authors>
-
         <AssemblyName>Meshmakers.Common.MetricsTests</AssemblyName>
-
-        <PackageId>Meshmakers.Common.MetricsTests</PackageId>
-
-        <Product>Meshmakers.Common.MetricsTests</Product>
-
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
-
+        <Authors>meshmakers GmbH</Authors>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+        <LangVersion>latestmajor</LangVersion>
+        <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
-
+        <PackageId>Meshmakers.Common.MetricsTests</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <Product>Meshmakers.Common.MetricsTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <RootNamespace>Meshmakers.Common.MetricsTests</RootNamespace>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

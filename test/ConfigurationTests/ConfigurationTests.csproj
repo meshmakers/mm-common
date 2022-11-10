@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>Meshmakers.Common.ConfigurationTests</AssemblyName>
+        <Authors>meshmakers GmbH</Authors>
         <IsPackable>false</IsPackable>
-        <RootNamespace>Meshmakers.Common.ConfigurationTests</RootNamespace>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
-        <Authors>meshmakers GmbH</Authors>
-        <AssemblyName>Meshmakers.Common.ConfigurationTests</AssemblyName>
-        <PackageId>Meshmakers.Common.ConfigurationTests</PackageId>
-        <Product>Meshmakers.Common.ConfigurationTests</Product>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageId>Meshmakers.Common.ConfigurationTests</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <Product>Meshmakers.Common.ConfigurationTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <RootNamespace>Meshmakers.Common.ConfigurationTests</RootNamespace>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

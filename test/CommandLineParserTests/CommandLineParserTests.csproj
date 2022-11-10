@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>Meshmakers.Common.CommandLineParserTests</AssemblyName>
+        <Authors>meshmakers GmbH</Authors>
         <IsPackable>false</IsPackable>
-        <SignAssembly>false</SignAssembly>
-        <PackageId>Meshmakers.Common.CommandLineParserTests</PackageId>
-        <RootNamespace>Meshmakers.Common.CommandLineParserTests</RootNamespace>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
-        <Authors>meshmakers GmbH</Authors>
-        <AssemblyName>Meshmakers.Common.CommandLineParserTests</AssemblyName>
-        <Product>Meshmakers.Common.CommandLineParserTests</Product>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageIcon>meshmakers64.png</PackageIcon>
+        <PackageId>Meshmakers.Common.CommandLineParserTests</PackageId>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <Product>Meshmakers.Common.CommandLineParserTests</Product>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
+        <RootNamespace>Meshmakers.Common.CommandLineParserTests</RootNamespace>
+        <SignAssembly>false</SignAssembly>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

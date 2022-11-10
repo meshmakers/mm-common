@@ -2,19 +2,19 @@
 
     <PropertyGroup>
         <AssemblyName>Meshmakers.Common.CommandLineParser</AssemblyName>
-        <TargetFramework>net6.0</TargetFramework>
-        <SignAssembly>false</SignAssembly>
-        <RootNamespace>Meshmakers.Common.CommandLineParser</RootNamespace>
+        <Authors>meshmakers GmbH</Authors>
+        <Company>meshmakers GmbH</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
+        <LangVersion>latestmajor</LangVersion>
+        <Nullable>enable</Nullable>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageId>Meshmakers.Common.CommandLineParser</PackageId>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <LangVersion>latestmajor</LangVersion>
-        <Nullable>enable</Nullable>
+        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
-        <Authors>meshmakers GmbH</Authors>
-        <Company>meshmakers GmbH</Company>
+        <RootNamespace>Meshmakers.Common.CommandLineParser</RootNamespace>
+        <SignAssembly>false</SignAssembly>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
