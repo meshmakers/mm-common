@@ -47,6 +47,11 @@
         <None Update="nlog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>LICENSE</Link>
+        </None>
         <None Include="..\..\assets\meshmakers64.png">
             <Pack>True</Pack>
             <PackagePath />
