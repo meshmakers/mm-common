@@ -6,7 +6,7 @@ namespace Meshmakers.Common.MetricsTests.Meters;
 
 public class RuntimeMeterTest
 {
-    [Fact(Timeout = 100)]
+    [Fact(Timeout = 200)]
     public async void CreateAndMeasure()
     {
         var meter = new RuntimeMeter(RuntimeHelper.DefaultRuntimeName);
