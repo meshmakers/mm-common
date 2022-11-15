@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Meshmakers.Common.Shared;
@@ -45,5 +46,23 @@ public static class RandomGenerator
 
             return normalizedNumber;
         }
+    }
+
+    /// <summary>
+    /// Creates a short unique string based on the current time
+    /// </summary>
+    /// <returns></returns>
+    public static string GenerateUniqueString()
+    {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var time = DateTime.Now.ToUnixEpochInMilliSecondsTime() - new DateTime(2022, 11, 15).ToUnixEpochInMilliSecondsTime();
+        var part1 = time.ToIntArray().Select(v => chars[v]);
+        
+        var random = new Random();
+        var part2 = Enumerable.Repeat(chars, 4)
+            .Select(s => s[random.Next(s.Length)]);
+        
+        var result = new string(part1.Concat(part2).ToArray());
+        return result;
     }
 }
