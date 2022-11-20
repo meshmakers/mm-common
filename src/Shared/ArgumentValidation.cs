@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using JetBrains.Annotations;
 
@@ -42,7 +43,7 @@ public static class ArgumentValidation
     /// </summary>
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
-    public static void ValidateString([InvokerParameterName] string parameterName, string value)
+    public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -56,7 +57,7 @@ public static class ArgumentValidation
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
     /// <param name="length">Length of value</param>
-    public static void ValidateStringAndLength([InvokerParameterName] string parameterName, string value, uint length)
+    public static void ValidateStringAndLength([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint length)
     {
         ValidateString(parameterName, value, length, length);
     }
@@ -69,7 +70,7 @@ public static class ArgumentValidation
     /// <param name="minLength">Minimal length of value</param>
     /// <param name="maxLength">Maximal length of value</param>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static void ValidateString([InvokerParameterName] string parameterName, string value, uint? minLength,
+    public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint? minLength,
         uint? maxLength)
     {
         if (string.IsNullOrEmpty(value))
