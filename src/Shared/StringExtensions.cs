@@ -124,6 +124,12 @@ public static class StringExtensions
         var plainTextBytes = Encoding.UTF8.GetBytes(s);
         return Convert.ToBase64String(plainTextBytes);
     }
+    
+    public static string DecodeBase64(this string s)
+    {
+        var encodedTextBytes = Convert.FromBase64String(s);
+        return Encoding.UTF8.GetString(encodedTextBytes);
+    }
 
     public static IEnumerable<string> ToWords(this string s)
     {
