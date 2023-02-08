@@ -2,19 +2,10 @@
 
     <PropertyGroup>
         <AssemblyName>Meshmakers.Common.Metrics</AssemblyName>
-        <Authors>meshmakers GmbH</Authors>
-        <Company>meshmakers GmbH</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>latestmajor</LangVersion>
-        <Nullable>enable</Nullable>
-        <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageId>Meshmakers.Common.Metrics</PackageId>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/meshmakers/common/</RepositoryUrl>
         <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
-        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="prometheus-net" Version="7.0.0-pre-000305-75cc817" />
-        <PackageReference Include="prometheus-net.AspNetCore" Version="7.0.0-pre-000305-75cc817" />
+        <PackageReference Include="prometheus-net" Version="7.0.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>

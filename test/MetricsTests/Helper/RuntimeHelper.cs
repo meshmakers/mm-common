@@ -63,7 +63,7 @@ internal static class RuntimeHelper
     public static async Task<int> Simulate(IMetricsContext metricsContext, int delta = 3)
     {
         using var meter = metricsContext.CreateRuntimeMeter();
-        Assert.Equal(meter.Name, SimulationName);
+        Assert.Equal(SimulationName, meter.Name);
         await Task.Delay(delta);
         meter.SetCheckpoint(DefaultCheckpointName);
         await Task.Delay(delta);
