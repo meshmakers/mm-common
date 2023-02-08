@@ -29,7 +29,7 @@ public class PostCommand : Command<SampleOptions>
         var uri = uriArgData.GetValue<string>();
 
         var contentTypeData = CommandArgumentValue.GetArgumentValue(_contentType);
-        var contentType = contentTypeData.GetValue<string>();
+        var contentType = contentTypeData.GetValue<string>()!;
 
         var bodyArgData = CommandArgumentValue.GetArgumentValue(_body);
         var body = bodyArgData.GetValue<string>();
