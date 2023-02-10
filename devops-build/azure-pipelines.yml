@@ -25,7 +25,6 @@ steps:
     FileNames: |
       **/*.csproj
       !**Tests/*
-      Directory.Build.props
     InsertAttributes: true
     FileEncoding: 'auto'
     GeneratePackageOnBuild: true

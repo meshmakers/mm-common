@@ -6,6 +6,7 @@
         <PackageId>Meshmakers.Common.ConfigurationTests</PackageId>
         <Product>Meshmakers.Common.ConfigurationTests</Product>
         <RootNamespace>Meshmakers.Common.ConfigurationTests</RootNamespace>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
