@@ -6,6 +6,7 @@
         <PackageId>Meshmakers.Common.CommandLineParser</PackageId>
         <RootNamespace>Meshmakers.Common.CommandLineParser</RootNamespace>
         <SignAssembly>false</SignAssembly>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageId>Meshmakers.Common.Metrics</PackageId>
         <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

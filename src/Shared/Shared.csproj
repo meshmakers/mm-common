@@ -6,6 +6,7 @@
         <PackageId>Meshmakers.Common.Shared</PackageId>
         <RootNamespace>Meshmakers.Common.Shared</RootNamespace>
         <SignAssembly>false</SignAssembly>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
