@@ -120,17 +120,17 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
     /// </summary>
     /// <param name="key">The key of the resource</param>
     /// <returns>True, when the resource is existing, otherwise false</returns>
-    protected bool ResourceExist(string key)
+    protected virtual bool ResourceExist(string key)
     {
-        if (_resourceSet == null)
-        {
-            return false;
-        }
-
         var resourcePath = string.Format(_resourcePath, key).ToLower();
 
-        var resourceExists = _resourceSet.Cast<DictionaryEntry>()
-            .Any(e => Equals(e.Key, resourcePath));
+        var resourceExists = _resourceSet?.Cast<DictionaryEntry>()
+            .Any(e => Equals(e.Key, resourcePath)) ?? false;
+
+        if (!resourceExists)
+        {
+            resourceExists = _assembly.GetManifestResourceNames().Contains(resourcePath);
+        }
 
         return resourceExists;
     }
