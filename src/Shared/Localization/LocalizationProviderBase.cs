@@ -129,7 +129,7 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
 
         if (!resourceExists)
         {
-            resourceExists = _assembly.GetManifestResourceNames().Contains(resourcePath);
+            resourceExists = _assembly.GetManifestResourceNames().Any(n => n.ToLower() == resourcePath);
         }
 
         return resourceExists;
