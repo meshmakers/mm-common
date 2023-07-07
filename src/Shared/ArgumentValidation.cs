@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using JetBrains.Annotations;
 
@@ -43,7 +42,11 @@ public static class ArgumentValidation
     /// </summary>
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
+    #if NETSTANDARD2_0  
+    public static void ValidateString([InvokerParameterName] string parameterName, string? value)
+    #else
     public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value)
+    #endif
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -57,7 +60,12 @@ public static class ArgumentValidation
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
     /// <param name="length">Length of value</param>
+#if NETSTANDARD2_0   
+    public static void ValidateStringAndLength([InvokerParameterName] string parameterName, string? value, uint length)
+#else 
     public static void ValidateStringAndLength([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint length)
+#endif
+
     {
         ValidateString(parameterName, value, length, length);
     }
@@ -70,10 +78,15 @@ public static class ArgumentValidation
     /// <param name="minLength">Minimal length of value</param>
     /// <param name="maxLength">Maximal length of value</param>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint? minLength,
+    #if NETSTANDARD2_0
+        public static void ValidateString([InvokerParameterName] string parameterName, string? value, uint? minLength,
+            uint? maxLength)
+    #else 
+        public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint? minLength,
         uint? maxLength)
+    #endif
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value) || value == null)
         {
             throw new ArgumentNullException(parameterName);
         }

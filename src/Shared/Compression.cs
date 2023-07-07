@@ -30,7 +30,11 @@ public static class Compression
 
             var archiveFileStream = entry.Open();
 
+#if NETSTANDARD2_0  
+            using (var streamWriter = new StreamWriter(targetFile))
+#else
             await using (var streamWriter = new StreamWriter(targetFile))
+#endif
             {
                 await archiveFileStream.CopyToAsync(streamWriter.BaseStream);
             }
@@ -43,7 +47,11 @@ public static class Compression
         using (var zipArchive = new ZipArchive(zipArchiveStream, ZipArchiveMode.Create))
         {
             var archiveEntry = zipArchive.CreateEntry(fileNameWithExtension);
-            await using (var stream = archiveEntry.Open())
+#if NETSTANDARD2_0  
+            using (var stream = archiveEntry.Open())
+#else
+             await using (var stream = archiveEntry.Open())
+#endif
             {
                 await zipStream.CopyToAsync(stream);
             }
