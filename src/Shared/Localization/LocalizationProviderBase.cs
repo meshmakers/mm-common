@@ -157,14 +157,18 @@ public abstract class LocalizationProviderBase : ILocalizationProvider
         }
         else
         {
-            var resourcePath = string.Format(_resourcePath, key);
-            var resourcesStream = _assembly.GetManifestResourceStream(resourcePath);
-            if (resourcesStream == null)
+            var resourcePath = string.Format(_resourcePath, key).ToLower();
+            var resourcesStreamPath = _assembly.GetManifestResourceNames().SingleOrDefault(n => n.ToLower() == resourcePath);
+            if (!string.IsNullOrWhiteSpace(resourcesStreamPath))
             {
-                throw new LocalizationException($"Resource '{key}' not found in assembly '{_assembly.FullName}'.");
+                var resourcesStream = _assembly.GetManifestResourceStream(resourcesStreamPath);
+                if (resourcesStream == null)
+                {
+                    throw new LocalizationException($"Resource with path '{resourcesStreamPath}' not found in assembly '{_assembly.FullName}'.");
+                }
+                return resourcesStream;
             }
-
-            return resourcesStream;
+            throw new LocalizationException($"Resource '{resourcePath}' not found in assembly '{_assembly.FullName}'.");
         }
     }
 
