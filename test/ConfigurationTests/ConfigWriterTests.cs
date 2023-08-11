@@ -1,7 +1,7 @@
 using System.IO.Abstractions;
 using Meshmakers.Common.Configuration;
 using Microsoft.Extensions.Options;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace Meshmakers.Common.ConfigurationTests;
@@ -12,13 +12,11 @@ public class UnitTest1
     public void ConfigWriterTests()
     {
         // Arrange
-        var fileSystem = Mock.Of<IFileSystem>();
-        var file = Mock.Of<IFile>();
-        var directory = Mock.Of<IDirectory>();
-        Mock.Get(fileSystem).Setup(fs => fs.Directory).Returns(directory);
-        Mock.Get(fileSystem).Setup(fs => fs.File).Returns(file);
-        Mock.Get(file).Setup(fs => fs.WriteAllText(It.IsAny<string>(), It.IsAny<string>()));
-        Mock.Get(directory).Setup(d => d.Exists(It.IsAny<string>())).Returns(true);
+        var fileSystem = Substitute.For<IFileSystem>();
+        var file = Substitute.For<IFile>();
+        var directory = Substitute.For<IDirectory>();
+        fileSystem.Directory.Returns(directory);
+        fileSystem.File.Returns(file);
 
         var options = new OptionsWrapper<TestOptions>(new TestOptions());
 
@@ -29,20 +27,18 @@ public class UnitTest1
         writer.WriteSettings("testapp");
 
         // Validate
-        Mock.Get(file).Verify(f => f.WriteAllText(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        file.Received(1).WriteAllText(Arg.Any<string>(), Arg.Any<string>());
     }
 
     [Fact]
     public void ConfigWriterTestsTwoOptions()
     {
         // Arrange
-        var fileSystem = Mock.Of<IFileSystem>();
-        var file = Mock.Of<IFile>();
-        var directory = Mock.Of<IDirectory>();
-        Mock.Get(fileSystem).Setup(fs => fs.Directory).Returns(directory);
-        Mock.Get(fileSystem).Setup(fs => fs.File).Returns(file);
-        Mock.Get(file).Setup(fs => fs.WriteAllText(It.IsAny<string>(), It.IsAny<string>()));
-        Mock.Get(directory).Setup(d => d.Exists(It.IsAny<string>())).Returns(true);
+        var fileSystem = Substitute.For<IFileSystem>();
+        var file = Substitute.For<IFile>();
+        var directory = Substitute.For<IDirectory>();
+        fileSystem.Directory.Returns(directory);
+        fileSystem.File.Returns(file);
 
         var options1 = new OptionsWrapper<TestOptions>(new TestOptions { Test = "FirstValueTest" });
         var options2 = new OptionsWrapper<SecondOptions>(new SecondOptions { SecondTest = "SecondValueTest" });
@@ -55,11 +51,8 @@ public class UnitTest1
         writer.WriteSettings("testapp");
 
         // Validate
-        Mock.Get(file).Verify(f => f.WriteAllText(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-        Mock.Get(file).Verify(f => f.WriteAllText(It.IsAny<string>(), It.Is<string>(s => s.Contains("FirstValueTest"))),
-            Times.Once);
-        Mock.Get(file)
-            .Verify(f => f.WriteAllText(It.IsAny<string>(), It.Is<string>(s => s.Contains("SecondValueTest"))),
-                Times.Once);
+        file.Received(1).WriteAllText(Arg.Any<string>(), Arg.Any<string>());
+        file.Received(1).WriteAllText(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("FirstValueTest")));
+        file.Received(1).WriteAllText(Arg.Any<string>(), Arg.Is<string>(s => s.Contains("SecondValueTest")));
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Meshmakers.Common.CommandLineParser;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace Meshmakers.Common.CommandLineParserTests;
@@ -12,18 +12,19 @@ public class ArgumentValueTests
     [Fact]
     public void Creation_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
 
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
 
-        Assert.Equal(stubArgDefinition.Object, commandLineValue.Argument);
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
+
+        Assert.Equal(stubArgDefinition, commandLineValue.Argument);
     }
 
     [Fact]
     public void AddValue_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue");
 
@@ -34,8 +35,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_NoValue_Fail()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         Assert.Throws<KeyNotFoundException>(() => commandLineValue.GetValue<string>());
     }
@@ -43,8 +44,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_ValueExisting_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue");
 
@@ -56,8 +57,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_WrongCast_Fail()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue");
 
@@ -67,8 +68,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_NoValue_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         var result = commandLineValue.GetValue("myDefaultValue");
         Assert.Equal("myDefaultValue", result);
@@ -77,8 +78,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_ValueExisting_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue");
 
@@ -90,8 +91,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_WrongCast_Fail()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue");
 
@@ -101,8 +102,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_Index_OutOfRange_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         var result = commandLineValue.GetValue(3, "myDefaultValue");
         Assert.Equal("myDefaultValue", result);
@@ -111,8 +112,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_Index_ValueExisting_OK()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue1");
         commandLineValue.AddValue("testUnitTestValue2");
@@ -127,8 +128,8 @@ public class ArgumentValueTests
     [Fact]
     public void GetValue_DefaultValue_Index_WrongCast_Fail()
     {
-        var stubArgDefinition = new Mock<IArgument>();
-        var commandLineValue = new ArgumentValue(stubArgDefinition.Object);
+        var stubArgDefinition = Substitute.For<IArgument>();
+        var commandLineValue = new ArgumentValue(stubArgDefinition);
 
         commandLineValue.AddValue("testUnitTestValue1");
         commandLineValue.AddValue("testUnitTestValue2");
