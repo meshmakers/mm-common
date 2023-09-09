@@ -2,47 +2,48 @@ using System;
 using System.Threading.Tasks;
 using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace Meshmakers.Common.CommandLineParserTests;
 
 public class CommandParserTests
 {
-    private readonly Mock<ICommandArgument> _commandArgument = new();
+    private readonly ICommandArgument _commandArgument = Substitute.For<ICommandArgument>();
 
     private readonly ICommand[] _commandList;
-    private readonly Mock<ICommand> _commandT = new();
-    private readonly Mock<ICommandArgumentValue> _commandTArgValue = new();
-    private readonly Mock<ICommand> _commandU = new();
-    private readonly Mock<ICommandArgumentValue> _commandUArgValue = new();
-    private readonly Mock<ICommand> _commandV = new();
-    private readonly Mock<ICommandArgumentValue> _commandVArgValue = new();
-    private readonly Mock<ICommand> _commandW = new();
-    private readonly Mock<ICommandArgumentValue> _commandWArgValue = new();
-    private readonly Mock<IParserService> _stubParserService = new();
+    private readonly ICommand _commandT = Substitute.For<ICommand>();
+    private readonly ICommandArgumentValue _commandTArgValue = Substitute.For<ICommandArgumentValue>();
+    private readonly ICommand _commandU = Substitute.For<ICommand>();
+    private readonly ICommandArgumentValue _commandUArgValue = Substitute.For<ICommandArgumentValue>();
+    private readonly ICommand _commandV = Substitute.For<ICommand>();
+    private readonly ICommandArgumentValue _commandVArgValue = Substitute.For<ICommandArgumentValue>();
+    private readonly ICommand _commandW = Substitute.For<ICommand>();
+    private readonly ICommandArgumentValue _commandWArgValue = Substitute.For<ICommandArgumentValue>();
+    private readonly IParserService _stubParserService = Substitute.For<IParserService>();
 
     public CommandParserTests()
     {
-        _stubParserService
-            .Setup(x => x.AddCommandArgument(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string[]>(),
-                It.IsAny<bool>())).Returns(_commandArgument.Object);
-        _commandT.SetupGet(x => x.CommandArgumentValue).Returns(_commandTArgValue.Object);
-        _commandU.SetupGet(x => x.CommandArgumentValue).Returns(_commandUArgValue.Object);
-        _commandV.SetupGet(x => x.CommandArgumentValue).Returns(_commandVArgValue.Object);
-        _commandW.SetupGet(x => x.CommandArgumentValue).Returns(_commandWArgValue.Object);
+        _stubParserService.AddCommandArgument(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string[]>(),
+            Arg.Any<bool>()).Returns(info => _commandArgument);
 
-        _commandTArgValue.SetupGet(x => x.Value).Returns("t");
-        _commandUArgValue.SetupGet(x => x.Value).Returns("u");
-        _commandVArgValue.SetupGet(x => x.Value).Returns("v");
-        _commandWArgValue.SetupGet(x => x.Value).Returns("w");
+
+        _commandT.CommandArgumentValue.Returns(_commandTArgValue);
+        _commandU.CommandArgumentValue.Returns(_commandUArgValue);
+        _commandV.CommandArgumentValue.Returns(_commandVArgValue);
+        _commandW.CommandArgumentValue.Returns(_commandWArgValue);
+
+        _commandTArgValue.Value.Returns("t");
+        _commandUArgValue.Value.Returns("u");
+        _commandVArgValue.Value.Returns("v");
+        _commandWArgValue.Value.Returns("w");
 
         _commandList = new[]
         {
-            _commandT.Object,
-            _commandU.Object,
-            _commandV.Object,
-            _commandW.Object
+            _commandT,
+            _commandU,
+            _commandV,
+            _commandW
         };
     }
 
@@ -50,11 +51,11 @@ public class CommandParserTests
     [Fact]
     public void CommandParser_ShowUsageInformation_OK()
     {
-        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
+        var commandParser = new CommandParser(_stubParserService, _commandList);
 
         commandParser.ShowUsageInformation("Demo.exe");
 
-        _stubParserService.Verify(service => service.ShowUsageInformation("Demo.exe"));
+        _stubParserService.Received().ShowUsageInformation("Demo.exe");
     }
 
     [Theory]
@@ -62,19 +63,20 @@ public class CommandParserTests
     [InlineData("T")]
     public async Task CommandParser_ParseAndValidateAsync_OK(string param)
     {
-        Mock<IArgumentValue> argumentValue = new();
-        argumentValue.Setup(x => x.GetValue<string>(0)).Returns(param);
+        IArgumentValue argumentValue = Substitute.For<IArgumentValue>();
+        argumentValue.GetValue<string>(Arg.Is(0)).Returns(param);
 
-        _stubParserService.Setup(x => x.GetArgumentValue(It.IsAny<ICommandArgument>()))
-            .Returns(argumentValue.Object);
+        _stubParserService.GetArgumentValue(Arg.Any<ICommandArgument>()).Returns(argumentValue);
 
-        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
+
+        var commandParser = new CommandParser(_stubParserService, _commandList);
 
         await commandParser.ParseAndValidateAsync();
 
-        _stubParserService.Verify(x => x.ParseAndValidate(), Times.Once());
-        _commandT.Verify(x => x.PreValidate(), Times.Once());
-        _commandT.Verify(x => x.Execute(), Times.Once());
+        _stubParserService.Received(1).ParseAndValidate();
+
+        await _commandT.Received(1).PreValidate();
+        await _commandT.Received(1).Execute();
     }
 
     [Theory]
@@ -83,13 +85,13 @@ public class CommandParserTests
     [InlineData(null)]
     public async Task CommandParser_ParseAndValidateAsync_InvalidArgument_Fail(string param)
     {
-        Mock<IArgumentValue> argumentValue = new();
-        argumentValue.Setup(x => x.GetValue<string>(0)).Returns(param);
+        IArgumentValue argumentValue = Substitute.For<IArgumentValue>();
+        argumentValue.GetValue<string>(0).Returns(param);
 
-        _stubParserService.Setup(x => x.GetArgumentValue(It.IsAny<ICommandArgument>()))
-            .Returns(argumentValue.Object);
+        _stubParserService.GetArgumentValue(Arg.Any<ICommandArgument>()).Returns(argumentValue);
 
-        var commandParser = new CommandParser(_stubParserService.Object, _commandList);
+
+        var commandParser = new CommandParser(_stubParserService, _commandList);
 
         await Assert.ThrowsAsync<InvalidProgramException>(() => commandParser.ParseAndValidateAsync());
     }
