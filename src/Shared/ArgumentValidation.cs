@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using JetBrains.Annotations;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Meshmakers.Common.Shared;
 
@@ -10,16 +11,46 @@ namespace Meshmakers.Common.Shared;
 public static class ArgumentValidation
 {
     /// <summary>
-    ///     Validates a string
+    /// Validates an object to be not null
+    /// </summary>
+    /// <param name="parameterName">Name of the parameter</param>
+    /// <param name="value">Value of the parameter</param>
+// ReSharper disable once UnusedParameter.Global
+#if NETSTANDARD2_0
+    public static void Validate([InvokerParameterName]string parameterName, object? value)
+#else
+    public static void Validate([InvokerParameterName]string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] object? value)
+#endif
+    {
+        if (value == null)
+            throw new ArgumentNullException(parameterName);
+    }
+
+
+    /// <summary>
+    ///     Validates if the object is of the expected type
     /// </summary>
     /// <typeparam name="T">The expected object type</typeparam>
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
-    public static T? ValidateAndCastToObject<T>([InvokerParameterName] string parameterName, object value)
+    public static T ValidateAndCastToObjectNullable<T>([InvokerParameterName] string parameterName, object value)
         where T : class
     {
         Validate<T>(parameterName, value);
-        return value as T;
+        return value as T ?? throw new InvalidOperationException($"The object is not from the expected type '{typeof(T).FullName}'");
+    }
+
+    /// <summary>
+    ///     Validates if the object is to null and of the expected type
+    /// </summary>
+    /// <typeparam name="T">The expected object type</typeparam>
+    /// <param name="parameterName">Name of the parameter</param>
+    /// <param name="value">Value of the parameter</param>
+    public static T ValidateAndCastToObject<T>([InvokerParameterName] string parameterName, object? value)
+        where T : class
+    {
+        Validate<T>(parameterName, value);
+        return value as T ?? throw new InvalidOperationException($"The object is not from the expected type '{typeof(T).FullName}'");
     }
 
     /// <summary>
@@ -28,12 +59,18 @@ public static class ArgumentValidation
     /// <typeparam name="T">The expected object type</typeparam>
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
-    public static void Validate<T>([InvokerParameterName] string parameterName, object value)
+#if NETSTANDARD2_0
+    public static void Validate<T>([InvokerParameterName] string parameterName, object? value)
+#else
+    public static void Validate<T>([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] object? value)
+#endif
     {
+        Validate(parameterName, value);
+
         if (!(value is T))
         {
             throw new ArgumentOutOfRangeException(parameterName,
-                $@"The object of argument '{parameterName}' does not match the expected type '{value.GetType().FullName}'. Expected was object type '{typeof(T).FullName}'");
+                $@"The object of argument '{parameterName}' does not match the expected type '{typeof(T).FullName}'.");
         }
     }
 
@@ -42,11 +79,11 @@ public static class ArgumentValidation
     /// </summary>
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
-    #if NETSTANDARD2_0  
+#if NETSTANDARD2_0
     public static void ValidateString([InvokerParameterName] string parameterName, string? value)
-    #else
+#else
     public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value)
-    #endif
+#endif
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -60,10 +97,11 @@ public static class ArgumentValidation
     /// <param name="parameterName">Name of the parameter</param>
     /// <param name="value">Value of the parameter</param>
     /// <param name="length">Length of value</param>
-#if NETSTANDARD2_0   
+#if NETSTANDARD2_0
     public static void ValidateStringAndLength([InvokerParameterName] string parameterName, string? value, uint length)
-#else 
-    public static void ValidateStringAndLength([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint length)
+#else
+    public static void ValidateStringAndLength([InvokerParameterName] string parameterName,
+        [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint length)
 #endif
 
     {
@@ -78,13 +116,14 @@ public static class ArgumentValidation
     /// <param name="minLength">Minimal length of value</param>
     /// <param name="maxLength">Maximal length of value</param>
     // ReSharper disable once MemberCanBePrivate.Global
-    #if NETSTANDARD2_0
+#if NETSTANDARD2_0
         public static void ValidateString([InvokerParameterName] string parameterName, string? value, uint? minLength,
             uint? maxLength)
-    #else 
-        public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value, uint? minLength,
+#else
+    public static void ValidateString([InvokerParameterName] string parameterName, [System.Diagnostics.CodeAnalysis.NotNull] string? value,
+        uint? minLength,
         uint? maxLength)
-    #endif
+#endif
     {
         if (string.IsNullOrEmpty(value) || value == null)
         {
