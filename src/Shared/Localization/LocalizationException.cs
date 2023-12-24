@@ -17,10 +17,4 @@ public class LocalizationException : Exception
     public LocalizationException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    protected LocalizationException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

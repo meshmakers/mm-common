@@ -24,10 +24,4 @@ public class MandatoryArgumentsMissingException : ParserException
     public MandatoryArgumentsMissingException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    protected MandatoryArgumentsMissingException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

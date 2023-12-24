@@ -24,10 +24,4 @@ public class ArgumentValueMissingException : Exception
     public ArgumentValueMissingException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    protected ArgumentValueMissingException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

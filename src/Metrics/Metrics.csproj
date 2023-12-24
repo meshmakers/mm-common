@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageId>Meshmakers.Common.Metrics</PackageId>
         <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="prometheus-net" Version="7.0.0" />
-        <PackageReference Include="prometheus-net.AspNetCore" Version="7.0.0" />
+        <PackageReference Include="prometheus-net" Version="8.2.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.0" />
     </ItemGroup>
 
     <ItemGroup>

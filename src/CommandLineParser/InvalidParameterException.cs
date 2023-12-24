@@ -24,10 +24,4 @@ public class InvalidParameterException : ParserException
     public InvalidParameterException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    protected InvalidParameterException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

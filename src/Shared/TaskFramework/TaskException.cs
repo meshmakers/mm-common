@@ -32,16 +32,4 @@ public class TaskException : Exception
     public TaskException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    /// <summary>
-    ///     Constructor
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected TaskException(
-        SerializationInfo info,
-        StreamingContext context)
-        : base(info, context)
-    {
-    }
 }

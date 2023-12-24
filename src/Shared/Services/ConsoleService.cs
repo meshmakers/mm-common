@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Meshmakers.Common.Shared.Services;
+﻿namespace Meshmakers.Common.Shared.Services;
 
 /// <summary>
 ///     Helper class for console interaction
@@ -70,7 +67,7 @@ public class ConsoleService : IConsoleService
     ///     Writes the specified string value, followed by the current line terminator, to the standard output stream.
     /// </summary>
     /// <param name="text">The value to write.</param>
-    public void WriteLine(string text)
+    public void WriteLine(string? text)
     {
         Console.WriteLine(text);
     }
@@ -114,8 +111,8 @@ public class ConsoleService : IConsoleService
 
         while (!string.IsNullOrEmpty(lineBuilder))
         {
-            string nextLine;
-            if (lineBuilder.Length >= _maxLineLength)
+            string? nextLine;
+            if (lineBuilder != null && lineBuilder.Length >= _maxLineLength)
             {
                 var splitIndex = lineBuilder.LastIndexOf(' ', _maxLineLength - 1);
                 if (splitIndex < 0)

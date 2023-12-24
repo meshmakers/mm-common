@@ -83,7 +83,7 @@ public class CommandParserTests
     [InlineData("z")]
     [InlineData("")]
     [InlineData(null)]
-    public async Task CommandParser_ParseAndValidateAsync_InvalidArgument_Fail(string param)
+    public async Task CommandParser_ParseAndValidateAsync_InvalidArgument_Fail(string? param)
     {
         IArgumentValue argumentValue = Substitute.For<IArgumentValue>();
         argumentValue.GetValue<string>(0).Returns(param);
