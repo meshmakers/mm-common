@@ -8,6 +8,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <ImplicitUsings>true</ImplicitUsings>
         <RepositoryUrl>https://github.com/meshmakers/common.git</RepositoryUrl>
+        <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageTags>Octo data mesh iot</PackageTags>
