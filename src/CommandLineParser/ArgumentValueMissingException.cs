@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Meshmakers.Common.CommandLineParser;
+﻿namespace Meshmakers.Common.CommandLineParser;
 
 [Serializable]
 public class ArgumentValueMissingException : Exception

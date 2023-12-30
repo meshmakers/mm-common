@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Meshmakers.Common.CommandLineParser.Commands;
 
 public interface ICommandParser

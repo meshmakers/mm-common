@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Meshmakers.Common.Shared.TaskFramework;
+﻿namespace Meshmakers.Common.Shared.TaskFramework;
 
 /// <summary>
 ///     Represents an task execution error

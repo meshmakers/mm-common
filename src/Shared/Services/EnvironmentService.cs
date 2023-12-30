@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Meshmakers.Common.Shared.Services;
+﻿namespace Meshmakers.Common.Shared.Services;
 
 /// <summary>
 ///     Implements the access to information of the current environment

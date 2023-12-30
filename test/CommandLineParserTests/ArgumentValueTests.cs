@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Meshmakers.Common.CommandLineParser;
+﻿using Meshmakers.Common.CommandLineParser;
 using NSubstitute;
 using Xunit;
 

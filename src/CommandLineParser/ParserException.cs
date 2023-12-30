@@ -1,6 +1,3 @@
-using System;
-using System.Runtime.Serialization;
-
 namespace Meshmakers.Common.CommandLineParser;
 
 /// <summary>

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Meshmakers.Common.CommandLineParser;
+﻿namespace Meshmakers.Common.CommandLineParser;
 
 public interface ICommandArgument : IArgument
 {

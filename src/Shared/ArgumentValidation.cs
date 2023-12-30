@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Meshmakers.Common.Shared;
@@ -23,7 +21,9 @@ public static class ArgumentValidation
 #endif
     {
         if (value == null)
+        {
             throw new ArgumentNullException(parameterName);
+        }
     }
 
 

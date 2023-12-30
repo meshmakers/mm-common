@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
+﻿using System.ComponentModel;
 using JetBrains.Annotations;
 
 namespace Meshmakers.Common.Shared.TaskFramework;

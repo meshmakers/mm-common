@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Meshmakers.Common.Shared;
 
 public static class Int64Extensions

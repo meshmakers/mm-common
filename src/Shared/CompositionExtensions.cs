@@ -1,5 +1,4 @@
 ﻿using System.Composition.Hosting;
-using System.IO;
 using System.Reflection;
 
 namespace Meshmakers.Common.Shared;

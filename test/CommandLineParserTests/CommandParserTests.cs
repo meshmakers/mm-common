@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Meshmakers.Common.CommandLineParser;
 using Meshmakers.Common.CommandLineParser.Commands;
 using NSubstitute;

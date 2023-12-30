@@ -1,5 +1,4 @@
-﻿using System;
-using Meshmakers.Common.Shared;
+﻿using Meshmakers.Common.Shared;
 using Xunit;
 
 namespace Meshmakers.Common.SharedTests;

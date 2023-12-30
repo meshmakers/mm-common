@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Meshmakers.Common.Shared.Services;
+﻿using Meshmakers.Common.Shared.Services;
 
 namespace Meshmakers.Common.CommandLineParser;
 
