@@ -8,6 +8,8 @@
         <Product>Meshmakers.Common.MetricsTests</Product>
         <RootNamespace>Meshmakers.Common.MetricsTests</RootNamespace>
         <TargetFramework>net8.0</TargetFramework>
+        <Configurations>Debug;Release;DebugL</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
