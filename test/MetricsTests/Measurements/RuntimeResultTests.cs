@@ -12,7 +12,7 @@ public class RuntimeResultTests
     private readonly List<Checkpoint> _checkpoints = new();
 
     [Fact]
-    public async void Create()
+    public async Task Create()
     {
         await SetupCheckpoints();
         var result = new RuntimeResult(RuntimeHelper.DefaultRuntimeName, new RuntimeData(_checkpoints));
@@ -50,7 +50,7 @@ public class RuntimeResultTests
     }
 
     [Fact]
-    public async void Add()
+    public async Task Add()
     {
         var result = new RuntimeResult(RuntimeHelper.DefaultRuntimeName);
         Assert.Equal(0, result.Runs);
@@ -62,7 +62,7 @@ public class RuntimeResultTests
     }
 
     [Fact]
-    public async void GetTotalResults()
+    public async Task GetTotalResults()
     {
         var result = new RuntimeResult(RuntimeHelper.DefaultRuntimeName);
         await SetupCheckpoints(1, 0);

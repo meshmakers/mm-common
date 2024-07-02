@@ -37,7 +37,7 @@ public class RuntimeDataCollectionTests
     }
 
     [Fact]
-    public async void PopResults()
+    public async Task PopResults()
     {
         var collection = new RuntimeDataCollection();
         await Task.WhenAll(new Task[100].Select(_ => AddAndPop(collection)));

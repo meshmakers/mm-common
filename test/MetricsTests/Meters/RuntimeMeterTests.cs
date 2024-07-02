@@ -7,7 +7,7 @@ namespace Meshmakers.Common.MetricsTests.Meters;
 public class RuntimeMeterTest
 {
     [Fact(Timeout = 200)]
-    public async void CreateAndMeasure()
+    public async Task CreateAndMeasure()
     {
         var meter = new RuntimeMeter(RuntimeHelper.DefaultRuntimeName);
         Assert.Equal(RuntimeHelper.DefaultRuntimeName, meter.Name);
@@ -28,7 +28,7 @@ public class RuntimeMeterTest
     }
 
     [Fact]
-    public async void SecondStartEmitsCheckpoints()
+    public async Task SecondStartEmitsCheckpoints()
     {
         var meter = new RuntimeMeter(RuntimeHelper.DefaultRuntimeName);
         var checkpoints = new List<Checkpoint>();
@@ -59,7 +59,7 @@ public class RuntimeMeterTest
     }
 
     [Fact(Timeout = 100)]
-    public async void ValidateArgs()
+    public async Task ValidateArgs()
     {
         var meter = new RuntimeMeter(RuntimeHelper.DefaultRuntimeName);
         RuntimeDataArgs? checkpointsArgs = null;

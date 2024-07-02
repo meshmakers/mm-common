@@ -20,7 +20,7 @@ public class CheckpointResultTests
     }
 
     [Fact]
-    public async void Add()
+    public async Task Add()
     {
         var result = new CheckpointResult(RuntimeHelper.CreateCheckpoint());
         await Task.Delay(10);

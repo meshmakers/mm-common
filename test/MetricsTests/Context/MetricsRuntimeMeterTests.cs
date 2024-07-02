@@ -7,7 +7,7 @@ namespace Meshmakers.Common.MetricsTests.Context;
 public class MetricsRuntimeMeterTests
 {
     [Fact(Timeout = 500)]
-    public async void MeasureAndAnalyseParallel()
+    public async Task MeasureAndAnalyseParallel()
     {
         const int numIterations = 100;
         const int numAnalysis = 10;
@@ -28,7 +28,7 @@ public class MetricsRuntimeMeterTests
     }
 
     [Fact(Timeout = 500)]
-    public async void PopMeasurements()
+    public async Task PopMeasurements()
     {
         const int numIterations = 10;
         var metrics = new MetricsContext();
