@@ -15,11 +15,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  Company: "meshmakers GmbH"
-  Copyright: "(c) meshmakers GmbH 2022"
 
 steps:
-- task: Assembly-Info-NetCore@2
+- task: Assembly-Info-NetCore@3
   inputs:
     Path: '$(Build.SourcesDirectory)'
     FileNames: |
@@ -27,30 +25,24 @@ steps:
       !**Tests/*
     InsertAttributes: true
     FileEncoding: 'auto'
-    GeneratePackageOnBuild: true
-    WriteBOM: false
-    Authors: 'Gerald Lochner'
-    Company: '$(Company)'
     Product: '$(Build.SourceBranchName) - $(Build.SourceVersion) (release)'
-    Copyright: '$(Copyright)'
     VersionNumber: '$(Build.BuildNumber)'
     FileVersionNumber: '$(Build.BuildNumber)'
     InformationalVersion: '$(Build.BuildNumber)'
     PackageVersion: '$(Build.BuildNumber)'
-    LogLevel: 'verbose'
-    FailOnWarning: true
+    DisableTelemetry: true
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: 'build'
-    arguments: '--configuration $(buildConfiguration)' 
+    arguments: '--configuration $(buildConfiguration)'
     projects: '$(solution)'
 - task: DotNetCoreCLI@2
   displayName: Tests
   inputs:
     command: 'test'
-    arguments: '--configuration $(buildConfiguration)' 
+    arguments: '--configuration $(buildConfiguration)'
     projects: '$(solution)'
 - task: CopyFiles@2
   condition: ne(variables['Build.Reason'], 'PullRequest')
@@ -72,4 +64,4 @@ steps:
     arguments: >
       push $(Build.ArtifactStagingDirectory)/**/*.nupkg
       -s https://api.nuget.org/v3/index.json
-      -k $(NuGetApiKey) 
+      -k $(NuGetApiKey)
