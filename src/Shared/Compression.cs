@@ -26,7 +26,7 @@ public static class Compression
 
             var archiveFileStream = entry.Open();
 
-#if NETSTANDARD2_0  
+#if NETSTANDARD2_0
             using (var streamWriter = new StreamWriter(targetFile))
 #else
             await using (var streamWriter = new StreamWriter(targetFile))
@@ -38,12 +38,12 @@ public static class Compression
     }
 
     public static async Task PackFileToZipAsync(this Stream zipStream, string fileNameWithExtension,
-        MemoryStream zipArchiveStream)
+        MemoryStream zipArchiveStream, bool leaveOpen = false)
     {
-        using (var zipArchive = new ZipArchive(zipArchiveStream, ZipArchiveMode.Create))
+        using (var zipArchive = new ZipArchive(zipArchiveStream, ZipArchiveMode.Create, leaveOpen))
         {
             var archiveEntry = zipArchive.CreateEntry(fileNameWithExtension);
-#if NETSTANDARD2_0  
+#if NETSTANDARD2_0
             using (var stream = archiveEntry.Open())
 #else
              await using (var stream = archiveEntry.Open())
