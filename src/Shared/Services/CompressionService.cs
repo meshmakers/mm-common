@@ -10,7 +10,7 @@ public class CompressionService : ICompressionService
     public async Task ExtractFileFromZipAsync(Stream zipStream, string contentType,
         Func<IEnumerable<CompressedFile>, CompressedFile?> filterFunc, string targetFile)
     {
-        if (contentType.ToLower() != "application/zip")
+        if (contentType.ToLower() != "application/zip" && contentType.ToLower() != "application/x-zip-compressed")
         {
             throw new NotSupportedException($"'{contentType}' not a supported content type.");
         }
