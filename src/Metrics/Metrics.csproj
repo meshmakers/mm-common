@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageId>Meshmakers.Common.Metrics</PackageId>
         <RootNamespace>Meshmakers.Common.Metrics</RootNamespace>
-        <TargetFramework>net8.0</TargetFramework>
         <Configurations>Debug;Release;DebugL</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>

@@ -6,7 +6,6 @@
         <PackageId>Meshmakers.Common.CommandLineParser</PackageId>
         <RootNamespace>Meshmakers.Common.CommandLineParser</RootNamespace>
         <SignAssembly>false</SignAssembly>
-        <TargetFramework>net8.0</TargetFramework>
         <Configurations>Debug;Release;DebugL</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
