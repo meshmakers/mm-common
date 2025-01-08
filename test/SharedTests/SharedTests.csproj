@@ -7,7 +7,6 @@
         <Product>Meshmakers.Common.SharedTests</Product>
         <RootNamespace>Meshmakers.Common.SharedTests</RootNamespace>
         <SignAssembly>false</SignAssembly>
-        <TargetFramework>net8.0</TargetFramework>
         <Configurations>Debug;Release;DebugL</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>

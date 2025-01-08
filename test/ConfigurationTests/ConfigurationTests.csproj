@@ -6,7 +6,6 @@
         <PackageId>Meshmakers.Common.ConfigurationTests</PackageId>
         <Product>Meshmakers.Common.ConfigurationTests</Product>
         <RootNamespace>Meshmakers.Common.ConfigurationTests</RootNamespace>
-        <TargetFramework>net8.0</TargetFramework>
         <Configurations>Debug;Release;DebugL</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
