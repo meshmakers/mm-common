@@ -13,6 +13,7 @@
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageTags>Octo data mesh iot</PackageTags>
         <PackageVersion Condition="'$(Configuration)'=='DebugL'">999.0.0</PackageVersion>
+        <Version Condition="'$(Configuration)'=='DebugL'">999.0.0</Version>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
 </Project>
