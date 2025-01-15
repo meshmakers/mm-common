@@ -1,13 +1,10 @@
 <Project>
     <PropertyGroup>
-        <Authors>meshmakers GmbH and Contributors</Authors>
-        <Company>meshmakers GmbH and Contributors</Company>
-        <Copyright>(c) 2022-2025 meshmakers GmbH</Copyright>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <ImplicitUsings>true</ImplicitUsings>
-        <RepositoryUrl>https://github.com/meshmakers/common.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/meshmakers/mm-common.git</RepositoryUrl>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
