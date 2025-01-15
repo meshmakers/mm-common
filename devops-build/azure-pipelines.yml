@@ -58,7 +58,8 @@ steps:
     TargetFolder: $(build.artifactstagingdirectory)/nuget
     flattenFolders: true
 - task: PublishBuildArtifacts@1
+  condition: or(eq(variables.isMain, true), eq(variables.isRelease, true))
   displayName: 'Publish Artifact: local'
   inputs:
-    ArtifactName: local    
+    ArtifactName: local
 - template: push-nuget-package.yml
