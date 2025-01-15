@@ -1,0 +1,18 @@
+steps:
+- task: Assembly-Info-NetCore@3
+  displayName: "Setting version number to $(Build.BuildNumber)"
+  inputs:
+    FileNames: |
+      **/*.csproj
+      !**Tests/*
+    InsertAttributes: true
+    FileEncoding: 'auto'
+    Product: $(Build.SourceBranchName) - $(Build.SourceVersion) (release)
+    VersionNumber: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
+    InformationalVersion: '$(Build.BuildNumber)'
+    PackageVersion: '$(Build.BuildNumber)'
+    DisableTelemetry: true
+    Authors: $(Authors)
+    Company: $(Company)
+    Copyright: $(Copyright)

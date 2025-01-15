@@ -19,26 +19,23 @@ pool:
   name: Gerald-Local-Linux
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  - group: ApiKeys
+  - group: OctoDefault
+  - name: solution
+    value: '**/*.sln'
+  - name: isRelease
+    value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/r') }}
+  - name: buildConfiguration
+    value: 'Release'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: isRelease
+    value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/r') }}
+  - name: isMain
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
 steps:
-- task: Assembly-Info-NetCore@3
-  inputs:
-    Path: '$(Build.SourcesDirectory)'
-    FileNames: |
-      **/*.csproj
-      !**Tests/*
-    InsertAttributes: true
-    FileEncoding: 'auto'
-    Product: '$(Build.SourceBranchName) - $(Build.SourceVersion) (release)'
-    VersionNumber: '$(Build.BuildNumber)'
-    FileVersionNumber: '$(Build.BuildNumber)'
-    InformationalVersion: '$(Build.BuildNumber)'
-    PackageVersion: '$(Build.BuildNumber)'
-    DisableTelemetry: true
-
+- template: set-version.yml
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -52,23 +49,12 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     projects: '$(solution)'
 - task: CopyFiles@2
-  condition: ne(variables['Build.Reason'], 'PullRequest')
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  condition: or(eq(variables.isMain, true), eq(variables.isRelease, true))
+  displayName: 'Copy Files from **/*.nupkg to $(build.artifactstagingdirectory)'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
+    SourceFolder: $(Build.SourcesDirectory)
     Contents: |
-      **/bin/$(buildConfiguration)/**
-      **/bin/$(buildConfiguration)/*.nupkg
-      !**Tests/**
-      !.git/**/*
-    TargetFolder: $(build.artifactstagingdirectory)
-- task: DotNetCoreCLI@2
-  condition: ne(variables['Build.Reason'], 'PullRequest')
-  displayName: Push Nuget Package
-  inputs:
-    command: custom
-    custom: nuget
-    arguments: >
-      push $(Build.ArtifactStagingDirectory)/**/*.nupkg
-      -s https://api.nuget.org/v3/index.json
-      -k $(NuGetApiKey)
+      **/*.nupkg
+    TargetFolder: $(build.artifactstagingdirectory)/nuget
+    flattenFolders: true
+- template: push-nuget-package.yml
