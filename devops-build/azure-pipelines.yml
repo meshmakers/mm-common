@@ -48,16 +48,5 @@ steps:
     command: 'test'
     arguments: '--configuration $(buildConfiguration)'
     projects: '$(solution)'
-- task: CopyFiles@2
-  displayName: 'Copy Files from **/*.nupkg to $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: $(Build.SourcesDirectory)
-    Contents: |
-      **/*.nupkg
-    TargetFolder: $(build.artifactstagingdirectory)/nuget
-    flattenFolders: true
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: local'
-  inputs:
-    ArtifactName: local
+- template: handle-artifacts.yml
 - template: push-nuget-package.yml
