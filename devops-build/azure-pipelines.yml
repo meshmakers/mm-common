@@ -35,6 +35,7 @@ variables:
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
 steps:
+- template: update-build-number.yml  
 - template: set-version.yml
 - task: DotNetCoreCLI@2
   displayName: Build
