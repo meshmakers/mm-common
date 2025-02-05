@@ -1,14 +1,9 @@
 namespace Meshmakers.Common.Metrics.Meters;
 
-public abstract class BaseMeter : IDisposable
+public abstract class BaseMeter(string name) : IDisposable
 {
-    protected BaseMeter(string name)
-    {
-        Name = name;
-    }
-
     public bool Disposed { get; private set; }
-    public string Name { get; }
+    public string Name { get; } = name;
 
     public void Dispose()
     {

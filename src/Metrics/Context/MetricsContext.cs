@@ -16,7 +16,7 @@ public class MetricsContext : IMetricsContext
     private bool _publishActive = true;
     private RuntimePublisher? _runtimePublisher;
 
-    public RuntimeMeter CreateRuntimeMeter([CallerMemberName] string memberName = "")
+    public IRuntimeMeter CreateRuntimeMeter([CallerMemberName] string memberName = "")
     {
         var timeMeter = new RuntimeMeter(memberName);
         timeMeter.RunCompleted += HandleRunCompleted;

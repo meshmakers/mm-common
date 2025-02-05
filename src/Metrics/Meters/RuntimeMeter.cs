@@ -3,7 +3,7 @@ using Meshmakers.Common.Metrics.Meters.Data;
 
 namespace Meshmakers.Common.Metrics.Meters;
 
-public class RuntimeMeter : BaseMeter
+public class RuntimeMeter : BaseMeter, IRuntimeMeter
 {
     private readonly List<Checkpoint> _checkpoints = new();
     private readonly Stopwatch _totalTime = new();

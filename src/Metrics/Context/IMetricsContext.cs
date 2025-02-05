@@ -15,7 +15,7 @@ public interface IMetricsContext : IDisposable
     ///     A name can also optionally be assigned manually.
     /// </param>
     /// <returns></returns>
-    public RuntimeMeter CreateRuntimeMeter([CallerMemberName] string memberName = "");
+    public IRuntimeMeter CreateRuntimeMeter([CallerMemberName] string memberName = "");
 
     /// <summary>
     ///     Initiates a prometheus-provider that publishes the collected date at a specified interval.
