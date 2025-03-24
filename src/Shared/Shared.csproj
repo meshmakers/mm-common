@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <AssemblyName>Meshmakers.Common.Shared</AssemblyName>
@@ -14,7 +14,7 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-        <PackageReference Include="System.Composition.TypedParts" Version="9.0.2" />
+        <PackageReference Include="System.Composition.TypedParts" Version="9.0.3" />
         <PackageReference Include="System.Text.Json" Version="9.0.3" />
     </ItemGroup>
 
