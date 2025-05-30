@@ -58,15 +58,15 @@ public class CommandParser : ICommandParser
         _parserService.ParseAndValidate();
 
         var commandArgData = _parserService.GetArgumentValue(_commandArg);
-        var command = commandArgData.GetValue<string>()?.ToLower();
+        var commandString = commandArgData.GetValue<string>()?.ToLower();
 
-        var ospCommand = _commands.FirstOrDefault(c => c.CommandArgumentValue.Value.ToLower() == command);
-        if (ospCommand == null)
+        var command = _commands.FirstOrDefault(c => c.CommandArgumentValue.Value.ToLower() == commandString);
+        if (command == null)
         {
-            throw new InvalidProgramException($"Command value '{command}' is invalid.");
+            throw new InvalidProgramException($"Command value '{commandString}' is invalid.");
         }
 
-        await ospCommand.PreValidate();
-        await ospCommand.Execute();
+        await command.PreValidate();
+        await command.Execute();
     }
 }

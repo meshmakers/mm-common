@@ -3,6 +3,11 @@
 public interface ICommandArgumentValue : IArgumentParser
 {
     /// <summary>
+    /// Returns command group name
+    /// </summary>
+    string Group { get; }
+
+    /// <summary>
     ///     Returns key of command
     /// </summary>
     string Value { get; }

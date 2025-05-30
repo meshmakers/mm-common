@@ -15,11 +15,11 @@ public class PostCommand : Command<SampleOptions>
         IOptions<SampleOptions> options)
         : base(logger, "Post", "Posts content to the given URI", options)
     {
-        _uri = CommandArgumentValue.AddArgument("u", "uri", new[] { "URI to call" },
+        _uri = CommandArgumentValue.AddArgument("u", "uri", ["URI to call"],
             true, 1);
-        _contentType = CommandArgumentValue.AddArgument("ct", "contentType", new[] { "Content type of body" },
+        _contentType = CommandArgumentValue.AddArgument("ct", "contentType", ["Content type of body"],
             true, 1);
-        _body = CommandArgumentValue.AddArgument("b", "body", new[] { "The body content" },
+        _body = CommandArgumentValue.AddArgument("b", "body", ["The body content"],
             true, 1);
     }
 

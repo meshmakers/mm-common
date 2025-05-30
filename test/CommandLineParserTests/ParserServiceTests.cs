@@ -14,7 +14,7 @@ public class ParserServiceTests
     public void ParseAndValidate_ArgumentNotFound_Fail()
     {
         _stubIEnvironmentService.GetCommandLineArgs().Returns(
-             new[] { "my.exe", "-a" });
+            ["my.exe", "-a"]);
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         Assert.Throws<InvalidParameterException>(() =>
             commandLineParserService.ParseAndValidate());
@@ -23,9 +23,9 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ArgumentFound_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a"]);
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        var argumentDefinition = commandLineParserService.AddArgument("a", "longTerm", new[] { "test" });
+        var argumentDefinition = commandLineParserService.AddArgument("a", "longTerm", ["test"]);
         commandLineParserService.ParseAndValidate();
 
         Assert.True(commandLineParserService.IsArgumentUsed(argumentDefinition));
@@ -34,11 +34,11 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ClearValue_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a" });
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-b" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a"]);
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-b"]);
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        var argumentADefinition = commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" });
-        var argumentBDefinition = commandLineParserService.AddArgument("b", "bLongTerm", new[] { "test" });
+        var argumentADefinition = commandLineParserService.AddArgument("a", "aLongTerm", ["test"]);
+        var argumentBDefinition = commandLineParserService.AddArgument("b", "bLongTerm", ["test"]);
         commandLineParserService.ParseAndValidate();
         commandLineParserService.ParseAndValidate();
 
@@ -49,9 +49,9 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_EmptyString_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a"]);
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        var argumentADefinition = commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" });
+        var argumentADefinition = commandLineParserService.AddArgument("a", "aLongTerm", ["test"]);
         commandLineParserService.ParseAndValidate();
 
         Assert.True(commandLineParserService.IsArgumentUsed(argumentADefinition));
@@ -60,9 +60,9 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ArgumentValues_Mandatory_Missing_Fail()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a","value1" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a", "value1"]);
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" }, true, 2, false);
+        commandLineParserService.AddArgument("a", "aLongTerm", ["test"], true, 2, false);
         Assert.Throws<ArgumentValueMissingException>(() =>
             commandLineParserService.ParseAndValidate());
     }
@@ -70,10 +70,10 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ArgumentValues_Mandatory_Match_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a", "value1", "value2" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a", "value1", "value2"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        var argDef = commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" }, true, 2, false);
+        var argDef = commandLineParserService.AddArgument("a", "aLongTerm", ["test"], true, 2, false);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("value1", commandLineParserService.GetArgumentValue(argDef).GetValue<string>());
@@ -84,10 +84,10 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ArgumentValues_Mandatory_MoreThanDefined_Fail()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a", "value1", "value2", "value3" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a", "value1", "value2", "value3"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" }, true, 2, false);
+        commandLineParserService.AddArgument("a", "aLongTerm", ["test"], true, 2, false);
         Assert.Throws<InvalidParameterException>(() =>
             commandLineParserService.ParseAndValidate());
     }
@@ -95,10 +95,10 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_ArgumentValues_Optional_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a", "value1", "value2", "value3" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a", "value1", "value2", "value3"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
-        var argDef = commandLineParserService.AddArgument("a", "aLongTerm", new[] { "test" }, true, 1, true);
+        var argDef = commandLineParserService.AddArgument("a", "aLongTerm", ["test"], true, 1, true);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("value1", commandLineParserService.GetArgumentValue(argDef).GetValue<string>());
@@ -111,18 +111,18 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_CommandArgument_MandatoryArgMissing_Fail()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, true);
-        var firstCommandArgumentValue = new CommandArgumentValue("first", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], true);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
-        var secondCommandArgumentValue = new CommandArgumentValue("second", "second command");
+        var secondCommandArgumentValue = new CommandArgumentValue("g", "second", "second command");
         commandArgument.AddCommandValue(secondCommandArgumentValue);
 
-        firstCommandArgumentValue.AddArgument("a", "aLongTerm", new[] { "test a" }, true, 1, true);
-        secondCommandArgumentValue.AddArgument("b", "bLongTerm", new[] { "test b" }, true, 1, true);
+        firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1, true);
+        secondCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], true, 1, true);
         Assert.Throws<MandatoryArgumentsMissingException>(() =>
             commandLineParserService.ParseAndValidate());
     }
@@ -130,18 +130,18 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_CommandArgument_MandatoryArgMissing_OtherArguments_Fail()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-a", "value1", "value2", "value3" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-a", "value1", "value2", "value3"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, true);
-        var firstCommandArgumentValue = new CommandArgumentValue("first", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], true);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
-        var secondCommandArgumentValue = new CommandArgumentValue("second", "second command");
+        var secondCommandArgumentValue = new CommandArgumentValue("g", "second", "second command");
         commandArgument.AddCommandValue(secondCommandArgumentValue);
 
-        firstCommandArgumentValue.AddArgument("a", "aLongTerm", new[] { "test a" }, true, 1, true);
-        secondCommandArgumentValue.AddArgument("b", "bLongTerm", new[] { "test b" }, true, 1, true);
+        firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1, true);
+        secondCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], true, 1, true);
 
         Assert.Throws<InvalidParameterException>(() =>
             commandLineParserService.ParseAndValidate());
@@ -150,18 +150,18 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_CommandArgument_FilePath_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns([
             "my.exe", "-c", "ImportCk", "-f",
             "/Users/gerald/RiderProjects/PaketService/Backend/Persistence/PaketServiceConstructionKit.json"
-        });
+        ]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, false);
-        var firstCommandArgumentValue = new CommandArgumentValue("ImportCk", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], false);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "ImportCk", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
 
-        var argumentA = firstCommandArgumentValue.AddArgument("f", "file", new[] { "test a" }, true, 1, false);
+        var argumentA = firstCommandArgumentValue.AddArgument("f", "file", ["test a"], true, 1, false);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("ImportCk", commandLineParserService.GetArgumentValue(commandArgument).GetValue<string>());
@@ -172,22 +172,22 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_CommandArgument_OtherArguments_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-c", "first", "-a", "value1", "value2", "value3", "-o" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-c", "first", "-a", "value1", "value2", "value3", "-o"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var otherParameterArgument =
-            commandLineParserService.AddArgument("o", "Other", new[] { "Other parameter" }, false);
+            commandLineParserService.AddArgument("o", "Other", ["Other parameter"], false);
 
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, false);
-        var firstCommandArgumentValue = new CommandArgumentValue("first", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], false);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
 
-        var secondCommandArgumentValue = new CommandArgumentValue("second", "second command");
+        var secondCommandArgumentValue = new CommandArgumentValue("g", "second", "second command");
         commandArgument.AddCommandValue(secondCommandArgumentValue);
 
-        firstCommandArgumentValue.AddArgument("a", "aLongTerm", new[] { "test a" }, true, 1, true);
-        secondCommandArgumentValue.AddArgument("b", "bLongTerm", new[] { "test b" }, true, 1, true);
+        firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1, true);
+        secondCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], true, 1, true);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("first", commandLineParserService.GetArgumentValue(commandArgument).GetValue<string>());
@@ -197,22 +197,22 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_CommandArgument_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-c", "first", "-a", "value1", "value2", "value3", "-o" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-c", "first", "-a", "value1", "value2", "value3", "-o"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var otherParameterArgument =
-            commandLineParserService.AddArgument("o", "Other", new[] { "Other parameter" }, false);
+            commandLineParserService.AddArgument("o", "Other", ["Other parameter"], false);
 
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, false);
-        var firstCommandArgumentValue = new CommandArgumentValue("first", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], false);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
 
-        var secondCommandArgumentValue = new CommandArgumentValue("second", "second command");
+        var secondCommandArgumentValue = new CommandArgumentValue("g", "second", "second command");
         commandArgument.AddCommandValue(secondCommandArgumentValue);
 
-        firstCommandArgumentValue.AddArgument("a", "aLongTerm", new[] { "test a" }, true, 1, true);
-        secondCommandArgumentValue.AddArgument("b", "bLongTerm", new[] { "test b" }, true, 1, true);
+        firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1, true);
+        secondCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], true, 1, true);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("first", commandLineParserService.GetArgumentValue(commandArgument).GetValue<string>());
@@ -222,19 +222,19 @@ public class ParserServiceTests
     [Fact]
     public void ParseAndValidate_Arguments_StartsWithSameCharacters_OK()
     {
-        _stubIEnvironmentService.GetCommandLineArgs().Returns(new[] { "my.exe", "-c", "first", "-b", "-s" });
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-c", "first", "-b", "-s"]);
 
         var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
         var otherParameterArgument =
-            commandLineParserService.AddArgument("s", "simulation", new[] { "Other parameter" }, false);
+            commandLineParserService.AddArgument("s", "simulation", ["Other parameter"], false);
 
         var commandArgument =
-            commandLineParserService.AddCommandArgument("c", "command", new[] { "test command" }, false);
-        var firstCommandArgumentValue = new CommandArgumentValue("first", "first command");
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], false);
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
         commandArgument.AddCommandValue(firstCommandArgumentValue);
 
-        var argumentA = firstCommandArgumentValue.AddArgument("st", "status", new[] { "test a" }, 0);
-        var argumentB = firstCommandArgumentValue.AddArgument("b", "bLongTerm", new[] { "test b" }, 0);
+        var argumentA = firstCommandArgumentValue.AddArgument("st", "status", ["test a"], 0);
+        var argumentB = firstCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], 0);
         commandLineParserService.ParseAndValidate();
 
         Assert.Equal("first", commandLineParserService.GetArgumentValue(commandArgument).GetValue<string>());

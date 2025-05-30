@@ -8,6 +8,9 @@
 //------------------------------------------------------------------------------
 
 namespace Meshmakers.Common.CommandLineParser.Sample {
+    using System;
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,7 +28,7 @@ namespace Meshmakers.Common.CommandLineParser.Sample {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("CommandLineParser.Sample.Texts", typeof(Texts).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Meshmakers.Common.CommandLineParser.Sample.Texts", typeof(Texts).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

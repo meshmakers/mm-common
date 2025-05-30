@@ -22,7 +22,7 @@ public class ConsoleService : IConsoleService
         }
         catch (IOException)
         {
-            // We ignore the exception, in case the console window is hosted in an application (e. g. nuget package manager console)
+            // We ignore the exception, in case the console window is hosted in an application (e.g. nuget package manager console)
         }
     }
 
@@ -79,7 +79,7 @@ public class ConsoleService : IConsoleService
     /// <param name="text">The value to write.</param>
     public void WriteLineRegardSpace(string text)
     {
-        WriteLineRegardSpace(text, fragment => fragment);
+        WriteLineRegardSpace(text, 0, fragment => fragment);
     }
 
     /// <summary>
@@ -101,29 +101,31 @@ public class ConsoleService : IConsoleService
 
         var fullName = column1Text.PadRight(column1Length);
 
-        WriteLineRegardSpace($"{fullName}{column2Text}", fragment => $"{"".PadRight(column1Length)}{fragment}");
+        WriteLineRegardSpace($"{fullName}{column2Text}", column1Length, fragment => $"{"".PadRight(column1Length)}{fragment}");
     }
 
 
-    private void WriteLineRegardSpace(string line, Func<string, string> remainingTextTreatment)
+    private void WriteLineRegardSpace(string line, int skipCount, Func<string, string> remainingTextTreatment)
     {
         var lineBuilder = line;
 
         while (!string.IsNullOrEmpty(lineBuilder))
         {
             string? nextLine;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (lineBuilder != null && lineBuilder.Length >= _maxLineLength)
             {
-                var splitIndex = lineBuilder.LastIndexOf(' ', _maxLineLength - 1);
+                var remainingText = lineBuilder.Substring(skipCount);
+                var splitIndex = remainingText.LastIndexOf(' ', _maxLineLength - 1);
                 if (splitIndex < 0)
                 {
-                    nextLine = lineBuilder;
-                    lineBuilder = null;
+                    nextLine = lineBuilder.Substring(0, _maxLineLength);
+                    lineBuilder = remainingTextTreatment(lineBuilder.Substring(_maxLineLength + 1));
                 }
                 else
                 {
-                    nextLine = lineBuilder.Substring(0, splitIndex);
-                    lineBuilder = remainingTextTreatment(lineBuilder.Substring(splitIndex + 1));
+                    nextLine = lineBuilder.Substring(0, splitIndex + skipCount);
+                    lineBuilder = remainingTextTreatment(lineBuilder.Substring(splitIndex + skipCount + 1));
                 }
             }
             else

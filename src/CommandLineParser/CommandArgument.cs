@@ -49,13 +49,20 @@ internal class CommandArgument : Argument, ICommandArgument
         var prefix = "".PadRight(newEmptySpacesOnStartCount);
         consoleService.WriteLineRegardSpace($"{prefix}Possible commands:");
 
-        foreach (var argumentValue in _commandArgumentValues.Values)
+        foreach (var commandArgumentValuesGroup in _commandArgumentValues.Values.GroupBy(x=> x.Group))
         {
-            consoleService.WriteColumnLine($"{prefix}{argumentValue.Value}:", Constants.UsageNameLength,
-                argumentValue.Description);
-
-            argumentValue.ShowLayerUsage(newEmptySpacesOnStartCount + Constants.TabCount, consoleService);
             consoleService.WriteLine("");
+            consoleService.WriteLine(commandArgumentValuesGroup.Key.ToUpper());
+            consoleService.WriteLine("");
+
+            foreach (var commandArgumentValue in commandArgumentValuesGroup.OrderBy(a=> a.Value))
+            {
+                consoleService.WriteColumnLine($"{prefix}{commandArgumentValue.Value}:", Constants.UsageNameLength,
+                    commandArgumentValue.Description);
+
+                commandArgumentValue.ShowLayerUsage(newEmptySpacesOnStartCount + Constants.TabCount, consoleService);
+                consoleService.WriteLine("");
+            }
         }
     }
 }

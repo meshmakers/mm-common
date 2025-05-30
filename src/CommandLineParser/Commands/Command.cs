@@ -10,6 +10,8 @@ namespace Meshmakers.Common.CommandLineParser.Commands;
 public abstract class Command<TOptions> : ICommand
     where TOptions : class
 {
+    private const string DefaultCommandGroup = "GENERAL";
+
     /// <summary>
     ///     Constructor
     /// </summary>
@@ -20,7 +22,23 @@ public abstract class Command<TOptions> : ICommand
     protected Command(ILogger<Command<TOptions>> logger, string commandValue, string commandDescription,
         IOptions<TOptions> options)
     {
-        CommandArgumentValue = new CommandArgumentValue(commandValue, commandDescription);
+        CommandArgumentValue = new CommandArgumentValue(DefaultCommandGroup, commandValue, commandDescription);
+        Logger = logger;
+        Options = options;
+    }
+
+    /// <summary>
+    ///     Constructor
+    /// </summary>
+    /// <param name="logger">Logger abstraction object</param>
+    /// <param name="commandGroup">Group of the command, for example, "User Management"</param>
+    /// <param name="commandValue">Command key</param>
+    /// <param name="commandDescription">Description of command</param>
+    /// <param name="options">IOptions instance</param>
+    protected Command(ILogger<Command<TOptions>> logger, string commandGroup, string commandValue, string commandDescription,
+        IOptions<TOptions> options)
+    {
+        CommandArgumentValue = new CommandArgumentValue(commandGroup, commandValue, commandDescription);
         Logger = logger;
         Options = options;
     }

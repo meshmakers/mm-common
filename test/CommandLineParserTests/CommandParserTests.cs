@@ -36,13 +36,13 @@ public class CommandParserTests
         _commandVArgValue.Value.Returns("v");
         _commandWArgValue.Value.Returns("w");
 
-        _commandList = new[]
-        {
+        _commandList =
+        [
             _commandT,
             _commandU,
             _commandV,
             _commandW
-        };
+        ];
     }
 
 

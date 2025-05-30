@@ -2,16 +2,12 @@
 
 namespace Meshmakers.Common.CommandLineParser;
 
-public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
+public class CommandArgumentValue(string commandGroup, string commandValue, string commandDescription)
+    : ArgumentParser, ICommandArgumentValue
 {
-    public CommandArgumentValue(string commandValue, string commandDescription)
-    {
-        Value = commandValue;
-        Description = commandDescription;
-    }
-
-    public string Value { get; }
-    public string Description { get; }
+    public string Group { get; } = commandGroup;
+    public string Value { get; } = commandValue;
+    public string Description { get; } = commandDescription;
 
     /// <summary>
     ///     Compares a string to the short and long parameter value

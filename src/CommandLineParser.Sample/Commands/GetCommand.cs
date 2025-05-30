@@ -16,16 +16,16 @@ public class ExecuteCommand : Command<SampleOptions>
         : base(logger, "get", "Gets content from a given URI", options)
     {
         _consoleService = consoleService;
-        _uri = CommandArgumentValue.AddArgument("u", "uri", new[] { "URI to call" },
+        _uri = CommandArgumentValue.AddArgument("u", "uri", ["URI to call"],
             true, 1);
     }
 
     public override IEnumerable<CodeSample>? GetSamples()
     {
-        return new[]
-        {
+        return
+        [
             new CodeSample($"{Texts.Tool_Name} -c get -u 'https://www.google.at/", "Gets content from a given URI")
-        };
+        ];
     }
 
     public override async Task Execute()
