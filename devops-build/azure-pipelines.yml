@@ -16,7 +16,7 @@ trigger:
       - '*'
 
 pool:
-  name: Gerald-Local-Linux
+  name: meshmakers-infra
 
 variables:
   - group: ApiKeys
@@ -35,7 +35,7 @@ variables:
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
 steps:
-- template: update-build-number.yml  
+- template: update-build-number.yml
 - template: set-version.yml
 - task: DotNetCoreCLI@2
   displayName: Build
