@@ -16,7 +16,7 @@ trigger:
       - '*'
 
 pool:
-  name: meshmakers-infra
+  name: meshmakers-ci-agents
 
 variables:
   - group: ApiKeys
