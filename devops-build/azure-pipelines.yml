@@ -19,7 +19,7 @@ pool:
   name: meshmakers-ci-agents
 
 variables:
-  - group: ApiKeys
+  - group: ApiKeys-mm-cloud
   - group: OctoDefault
   - name: solution
     value: '**/*.sln'
