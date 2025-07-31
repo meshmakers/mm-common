@@ -116,6 +116,13 @@ public class ConsoleService : IConsoleService
             if (lineBuilder != null && lineBuilder.Length >= _maxLineLength)
             {
                 var remainingText = lineBuilder.Substring(skipCount);
+                if (remainingText.Length <= _maxLineLength)
+                {
+                    nextLine = lineBuilder;
+                    lineBuilder = null;
+                    WriteLine(nextLine);
+                    continue;
+                }
                 var splitIndex = remainingText.LastIndexOf(' ', _maxLineLength - 1);
                 if (splitIndex < 0)
                 {
