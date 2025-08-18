@@ -19,7 +19,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
         <PackageReference Include="NLog.Extensions.Logging" Version="6.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.7" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.8" />
         <PackageReference Include="System.Text.Json" Version="9.0.7" />
     </ItemGroup>
 
