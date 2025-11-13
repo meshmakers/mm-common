@@ -14,8 +14,8 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageReference Include="System.Composition.TypedParts" Version="10.0.0" />
-        <PackageReference Include="System.Text.Json" Version="10.0.0" />
+        <PackageReference Include="System.Composition.TypedParts" Version="9.0.10" />
+        <PackageReference Include="System.Text.Json" Version="9.0.10" />
     </ItemGroup>
 
     <ItemGroup>
