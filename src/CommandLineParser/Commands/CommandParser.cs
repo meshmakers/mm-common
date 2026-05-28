@@ -34,12 +34,12 @@ public class CommandParser : ICommandParser
         {
             _commandArg.AddCommandValue(command.CommandArgumentValue);
 
-            var samples = command.GetSamples();
+            var samples = command.GetDocumentation()?.Samples;
             if (samples != null)
             {
                 foreach (var sample in samples)
                 {
-                    _parserService.AddSample(sample);
+                    _parserService.AddSample(command.CommandArgumentValue.Value, sample);
                 }
             }
         }

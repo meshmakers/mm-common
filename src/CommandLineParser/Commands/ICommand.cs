@@ -11,10 +11,13 @@ public interface ICommand
     public ICommandArgumentValue CommandArgumentValue { get; }
 
     /// <summary>
-    ///     Returns optional samples for the command.
+    ///     Returns the documentation for the command — invocation samples, notes, and related-doc links.
+    ///     Override this to declare per-command documentation alongside the class.
+    ///     Default implementation returns <c>null</c>, in which case the CLI help and documentation
+    ///     generator fall back to argument-only output.
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<CodeSample>? GetSamples();
+    public CommandDocumentation? GetDocumentation() => null;
 
     /// <summary>
     ///     Validates preconditions for command execution, for example access keys.

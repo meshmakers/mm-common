@@ -20,13 +20,11 @@ public class ExecuteCommand : Command<SampleOptions>
             true, 1);
     }
 
-    public override IEnumerable<CodeSample>? GetSamples()
-    {
-        return
+    public override CommandDocumentation? GetDocumentation() =>
+        new(Samples:
         [
-            new CodeSample($"{Texts.Tool_Name} -c get -u 'https://www.google.at/", "Gets content from a given URI")
-        ];
-    }
+            new CodeSample([new CodeSampleArgument(_uri, "https://www.google.at/")], "Gets content from a given URI"),
+        ]);
 
     public override async Task Execute()
     {

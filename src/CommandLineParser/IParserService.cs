@@ -1,19 +1,15 @@
-﻿namespace Meshmakers.Common.CommandLineParser;
+namespace Meshmakers.Common.CommandLineParser;
 
 public interface IParserService : IArgumentParser
 {
     /// <summary>
-    ///     Adds a sample
+    ///     Registers a sample for inclusion in <see cref="ShowUsageInformation" />.
+    ///     The invocation string is composed at render time from <paramref name="commandVerb" />,
+    ///     the application name, and the live argument definitions referenced by <paramref name="codeSample" />.
     /// </summary>
-    /// <param name="sample">Sample code</param>
-    /// <param name="description">Description to sample</param>
-    void AddSample(string sample, string description);
-
-    /// <summary>
-    ///     Adds a sample
-    /// </summary>
-    /// <param name="codeSample">Sample object with sample code and description</param>
-    void AddSample(CodeSample codeSample);
+    /// <param name="commandVerb">The command verb (matches <see cref="ICommandArgumentValue.Value" />).</param>
+    /// <param name="codeSample">The sample carrying ordered argument bindings and its description.</param>
+    void AddSample(string commandVerb, CodeSample codeSample);
 
     /// <summary>
     ///     Shows all possible commands, arguments and corresponding descriptions

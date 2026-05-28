@@ -61,10 +61,11 @@ public abstract class Command<TOptions> : ICommand
     public ICommandArgumentValue CommandArgumentValue { get; }
 
     /// <summary>
-    ///     Returns optional samples for the command.
+    ///     Returns the documentation for the command — invocation samples, notes, and related-doc links.
+    ///     Override to declare per-command documentation alongside the class. Default returns <c>null</c>.
     /// </summary>
     /// <returns></returns>
-    public virtual IEnumerable<CodeSample>? GetSamples()
+    public virtual CommandDocumentation? GetDocumentation()
     {
         return null;
     }
