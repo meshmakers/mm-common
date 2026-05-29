@@ -32,12 +32,13 @@ public class ParserService : ArgumentParser, IParserService
     }
 
     /// <inheritdoc />
-    public void AddSample(string commandVerb, CodeSample codeSample)
+    public void AddSample(IArgument commandArgument, string commandValue, CodeSample codeSample)
     {
-        ArgumentValidation.ValidateString(nameof(commandVerb), commandVerb);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+        ArgumentValidation.ValidateString(nameof(commandValue), commandValue);
         ArgumentValidation.Validate(nameof(codeSample), codeSample);
 
-        _sampleList.Add(new RegisteredSample(commandVerb, codeSample));
+        _sampleList.Add(new RegisteredSample(commandArgument, commandValue, codeSample));
     }
 
     /// <summary>
@@ -83,18 +84,20 @@ public class ParserService : ArgumentParser, IParserService
 
             foreach (var entry in _sampleList)
             {
-                _consoleService.WriteLine(ComposeInvocation(applicationExeName, entry.CommandVerb, entry.Sample));
+                _consoleService.WriteLine(ComposeInvocation(applicationExeName, entry));
                 _consoleService.WriteLine("  " + entry.Sample.Description);
                 _consoleService.WriteLine("");
             }
         }
     }
 
-    private static string ComposeInvocation(string applicationExeName, string commandVerb, CodeSample sample)
+    private static string ComposeInvocation(string applicationExeName, RegisteredSample entry)
     {
         var sb = new StringBuilder();
-        sb.Append(applicationExeName).Append(" -c ").Append(commandVerb);
-        foreach (var arg in sample.Arguments)
+        sb.Append(applicationExeName)
+            .Append(" -").Append(entry.CommandArgument.ShortTerm)
+            .Append(' ').Append(entry.CommandValue);
+        foreach (var arg in entry.Sample.Arguments)
         {
             sb.Append(" -").Append(arg.Argument.ShortTerm);
             if (arg.Value != null)
@@ -110,5 +113,5 @@ public class ParserService : ArgumentParser, IParserService
         ParseLayer(arguments.Skip(1) /* first arg contains name of executable */);
     }
 
-    private sealed record RegisteredSample(string CommandVerb, CodeSample Sample);
+    private sealed record RegisteredSample(IArgument CommandArgument, string CommandValue, CodeSample Sample);
 }

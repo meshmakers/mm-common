@@ -3,7 +3,8 @@ using Meshmakers.Common.Shared;
 namespace Meshmakers.Common.CommandLineParser;
 
 /// <summary>
-///     A link to related documentation surfaced by <see cref="CommandDocumentation.SeeAlso" />.
+///     A link to related documentation exposed via <see cref="CommandDocumentation.SeeAlso" />.
+///     Intended for external documentation generators; CLI help does not render see-also links.
 /// </summary>
 public sealed class SeeAlsoLink
 {

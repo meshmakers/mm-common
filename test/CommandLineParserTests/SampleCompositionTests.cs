@@ -7,10 +7,10 @@ namespace Meshmakers.Common.CommandLineParserTests;
 
 /// <summary>
 ///     Verifies that <see cref="ParserService.ShowUsageInformation" /> composes invocation strings
-///     from each registered <see cref="CodeSample" /> by combining the application name, the
-///     command verb passed to <see cref="ParserService.AddSample" />, and the live
-///     <see cref="IArgument.ShortTerm" /> of every bound argument. Renaming the short term on the
-///     argument propagates here automatically — that's the whole point of the typed sample model.
+///     by combining the application name, the live <see cref="IArgument.ShortTerm" /> of the
+///     command selector passed to <see cref="ParserService.AddSample" />, the command verb, and the
+///     bound argument definitions. Renaming the short term on any of these arguments propagates
+///     here automatically — that's the whole point of the typed sample model.
 /// </summary>
 public class SampleCompositionTests
 {
@@ -18,6 +18,9 @@ public class SampleCompositionTests
     private readonly IEnvironmentService _environmentService = Substitute.For<IEnvironmentService>();
 
     private ParserService NewService() => new(_environmentService, _consoleService);
+
+    private static Argument SelectorArgument(string shortTerm = "c") =>
+        new(shortTerm, "command", ["Command to run"], isMandatoryArgument: true, mandatoryValuesCount: 1, areOptionalValuesAllowed: false);
 
     private static Argument ValueArgument(string shortTerm, string longTerm) =>
         new(shortTerm, longTerm, ["help"], isMandatoryArgument: true, mandatoryValuesCount: 1, areOptionalValuesAllowed: false);
@@ -29,9 +32,10 @@ public class SampleCompositionTests
     public void ShowUsage_RendersInvocation_WithBoundValue()
     {
         var service = NewService();
+        var selector = SelectorArgument();
         var tenantArg = ValueArgument("tid", "tenantId");
         var sample = new CodeSample([new CodeSampleArgument(tenantArg, "newtenant")], "Basic usage");
-        service.AddSample("Create", sample);
+        service.AddSample(selector, "Create", sample);
 
         service.ShowUsageInformation("octo-cli");
 
@@ -40,12 +44,29 @@ public class SampleCompositionTests
     }
 
     [Fact]
+    public void ShowUsage_UsesLiveSelectorShortTerm_NotHardCodedDashC()
+    {
+        // Regression guard: if someone renames the command-selector short term, every rendered
+        // sample must follow. Hard-coding "-c" in ComposeInvocation would silently drift here.
+        var service = NewService();
+        var selector = SelectorArgument(shortTerm: "cmd");
+        var tenantArg = ValueArgument("tid", "tenantId");
+        var sample = new CodeSample([new CodeSampleArgument(tenantArg, "newtenant")], "Basic usage");
+        service.AddSample(selector, "Create", sample);
+
+        service.ShowUsageInformation("octo-cli");
+
+        _consoleService.Received().WriteLine("octo-cli -cmd Create -tid \"newtenant\"");
+    }
+
+    [Fact]
     public void ShowUsage_RendersFlag_WithoutQuotedValue()
     {
         var service = NewService();
+        var selector = SelectorArgument();
         var waitArg = FlagArgument("w", "wait");
         var sample = new CodeSample([new CodeSampleArgument(waitArg)], "Interactive with wait");
-        service.AddSample("FixAll", sample);
+        service.AddSample(selector, "FixAll", sample);
 
         service.ShowUsageInformation("octo-cli");
 
@@ -56,6 +77,7 @@ public class SampleCompositionTests
     public void ShowUsage_RendersMultipleArguments_InOrder()
     {
         var service = NewService();
+        var selector = SelectorArgument();
         var tenantArg = ValueArgument("tid", "tenantId");
         var dbArg = ValueArgument("db", "database");
         var sample = new CodeSample(
@@ -64,7 +86,7 @@ public class SampleCompositionTests
                 new CodeSampleArgument(dbArg, "newtenant_db"),
             ],
             "Create with explicit database");
-        service.AddSample("Create", sample);
+        service.AddSample(selector, "Create", sample);
 
         service.ShowUsageInformation("octo-cli");
 
@@ -75,9 +97,10 @@ public class SampleCompositionTests
     public void ShowUsage_RendersMultipleSamples()
     {
         var service = NewService();
+        var selector = SelectorArgument();
         var verboseArg = FlagArgument("v", "verbose");
-        service.AddSample("Status", new CodeSample([], "Default"));
-        service.AddSample("Status", new CodeSample([new CodeSampleArgument(verboseArg)], "Verbose"));
+        service.AddSample(selector, "Status", new CodeSample([], "Default"));
+        service.AddSample(selector, "Status", new CodeSample([new CodeSampleArgument(verboseArg)], "Verbose"));
 
         service.ShowUsageInformation("octo-cli");
 
@@ -92,11 +115,12 @@ public class SampleCompositionTests
     {
         // ExpectedOutput is documentation-only — CLI help (this method) must ignore it.
         var service = NewService();
+        var selector = SelectorArgument();
         var sample = new CodeSample(
             [],
             "Show",
             expectedOutput: "NAME  STATE\nfoo   OK");
-        service.AddSample("Status", sample);
+        service.AddSample(selector, "Status", sample);
 
         service.ShowUsageInformation("octo-cli");
 

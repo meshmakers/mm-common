@@ -39,7 +39,7 @@ public class CommandParser : ICommandParser
             {
                 foreach (var sample in samples)
                 {
-                    _parserService.AddSample(command.CommandArgumentValue.Value, sample);
+                    _parserService.AddSample(_commandArg, command.CommandArgumentValue.Value, sample);
                 }
             }
         }
