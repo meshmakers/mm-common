@@ -12,8 +12,8 @@ public class CodeSample
 {
     /// <summary>
     ///     Primary constructor: a sample described as a list of argument bindings plus a one-line description.
-    ///     Optionally carries an expected stdout fragment for external documentation generators to render
-    ///     (this library's CLI help does not render it).
+    ///     Optionally carries an expected stdout fragment which the documentation generator renders as an
+    ///     output block; CLI help ignores it.
     /// </summary>
     public CodeSample(IEnumerable<CodeSampleArgument> arguments, string description, string? expectedOutput = null)
     {
@@ -36,9 +36,8 @@ public class CodeSample
     public string Description { get; }
 
     /// <summary>
-    ///     Optional expected stdout fragment. Intended for external documentation generators (e.g. an
-    ///     <c>**Output:**</c> fenced block in generated Markdown); CLI help does not render it
-    ///     (consistent with how other CLIs like <c>kubectl</c> handle samples).
+    ///     Optional expected stdout fragment. The documentation generator renders this as an <c>**Output:**</c>
+    ///     fenced block; CLI help ignores it (consistent with the conventions of other CLIs like <c>kubectl</c>).
     /// </summary>
     public string? ExpectedOutput { get; }
 }
