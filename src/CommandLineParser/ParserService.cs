@@ -1,4 +1,5 @@
 using System.Composition;
+using System.Text;
 using Meshmakers.Common.Shared;
 using Meshmakers.Common.Shared.Services;
 
@@ -17,7 +18,7 @@ public class ParserService : ArgumentParser, IParserService
     private readonly IConsoleService _consoleService;
 
     private readonly IEnvironmentService _environmentService;
-    private readonly List<CodeSample> _sampleList;
+    private readonly List<RegisteredSample> _sampleList;
 
     /// <summary>
     ///     Constructor
@@ -27,29 +28,17 @@ public class ParserService : ArgumentParser, IParserService
     {
         _environmentService = environmentService;
         _consoleService = consoleService;
-        _sampleList = new List<CodeSample>();
+        _sampleList = new List<RegisteredSample>();
     }
 
-    /// <summary>
-    ///     Adds a sample for usage information
-    /// </summary>
-    /// <param name="sample">The sample</param>
-    /// <param name="description">Description of the sample</param>
-    public void AddSample(string sample, string description)
+    /// <inheritdoc />
+    public void AddSample(IArgument commandArgument, string commandValue, CodeSample codeSample)
     {
-        ArgumentValidation.ValidateString(nameof(sample), sample);
-        ArgumentValidation.ValidateString(nameof(description), description);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+        ArgumentValidation.ValidateString(nameof(commandValue), commandValue);
+        ArgumentValidation.Validate(nameof(codeSample), codeSample);
 
-        _sampleList.Add(new CodeSample(sample, description));
-    }
-
-    /// <summary>
-    ///     Adds a sample for usage information
-    /// </summary>
-    /// <param name="codeSample">The sample</param>
-    public void AddSample(CodeSample codeSample)
-    {
-        _sampleList.Add(codeSample);
+        _sampleList.Add(new RegisteredSample(commandArgument, commandValue, codeSample));
     }
 
     /// <summary>
@@ -93,18 +82,36 @@ public class ParserService : ArgumentParser, IParserService
             _consoleService.WriteLine(UsageSamplesHeader);
             _consoleService.WriteLine("");
 
-
-            foreach (var sample in _sampleList)
+            foreach (var entry in _sampleList)
             {
-                _consoleService.WriteLine(sample.SampleCode);
-                _consoleService.WriteLine("  " + sample.Description);
+                _consoleService.WriteLine(ComposeInvocation(applicationExeName, entry));
+                _consoleService.WriteLine("  " + entry.Sample.Description);
                 _consoleService.WriteLine("");
             }
         }
+    }
+
+    private static string ComposeInvocation(string applicationExeName, RegisteredSample entry)
+    {
+        var sb = new StringBuilder();
+        sb.Append(applicationExeName)
+            .Append(" -").Append(entry.CommandArgument.ShortTerm)
+            .Append(' ').Append(entry.CommandValue);
+        foreach (var arg in entry.Sample.Arguments)
+        {
+            sb.Append(" -").Append(arg.Argument.ShortTerm);
+            if (arg.Value != null)
+            {
+                sb.Append(" \"").Append(arg.Value).Append('"');
+            }
+        }
+        return sb.ToString();
     }
 
     private void ParseAndValidate(string[] arguments)
     {
         ParseLayer(arguments.Skip(1) /* first arg contains name of executable */);
     }
+
+    private sealed record RegisteredSample(IArgument CommandArgument, string CommandValue, CodeSample Sample);
 }
