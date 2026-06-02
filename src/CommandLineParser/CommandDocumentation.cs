@@ -7,8 +7,6 @@ namespace Meshmakers.Common.CommandLineParser;
 /// </summary>
 /// <param name="Samples">Invocation samples. Rendered in the SAMPLES section of CLI help and the Examples section of generated docs.</param>
 /// <param name="Notes">Free-form notes about the command. Documentation-only; CLI help does not render these.</param>
-/// <param name="SeeAlso">Links to related documentation. Documentation-only; CLI help does not render these.</param>
 public sealed record CommandDocumentation(
     IEnumerable<CodeSample>? Samples = null,
-    IEnumerable<string>? Notes = null,
-    IEnumerable<SeeAlsoLink>? SeeAlso = null);
+    IEnumerable<string>? Notes = null);
