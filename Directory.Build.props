@@ -21,6 +21,6 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="True" PackagePath="\" Visible="false" />
+        <None Include="$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)','README.md'))" Pack="True" PackagePath="" Visible="false" />
     </ItemGroup>
 </Project>
