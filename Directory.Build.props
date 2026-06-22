@@ -7,6 +7,7 @@
         <RepositoryUrl>https://github.com/meshmakers/mm-common.git</RepositoryUrl>
         <PackageIcon>meshmakers64.png</PackageIcon>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageProjectUrl>https://www.meshmakers.io</PackageProjectUrl>
         <PackageTags>Octo data mesh iot</PackageTags>
         <PackageVersion Condition="'$(Configuration)'=='DebugL'">999.0.0</PackageVersion>
@@ -19,4 +20,7 @@
         <Optimize>false</Optimize>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="True" PackagePath="\" Visible="false" />
+    </ItemGroup>
 </Project>
