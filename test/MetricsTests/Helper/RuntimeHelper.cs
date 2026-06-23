@@ -12,8 +12,13 @@ internal static class RuntimeHelper
 
     public const string SimulationName = "Simulate";
 
-    public const int DefaultDelta = 3;
-    public const int DefaultTotal = 6;
+    // Increased from 3/6 to 25/50 to stabilise the timing-sensitive tests on .NET 10,
+    // where Task.Delay(3) sometimes resolves in 1 ms (sub-timer-tick), failing
+    // RuntimeMeterTest.CreateAndMeasure with "Delta: 1 >= 2". The constants are also used
+    // as data fixtures elsewhere; keeping Total = 2 * Delta preserves the ratio every
+    // dependent test assumes (CheckpointResultTests.Create + .Add, RuntimeResultTests).
+    public const int DefaultDelta = 25;
+    public const int DefaultTotal = 50;
 
     public static Checkpoint CreateCheckpoint(string name = DefaultCheckpointName, int delta = DefaultDelta,
         int total = DefaultTotal)
@@ -60,7 +65,7 @@ internal static class RuntimeHelper
         meter.Stop();
     }
 
-    public static async Task<int> Simulate(IMetricsContext metricsContext, int delta = 3)
+    public static async Task<int> Simulate(IMetricsContext metricsContext, int delta = DefaultDelta)
     {
         using var meter = metricsContext.CreateRuntimeMeter();
         Assert.Equal(SimulationName, meter.Name);
