@@ -10,6 +10,19 @@ public interface ICommandParser
     void ShowUsageInformation(string applicationExeName);
 
     /// <summary>
+    ///     Shows every command group with the number of commands it holds
+    /// </summary>
+    /// <param name="applicationExeName">Name of application executable name</param>
+    void ShowGroupOverviewInformation(string applicationExeName);
+
+    /// <summary>
+    ///     Shows the commands of a single group with their descriptions
+    /// </summary>
+    /// <param name="applicationExeName">Name of application executable name</param>
+    /// <param name="groupName">The group whose commands are shown</param>
+    void ShowGroupUsageInformation(string applicationExeName, string groupName);
+
+    /// <summary>
     ///     Shows the arguments, samples and notes of a single command
     /// </summary>
     /// <param name="applicationExeName">Name of application executable name</param>

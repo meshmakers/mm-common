@@ -16,6 +16,8 @@ public class ParserService : ArgumentParser, IParserService
     private const string UsageNotesHeader = "NOTES";
     private const string UsageNameHeader = "ARGUMENT NAME";
     private const string UsageDescriptionHeader = "DESCRIPTION";
+    private const string UsageGroupHeader = "COMMAND GROUP";
+    private const string UsageCommandCountHeader = "COMMANDS";
     private readonly IConsoleService _consoleService;
 
     private readonly IEnvironmentService _environmentService;
@@ -78,6 +80,9 @@ public class ParserService : ArgumentParser, IParserService
             _consoleService.WriteLineRegardSpace(
                 "Add --help (-?) to a single command to show only the help of that command, for example: " +
                 $"{applicationExeName} -{CommandArgument.ShortTerm} <command> --help");
+            _consoleService.WriteLineRegardSpace(
+                $"Run '{applicationExeName} --help' for the command groups, " +
+                $"'{applicationExeName} --help <group>' for the commands of one group.");
         }
 
         _consoleService.WriteLine("");
@@ -86,6 +91,65 @@ public class ParserService : ArgumentParser, IParserService
         ShowLayerUsage(0, _consoleService);
 
         ShowSamples(applicationExeName, _sampleList);
+    }
+
+    /// <inheritdoc />
+    public void ShowGroupOverviewInformation(string applicationExeName, ICommandArgument commandArgument)
+    {
+        ArgumentValidation.ValidateString(nameof(applicationExeName), applicationExeName);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+
+        var groups = commandArgument.CommandValues
+            .GroupBy(x => x.Group)
+            .OrderBy(x => x.Key)
+            .ToList();
+
+        _consoleService.WriteLineRegardSpace(
+            $"{applicationExeName} groups its commands by topic. Pick a group to see its commands:");
+        _consoleService.WriteLine("");
+        _consoleService.WriteColumnLine(UsageGroupHeader, Constants.UsageNameLength, UsageCommandCountHeader);
+
+        var prefix = "".PadRight(Constants.TabCount);
+        foreach (var group in groups)
+        {
+            _consoleService.WriteColumnLine($"{prefix}{group.Key}", Constants.UsageNameLength,
+                group.Count().ToString());
+        }
+
+        _consoleService.WriteLine("");
+        _consoleService.WriteLineRegardSpace(
+            $"Run '{applicationExeName} --help <group>' for the commands of a group, " +
+            $"'{applicationExeName} -{commandArgument.ShortTerm} <command> --help' for a single command, " +
+            $"'{applicationExeName} --help {Constants.AllCommandsHelpTopic}' for every command with all arguments.");
+    }
+
+    /// <inheritdoc />
+    public void ShowGroupUsageInformation(string applicationExeName, ICommandArgument commandArgument,
+        string groupName, string? shadowedCommandValue)
+    {
+        ArgumentValidation.ValidateString(nameof(applicationExeName), applicationExeName);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+        ArgumentValidation.ValidateString(nameof(groupName), groupName);
+
+        var commandCount = commandArgument.CommandValues
+            .Count(x => string.Equals(x.Group, groupName, StringComparison.OrdinalIgnoreCase));
+
+        _consoleService.WriteLineRegardSpace(
+            $"Commands of group '{groupName}' ({commandCount}):");
+
+        commandArgument.ShowGroupUsage(0, _consoleService, groupName, false);
+
+        _consoleService.WriteLine("");
+        _consoleService.WriteLineRegardSpace(
+            $"Run '{applicationExeName} -{commandArgument.ShortTerm} <command> --help' for the arguments of a " +
+            "single command.");
+
+        if (shadowedCommandValue != null)
+        {
+            _consoleService.WriteLineRegardSpace(
+                $"Note: '{shadowedCommandValue}' is also a command — run " +
+                $"'{applicationExeName} -{commandArgument.ShortTerm} {shadowedCommandValue} --help' for its help.");
+        }
     }
 
     /// <inheritdoc />

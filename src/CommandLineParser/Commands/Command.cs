@@ -10,7 +10,8 @@ namespace Meshmakers.Common.CommandLineParser.Commands;
 public abstract class Command<TOptions> : ICommand
     where TOptions : class
 {
-    private const string DefaultCommandGroup = "GENERAL";
+    // Written as it should read in the group overview; headings upper-case it themselves.
+    private const string DefaultCommandGroup = "General";
 
     /// <summary>
     ///     Constructor

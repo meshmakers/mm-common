@@ -30,6 +30,13 @@ public interface IArgumentParser
     /// </summary>
     bool IsHelpRequested { get; }
 
+    /// <summary>
+    ///     The words following the help flag, joined by a single space, or null when the flag stood alone.
+    ///     Used to narrow help down to a topic — a command group or a single command — instead of listing
+    ///     everything. Collection stops at the next argument, so <c>--help -c foo</c> yields no topic.
+    /// </summary>
+    string? HelpTopic { get; }
+
     IArgument AddArgument(string shortTerm, string longTerm, string[] description);
     IArgument AddArgument(string shortTerm, string longTerm, string[] description, int mandatoryValuesCount);
     IArgument AddArgument(string shortTerm, string longTerm, string[] description, bool isMandatoryArgument);

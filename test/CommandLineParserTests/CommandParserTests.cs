@@ -125,7 +125,9 @@ public class CommandParserTests
 
         await commandParser.ParseAndValidateAsync("Demo.exe");
 
-        _stubParserService.Received(1).ShowUsageInformation("Demo.exe");
+        // Help without a command is the entry point, so it shows the groups rather than every command.
+        _stubParserService.Received(1).ShowGroupOverviewInformation("Demo.exe", _commandArgument);
+        _stubParserService.DidNotReceive().ShowUsageInformation(Arg.Any<string>());
         _stubParserService.DidNotReceive().ShowCommandUsageInformation(Arg.Any<string>(), Arg.Any<IArgument>(),
             Arg.Any<ICommandArgumentValue>(), Arg.Any<CommandDocumentation?>());
     }

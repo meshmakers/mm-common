@@ -45,11 +45,22 @@ internal class CommandArgument : Argument, ICommandArgument
     {
         base.ShowUsage(emptySpacesOnStartCount, consoleService);
 
-        var newEmptySpacesOnStartCount = emptySpacesOnStartCount + Constants.TabCount;
-        var prefix = "".PadRight(newEmptySpacesOnStartCount);
+        var prefix = "".PadRight(emptySpacesOnStartCount + Constants.TabCount);
         consoleService.WriteLineRegardSpace($"{prefix}Possible commands:");
 
-        foreach (var commandArgumentValuesGroup in _commandArgumentValues.Values.GroupBy(x=> x.Group))
+        ShowGroupUsage(emptySpacesOnStartCount, consoleService, null, true);
+    }
+
+    public void ShowGroupUsage(int emptySpacesOnStartCount, IConsoleService consoleService, string? groupName,
+        bool includeArguments)
+    {
+        var newEmptySpacesOnStartCount = emptySpacesOnStartCount + Constants.TabCount;
+        var prefix = "".PadRight(newEmptySpacesOnStartCount);
+
+        var commandArgumentValues = _commandArgumentValues.Values
+            .Where(x => groupName == null || string.Equals(x.Group, groupName, StringComparison.OrdinalIgnoreCase));
+
+        foreach (var commandArgumentValuesGroup in commandArgumentValues.GroupBy(x=> x.Group))
         {
             consoleService.WriteLine("");
             consoleService.WriteLine(commandArgumentValuesGroup.Key.ToUpper());
@@ -59,6 +70,11 @@ internal class CommandArgument : Argument, ICommandArgument
             {
                 consoleService.WriteColumnLine($"{prefix}{commandArgumentValue.Value}:", Constants.UsageNameLength,
                     commandArgumentValue.Description);
+
+                if (!includeArguments)
+                {
+                    continue;
+                }
 
                 commandArgumentValue.ShowLayerUsage(newEmptySpacesOnStartCount + Constants.TabCount, consoleService);
                 consoleService.WriteLine("");

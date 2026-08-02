@@ -26,6 +26,9 @@ public class ArgumentParser : IArgumentParser
     /// <inheritdoc />
     public bool IsHelpRequested { get; private set; }
 
+    /// <inheritdoc />
+    public string? HelpTopic { get; private set; }
+
     /// <summary>
     ///     Adds a command argument
     /// </summary>
@@ -220,16 +223,18 @@ public class ArgumentParser : IArgumentParser
     /// </exception>
     public virtual IEnumerable<string> ParseLayer(IEnumerable<string> arguments)
     {
-        return ParseLayer(arguments, false);
+        return ParseLayer(arguments, false, null);
     }
 
-    private IEnumerable<string> ParseLayer(IEnumerable<string> arguments, bool isHelpRequestedByOuterLayer)
+    private IEnumerable<string> ParseLayer(IEnumerable<string> arguments, bool isHelpRequestedByOuterLayer,
+        string? helpTopicOfOuterLayer)
     {
         ArgumentValue? argumentValue = null;
         ArgumentValue? previousArgumentValue = null;
 
         _argumentValues.Clear();
         IsHelpRequested = isHelpRequestedByOuterLayer;
+        HelpTopic = helpTopicOfOuterLayer;
 
         var commandLineArguments = new Queue<string>(arguments);
         if (commandLineArguments.Count == 0)
@@ -267,6 +272,7 @@ public class ArgumentParser : IArgumentParser
             if (!bFound && _helpArgument?.Compare(str) == true)
             {
                 IsHelpRequested = true;
+                HelpTopic ??= DequeueHelpTopic(commandLineArguments);
                 argumentValue = null;
                 continue;
             }
@@ -308,6 +314,7 @@ public class ArgumentParser : IArgumentParser
                     if (commandArgumentValue.IsHelpRequested)
                     {
                         IsHelpRequested = true;
+                        HelpTopic ??= commandArgumentValue.HelpTopic;
                     }
                 }
                 else
@@ -339,8 +346,34 @@ public class ArgumentParser : IArgumentParser
         IEnumerable<string> arguments)
     {
         return commandArgumentValue is ArgumentParser commandLayer
-            ? commandLayer.ParseLayer(arguments, IsHelpRequested)
+            ? commandLayer.ParseLayer(arguments, IsHelpRequested, HelpTopic)
             : commandArgumentValue.ParseLayer(arguments);
+    }
+
+    /// <summary>
+    ///     Takes the words following the help flag as its topic, for example "Identity Services" in
+    ///     "-h Identity Services". Collection stops at the next argument so that "-h -c foo" leaves the
+    ///     command selector alone. Terms starting with "/" end the topic as well, because the parser accepts
+    ///     that prefix for arguments — the check stays local instead of widening
+    ///     <see cref="IsArgumentCandidate" />, which would break path values such as "/Users/name/file.json".
+    /// </summary>
+    /// <returns>The topic, or null when the flag stands alone.</returns>
+    private static string? DequeueHelpTopic(Queue<string> commandLineArguments)
+    {
+        var topicWords = new List<string>();
+
+        while (commandLineArguments.Count > 0)
+        {
+            var nextTerm = commandLineArguments.Peek();
+            if (string.IsNullOrEmpty(nextTerm) || nextTerm.StartsWith("-") || nextTerm.StartsWith("/"))
+            {
+                break;
+            }
+
+            topicWords.Add(commandLineArguments.Dequeue());
+        }
+
+        return topicWords.Count == 0 ? null : string.Join(' ', topicWords);
     }
 
     private bool IsArgumentCandidate(string term)

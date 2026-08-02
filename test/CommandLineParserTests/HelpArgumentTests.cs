@@ -162,6 +162,77 @@ public class HelpArgumentTests
     }
 
     [Fact]
+    public void ParseAndValidate_HelpTopic_SingleWord_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-h", "General"]);
+        var parserService = CreateParserService(out _, out _);
+
+        parserService.ParseAndValidate();
+
+        Assert.True(parserService.IsHelpRequested);
+        Assert.Equal("General", parserService.HelpTopic);
+    }
+
+    [Fact]
+    public void ParseAndValidate_HelpTopic_MultipleWords_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "--help", "Identity", "Services"]);
+        var parserService = CreateParserService(out _, out _);
+
+        parserService.ParseAndValidate();
+
+        // An unquoted group name arrives as several arguments and has to be joined back together.
+        Assert.Equal("Identity Services", parserService.HelpTopic);
+    }
+
+    [Fact]
+    public void ParseAndValidate_HelpTopic_Quoted_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "--help", "Identity Services"]);
+        var parserService = CreateParserService(out _, out _);
+
+        parserService.ParseAndValidate();
+
+        Assert.Equal("Identity Services", parserService.HelpTopic);
+    }
+
+    [Fact]
+    public void ParseAndValidate_HelpTopic_StopsAtNextArgument_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "--help", "-c", "first"]);
+        var parserService = CreateParserService(out _, out var commandArgument);
+
+        parserService.ParseAndValidate();
+
+        // The command selector must not be swallowed as a topic.
+        Assert.Null(parserService.HelpTopic);
+        Assert.Equal("first", parserService.GetArgumentValue(commandArgument).GetValue<string>());
+    }
+
+    [Fact]
+    public void ParseAndValidate_HelpTopic_WithoutTopic_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-h"]);
+        var parserService = CreateParserService(out _, out _);
+
+        parserService.ParseAndValidate();
+
+        Assert.Null(parserService.HelpTopic);
+    }
+
+    [Fact]
+    public void ParseAndValidate_HelpTopic_FromCommandLayer_OK()
+    {
+        _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-c", "first", "--help", "topic"]);
+        var parserService = CreateParserService(out var firstCommand, out _);
+
+        parserService.ParseAndValidate();
+
+        Assert.Equal("topic", firstCommand.HelpTopic);
+        Assert.Equal("topic", parserService.HelpTopic);
+    }
+
+    [Fact]
     public void AddHelpArgument_CalledTwice_ReturnsSameArgument_OK()
     {
         var parserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);

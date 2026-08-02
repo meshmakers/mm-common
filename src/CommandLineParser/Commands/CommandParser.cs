@@ -56,6 +56,21 @@ public class CommandParser : ICommandParser
     }
 
     /// <inheritdoc />
+    public virtual void ShowGroupOverviewInformation(string applicationExeName)
+    {
+        _parserService.ShowGroupOverviewInformation(applicationExeName, _commandArg);
+    }
+
+    /// <inheritdoc />
+    public virtual void ShowGroupUsageInformation(string applicationExeName, string groupName)
+    {
+        ArgumentValidation.ValidateString(nameof(groupName), groupName);
+
+        _parserService.ShowGroupUsageInformation(applicationExeName, _commandArg, groupName,
+            FindCommand(groupName)?.CommandArgumentValue.Value);
+    }
+
+    /// <inheritdoc />
     public virtual void ShowCommandUsageInformation(string applicationExeName, ICommand command)
     {
         ArgumentValidation.Validate(nameof(command), command);
@@ -70,26 +85,94 @@ public class CommandParser : ICommandParser
         _parserService.ParseAndValidate();
 
         var command = ResolveCommand(out var commandString);
-        if (command == null)
+        if (command == null && !_parserService.IsHelpRequested)
         {
-            // Without a command to show help for, a help request can only mean the full usage.
-            if (_parserService.IsHelpRequested)
-            {
-                ShowUsageInformation(ResolveApplicationExeName(applicationExeName));
-                return;
-            }
-
             throw new InvalidProgramException($"Command value '{commandString}' is invalid.");
         }
 
-        if (_parserService.IsHelpRequested || command.CommandArgumentValue.IsHelpRequested)
+        if (_parserService.IsHelpRequested || command?.CommandArgumentValue.IsHelpRequested == true)
         {
-            ShowCommandUsageInformation(ResolveApplicationExeName(applicationExeName), command);
+            ShowHelp(ResolveApplicationExeName(applicationExeName), command);
             return;
         }
 
-        await command.PreValidate();
+        await command!.PreValidate();
         await command.Execute();
+    }
+
+    /// <summary>
+    ///     Narrows help down to what the command line asked for. The order is deliberate: an exact group name
+    ///     is served before an exact command name, because a command stays reachable through the command
+    ///     selector while a group has no second way in. Fuzzy matching applies to groups only.
+    /// </summary>
+    /// <param name="applicationExeName">Name of the application executable used in the output</param>
+    /// <param name="command">The command selected on the command line, if any</param>
+    private void ShowHelp(string applicationExeName, ICommand? command)
+    {
+        if (command != null)
+        {
+            ShowCommandUsageInformation(applicationExeName, command);
+            return;
+        }
+
+        var topic = _parserService.HelpTopic;
+        if (string.IsNullOrEmpty(topic))
+        {
+            ShowGroupOverviewInformation(applicationExeName);
+            return;
+        }
+
+        if (string.Equals(topic, Constants.AllCommandsHelpTopic, StringComparison.OrdinalIgnoreCase))
+        {
+            ShowUsageInformation(applicationExeName);
+            return;
+        }
+
+        var group = FindGroup(x => string.Equals(x, topic, StringComparison.OrdinalIgnoreCase));
+        if (group != null)
+        {
+            ShowGroupUsageInformation(applicationExeName, group);
+            return;
+        }
+
+        var commandOfTopic = FindCommand(topic);
+        if (commandOfTopic != null)
+        {
+            ShowCommandUsageInformation(applicationExeName, commandOfTopic);
+            return;
+        }
+
+        group = FindGroup(x => x.StartsWith(topic, StringComparison.OrdinalIgnoreCase))
+                ?? FindGroup(x => x.Contains(topic, StringComparison.OrdinalIgnoreCase));
+        if (group != null)
+        {
+            ShowGroupUsageInformation(applicationExeName, group);
+            return;
+        }
+
+        throw new InvalidParameterException(
+            $"'{topic}' is neither a command group nor a command. Known groups: " +
+            $"{string.Join(", ", Groups)}, {Constants.AllCommandsHelpTopic}.");
+    }
+
+    private IEnumerable<string> Groups =>
+        _commands.Select(c => c.CommandArgumentValue.Group).Distinct().OrderBy(x => x);
+
+    /// <summary>
+    ///     Returns the single group matching the predicate. An ambiguous match counts as no match, so that a
+    ///     shortened topic never silently picks one of several groups.
+    /// </summary>
+    private string? FindGroup(Func<string, bool> predicate)
+    {
+        var matches = Groups.Where(predicate).Take(2).ToList();
+
+        return matches.Count == 1 ? matches[0] : null;
+    }
+
+    private ICommand? FindCommand(string commandValue)
+    {
+        return _commands.FirstOrDefault(c =>
+            string.Equals(c.CommandArgumentValue.Value, commandValue, StringComparison.OrdinalIgnoreCase));
     }
 
     private ICommand? ResolveCommand(out string? commandString)
