@@ -23,6 +23,18 @@ public interface IParserService : IArgumentParser
     void ShowUsageInformation(string applicationExeName);
 
     /// <summary>
+    ///     Shows the arguments, samples and notes of a single command, so the caller does not have to scroll
+    ///     through the usage of the whole tool. Only the samples registered for
+    ///     <paramref name="commandArgumentValue" /> are rendered.
+    /// </summary>
+    /// <param name="applicationExeName">Name of application executable name</param>
+    /// <param name="commandArgument">The argument representing the command selector (e.g. <c>-c</c>).</param>
+    /// <param name="commandArgumentValue">The command whose help is shown.</param>
+    /// <param name="documentation">Optional documentation of the command; its notes are rendered.</param>
+    void ShowCommandUsageInformation(string applicationExeName, IArgument commandArgument,
+        ICommandArgumentValue commandArgumentValue, CommandDocumentation? documentation);
+
+    /// <summary>
     ///     Parses and validates provided command line args
     /// </summary>
     /// <exception cref="ParserException"></exception>

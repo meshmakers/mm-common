@@ -7,6 +7,7 @@ public class ArgumentParser : IArgumentParser
 {
     private readonly Dictionary<string, IArgument> _arguments;
     private readonly Dictionary<string, ArgumentValue> _argumentValues;
+    private HelpArgument? _helpArgument;
 
     /// <summary>
     ///     Constructor
@@ -16,6 +17,14 @@ public class ArgumentParser : IArgumentParser
         _arguments = new Dictionary<string, IArgument>();
         _argumentValues = new Dictionary<string, ArgumentValue>();
     }
+
+    /// <summary>
+    ///     Returns the command selector argument of this layer, or null when the layer has none.
+    /// </summary>
+    protected ICommandArgument? CommandArgument { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsHelpRequested { get; private set; }
 
     /// <summary>
     ///     Adds a command argument
@@ -33,7 +42,14 @@ public class ArgumentParser : IArgumentParser
 
         var argument = new CommandArgument(shortTerm, longTerm, description, isMandatoryArgument);
         _arguments.Add(argument.LongTerm, argument);
+        CommandArgument = argument;
         return argument;
+    }
+
+    /// <inheritdoc />
+    public IArgument AddHelpArgument()
+    {
+        return _helpArgument ??= new HelpArgument();
     }
 
     /// <summary>
@@ -204,16 +220,25 @@ public class ArgumentParser : IArgumentParser
     /// </exception>
     public virtual IEnumerable<string> ParseLayer(IEnumerable<string> arguments)
     {
+        return ParseLayer(arguments, false);
+    }
+
+    private IEnumerable<string> ParseLayer(IEnumerable<string> arguments, bool isHelpRequestedByOuterLayer)
+    {
         ArgumentValue? argumentValue = null;
         ArgumentValue? previousArgumentValue = null;
 
         _argumentValues.Clear();
+        IsHelpRequested = isHelpRequestedByOuterLayer;
 
         var commandLineArguments = new Queue<string>(arguments);
         if (commandLineArguments.Count == 0)
         {
             // Are mandatory arguments missing?
-            ValidateMandatoryArguments();
+            if (!IsHelpRequested)
+            {
+                ValidateMandatoryArguments();
+            }
 
             return new List<string>();
         }
@@ -234,6 +259,17 @@ public class ArgumentParser : IArgumentParser
 
             // Is an argument?
             var bFound = TryAddArgumentValue(str, out argumentValue);
+
+            // The help flag is matched only after the declared arguments had their chance, so a layer using
+            // -h for something else (e. g. --host) keeps that meaning. Help carries no values of its own.
+            // HelpArgument.Compare matches the fixed help terms exactly, including the "/" prefixed ones,
+            // which is why this is not narrowed down to IsArgumentCandidate.
+            if (!bFound && _helpArgument?.Compare(str) == true)
+            {
+                IsHelpRequested = true;
+                argumentValue = null;
+                continue;
+            }
 
             if (!bFound && IsArgumentCandidate(str) && this is ICommandArgumentValue)
             {
@@ -265,7 +301,14 @@ public class ArgumentParser : IArgumentParser
                 if (commandArgument.TryGetCommandValue(str, out var commandArgumentValue) &&
                     commandArgumentValue != null)
                 {
-                    commandLineArguments = new Queue<string>(commandArgumentValue.ParseLayer(commandLineArguments));
+                    commandLineArguments = new Queue<string>(ParseCommandLayer(commandArgumentValue,
+                        commandLineArguments));
+
+                    // A help flag inside the command layer asks for help of the whole command line.
+                    if (commandArgumentValue.IsHelpRequested)
+                    {
+                        IsHelpRequested = true;
+                    }
                 }
                 else
                 {
@@ -275,13 +318,29 @@ public class ArgumentParser : IArgumentParser
             }
         } while (commandLineArguments.Count > 0);
 
-        // Are mandatory arguments missing?
-        ValidateMandatoryArguments();
+        // Help short-circuits execution, so an intentionally incomplete command line is expected here.
+        if (!IsHelpRequested)
+        {
+            // Are mandatory arguments missing?
+            ValidateMandatoryArguments();
 
-        // Are mandatory values of arguments missing?
-        ValidateArgumentValues();
+            // Are mandatory values of arguments missing?
+            ValidateArgumentValues();
+        }
 
         return commandLineArguments;
+    }
+
+    /// <summary>
+    ///     Parses the layer of a command, handing a pending help request down so the command layer does not
+    ///     reject a command line that is incomplete on purpose (help given before the command selector).
+    /// </summary>
+    private IEnumerable<string> ParseCommandLayer(ICommandArgumentValue commandArgumentValue,
+        IEnumerable<string> arguments)
+    {
+        return commandArgumentValue is ArgumentParser commandLayer
+            ? commandLayer.ParseLayer(arguments, IsHelpRequested)
+            : commandArgumentValue.ParseLayer(arguments);
     }
 
     private bool IsArgumentCandidate(string term)

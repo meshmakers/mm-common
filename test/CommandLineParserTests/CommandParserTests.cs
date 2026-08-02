@@ -77,6 +77,59 @@ public class CommandParserTests
         await _commandT.Received(1).Execute();
     }
 
+    [Fact]
+    public async Task CommandParser_ParseAndValidateAsync_HelpForCommand_OK()
+    {
+        IArgumentValue argumentValue = Substitute.For<IArgumentValue>();
+        argumentValue.GetValue(Arg.Any<string>()).Returns("t");
+
+        _stubParserService.GetArgumentValue(Arg.Any<ICommandArgument>()).Returns(argumentValue);
+        _stubParserService.IsArgumentUsed(Arg.Any<ICommandArgument>()).Returns(true);
+        _stubParserService.IsHelpRequested.Returns(true);
+
+        var commandParser = new CommandParser(_stubParserService, _commandList);
+
+        await commandParser.ParseAndValidateAsync("Demo.exe");
+
+        _stubParserService.Received(1).ShowCommandUsageInformation("Demo.exe", _commandArgument, _commandTArgValue,
+            Arg.Any<CommandDocumentation?>());
+        _stubParserService.DidNotReceive().ShowUsageInformation(Arg.Any<string>());
+        await _commandT.DidNotReceive().Execute();
+    }
+
+    [Fact]
+    public async Task CommandParser_ParseAndValidateAsync_HelpInCommandLayer_OK()
+    {
+        IArgumentValue argumentValue = Substitute.For<IArgumentValue>();
+        argumentValue.GetValue<string>(Arg.Is(0)).Returns("t");
+
+        _stubParserService.GetArgumentValue(Arg.Any<ICommandArgument>()).Returns(argumentValue);
+        _commandTArgValue.IsHelpRequested.Returns(true);
+
+        var commandParser = new CommandParser(_stubParserService, _commandList);
+
+        await commandParser.ParseAndValidateAsync("Demo.exe");
+
+        _stubParserService.Received(1).ShowCommandUsageInformation("Demo.exe", _commandArgument, _commandTArgValue,
+            Arg.Any<CommandDocumentation?>());
+        await _commandT.DidNotReceive().Execute();
+    }
+
+    [Fact]
+    public async Task CommandParser_ParseAndValidateAsync_HelpWithoutCommand_OK()
+    {
+        _stubParserService.IsHelpRequested.Returns(true);
+        _stubParserService.IsArgumentUsed(Arg.Any<ICommandArgument>()).Returns(false);
+
+        var commandParser = new CommandParser(_stubParserService, _commandList);
+
+        await commandParser.ParseAndValidateAsync("Demo.exe");
+
+        _stubParserService.Received(1).ShowUsageInformation("Demo.exe");
+        _stubParserService.DidNotReceive().ShowCommandUsageInformation(Arg.Any<string>(), Arg.Any<IArgument>(),
+            Arg.Any<ICommandArgumentValue>(), Arg.Any<CommandDocumentation?>());
+    }
+
     [Theory]
     [InlineData("z")]
     [InlineData("")]
