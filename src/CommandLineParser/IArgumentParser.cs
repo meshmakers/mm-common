@@ -15,10 +15,11 @@ public interface IArgumentParser
         bool isMandatoryArgument);
 
     /// <summary>
-    ///     Declares the implicit help flag (<c>--help</c>, <c>-?</c>, and <c>-h</c> unless the layer declares
-    ///     <c>-h</c> itself) for this layer. The flag is not part of the declared arguments: it never shadows an
-    ///     argument of the same term and is not listed in the usage output. Calling this more than once returns
-    ///     the flag declared by the first call.
+    ///     Declares the implicit help flag for this layer. It is spelled <c>help</c>, <c>h</c> or <c>?</c>, each
+    ///     accepted with the <c>-</c>, <c>--</c> and <c>/</c> prefix the parser uses for arguments — except that
+    ///     <c>-h</c> and its variants lose to a layer declaring <c>h</c> itself. The flag is not part of the
+    ///     declared arguments: it never shadows an argument of the same term and is not listed in the usage
+    ///     output. Calling this more than once returns the flag declared by the first call.
     /// </summary>
     /// <returns>The help argument definition.</returns>
     IArgument AddHelpArgument();
