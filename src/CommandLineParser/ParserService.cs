@@ -175,18 +175,19 @@ public class ParserService : ArgumentParser, IParserService
 
         commandArgumentValue.ShowLayerUsage(Constants.TabCount, _consoleService);
 
-        ShowSamples(applicationExeName,
+        var samplesShown = ShowSamples(applicationExeName,
             _sampleList.Where(x => string.Equals(x.CommandValue, commandArgumentValue.Value,
                 StringComparison.OrdinalIgnoreCase)));
-        ShowNotes(documentation?.Notes);
+        ShowNotes(documentation?.Notes, samplesShown);
     }
 
-    private void ShowSamples(string applicationExeName, IEnumerable<RegisteredSample> samples)
+    /// <returns>True when samples were rendered, which leaves the output ending in an empty line.</returns>
+    private bool ShowSamples(string applicationExeName, IEnumerable<RegisteredSample> samples)
     {
         var sampleList = samples.ToList();
         if (sampleList.Count == 0)
         {
-            return;
+            return false;
         }
 
         _consoleService.WriteLine("");
@@ -199,14 +200,26 @@ public class ParserService : ArgumentParser, IParserService
             _consoleService.WriteLine("  " + entry.Sample.Description);
             _consoleService.WriteLine("");
         }
+
+        return true;
     }
 
-    private void ShowNotes(IEnumerable<string>? notes)
+    /// <param name="notes">The notes to render; nothing is written when there are none.</param>
+    /// <param name="isPrecededByEmptyLine">
+    ///     True when the preceding section already ended in an empty line. The separating line is written here
+    ///     only otherwise, so that the header neither sticks to the argument table nor is separated twice.
+    /// </param>
+    private void ShowNotes(IEnumerable<string>? notes, bool isPrecededByEmptyLine)
     {
         var noteList = notes?.ToList();
         if (noteList == null || noteList.Count == 0)
         {
             return;
+        }
+
+        if (!isPrecededByEmptyLine)
+        {
+            _consoleService.WriteLine("");
         }
 
         _consoleService.WriteLine(UsageNotesHeader);
