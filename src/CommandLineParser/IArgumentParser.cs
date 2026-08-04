@@ -14,6 +14,30 @@ public interface IArgumentParser
     ICommandArgument AddCommandArgument(string shortTerm, string longTerm, string[] description,
         bool isMandatoryArgument);
 
+    /// <summary>
+    ///     Declares the implicit help flag for this layer. It is spelled <c>help</c>, <c>h</c> or <c>?</c>, each
+    ///     accepted with the <c>-</c>, <c>--</c> and <c>/</c> prefix the parser uses for arguments — except that
+    ///     <c>-h</c> and its variants lose to a layer declaring <c>h</c> itself. The flag is not part of the
+    ///     declared arguments: it never shadows an argument of the same term and is not listed in the usage
+    ///     output. Calling this more than once returns the flag declared by the first call.
+    /// </summary>
+    /// <returns>The help argument definition.</returns>
+    IArgument AddHelpArgument();
+
+    /// <summary>
+    ///     True when the last <see cref="ParseLayer" /> saw the help flag — either in this layer or in a
+    ///     surrounding one. A help request suppresses validation of mandatory arguments and argument values,
+    ///     because help is meant to be reachable from an intentionally incomplete command line.
+    /// </summary>
+    bool IsHelpRequested { get; }
+
+    /// <summary>
+    ///     The words following the help flag, joined by a single space, or null when the flag stood alone.
+    ///     Used to narrow help down to a topic — a command group or a single command — instead of listing
+    ///     everything. Collection stops at the next argument, so <c>--help -c foo</c> yields no topic.
+    /// </summary>
+    string? HelpTopic { get; }
+
     IArgument AddArgument(string shortTerm, string longTerm, string[] description);
     IArgument AddArgument(string shortTerm, string longTerm, string[] description, int mandatoryValuesCount);
     IArgument AddArgument(string shortTerm, string longTerm, string[] description, bool isMandatoryArgument);

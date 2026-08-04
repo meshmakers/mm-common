@@ -66,7 +66,7 @@ internal class Argument : IArgument
     /// </summary>
     /// <param name="value">String</param>
     /// <returns></returns>
-    public bool Compare(string value)
+    public virtual bool Compare(string value)
     {
         ArgumentValidation.ValidateString(nameof(value), value);
 

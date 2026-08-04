@@ -220,6 +220,97 @@ public class ParserServiceTests
     }
 
     [Fact]
+    public void ShowCommandUsageInformation_RendersOnlyOwnSamples_OK()
+    {
+        var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
+        var commandArgument =
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], true);
+
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
+        var argumentA = firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1);
+        commandArgument.AddCommandValue(firstCommandArgumentValue);
+
+        var secondCommandArgumentValue = new CommandArgumentValue("g", "second", "second command");
+        var argumentB = secondCommandArgumentValue.AddArgument("b", "bLongTerm", ["test b"], true, 1);
+        commandArgument.AddCommandValue(secondCommandArgumentValue);
+
+        commandLineParserService.AddSample(commandArgument, "first",
+            new CodeSample([new CodeSampleArgument(argumentA, "valueA")], "first sample"));
+        commandLineParserService.AddSample(commandArgument, "second",
+            new CodeSample([new CodeSampleArgument(argumentB, "valueB")], "second sample"));
+
+        commandLineParserService.ShowCommandUsageInformation("my.exe", commandArgument,
+            firstCommandArgumentValue, new CommandDocumentation(Notes: ["a note"]));
+
+        _stubIConsoleService.Received().WriteLine("my.exe -c first -a \"valueA\"");
+        _stubIConsoleService.DidNotReceive().WriteLine("my.exe -c second -b \"valueB\"");
+        _stubIConsoleService.Received().WriteLine("NOTES");
+        _stubIConsoleService.Received().WriteLineRegardSpace("- a note");
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ShowCommandUsageInformation_SeparatesNotesByASingleEmptyLine_OK(bool withSample)
+    {
+        var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
+        var commandArgument =
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], true);
+
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
+        var argumentA = firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1);
+        commandArgument.AddCommandValue(firstCommandArgumentValue);
+
+        if (withSample)
+        {
+            commandLineParserService.AddSample(commandArgument, "first",
+                new CodeSample([new CodeSampleArgument(argumentA, "valueA")], "first sample"));
+        }
+
+        commandLineParserService.ShowCommandUsageInformation("my.exe", commandArgument,
+            firstCommandArgumentValue, new CommandDocumentation(Notes: ["a note"]));
+
+        // Samples end in an empty line, the argument table does not, so the separating line before the
+        // header comes from either the sample block or the notes block - never from both.
+        var writtenLines = GetWrittenLines();
+        var notesIndex = writtenLines.IndexOf("WriteLine:NOTES");
+        Assert.True(notesIndex > 1, "The NOTES header is expected after at least two other lines.");
+        Assert.Equal("WriteLine:", writtenLines[notesIndex - 1]);
+        Assert.NotEqual("WriteLine:", writtenLines[notesIndex - 2]);
+    }
+
+    /// <summary>
+    ///     Returns every line written to the console in order, as "method:firstArgument", so that empty lines
+    ///     can be told apart from lines written by another method.
+    /// </summary>
+    private List<string> GetWrittenLines()
+    {
+        return _stubIConsoleService.ReceivedCalls()
+            .Select(x => $"{x.GetMethodInfo().Name}:{x.GetArguments().FirstOrDefault()}")
+            .ToList();
+    }
+
+    [Fact]
+    public void ShowCommandUsageInformation_WithoutDocumentation_OK()
+    {
+        var commandLineParserService = new ParserService(_stubIEnvironmentService, _stubIConsoleService);
+        var commandArgument =
+            commandLineParserService.AddCommandArgument("c", "command", ["test command"], true);
+
+        var firstCommandArgumentValue = new CommandArgumentValue("g", "first", "first command");
+        firstCommandArgumentValue.AddArgument("a", "aLongTerm", ["test a"], true, 1);
+        commandArgument.AddCommandValue(firstCommandArgumentValue);
+
+        commandLineParserService.ShowCommandUsageInformation("my.exe", commandArgument,
+            firstCommandArgumentValue, null);
+
+        _stubIConsoleService.Received().WriteColumnLine("  --aLongTerm (-a)", Arg.Any<int>(),
+            "Required. test a");
+        _stubIConsoleService.DidNotReceive().WriteLine("SAMPLES");
+        _stubIConsoleService.DidNotReceive().WriteLine("NOTES");
+    }
+
+    [Fact]
     public void ParseAndValidate_Arguments_StartsWithSameCharacters_OK()
     {
         _stubIEnvironmentService.GetCommandLineArgs().Returns(["my.exe", "-c", "first", "-b", "-s"]);

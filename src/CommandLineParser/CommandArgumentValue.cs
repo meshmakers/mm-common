@@ -2,12 +2,22 @@
 
 namespace Meshmakers.Common.CommandLineParser;
 
-public class CommandArgumentValue(string commandGroup, string commandValue, string commandDescription)
-    : ArgumentParser, ICommandArgumentValue
+public class CommandArgumentValue : ArgumentParser, ICommandArgumentValue
 {
-    public string Group { get; } = commandGroup;
-    public string Value { get; } = commandValue;
-    public string Description { get; } = commandDescription;
+    public CommandArgumentValue(string commandGroup, string commandValue, string commandDescription)
+    {
+        Group = commandGroup;
+        Value = commandValue;
+        Description = commandDescription;
+
+        // Every command understands the help flag, so "-c <command> --help" can show the help of that
+        // single command instead of the full usage of the tool.
+        AddHelpArgument();
+    }
+
+    public string Group { get; }
+    public string Value { get; }
+    public string Description { get; }
 
     /// <summary>
     ///     Compares a string to the short and long parameter value

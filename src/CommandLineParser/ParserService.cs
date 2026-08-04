@@ -13,8 +13,11 @@ namespace Meshmakers.Common.CommandLineParser;
 public class ParserService : ArgumentParser, IParserService
 {
     private const string UsageSamplesHeader = "SAMPLES";
+    private const string UsageNotesHeader = "NOTES";
     private const string UsageNameHeader = "ARGUMENT NAME";
     private const string UsageDescriptionHeader = "DESCRIPTION";
+    private const string UsageGroupHeader = "COMMAND GROUP";
+    private const string UsageCommandCountHeader = "COMMANDS";
     private readonly IConsoleService _consoleService;
 
     private readonly IEnvironmentService _environmentService;
@@ -71,24 +74,163 @@ public class ParserService : ArgumentParser, IParserService
             "arguments can be given in any order):");
         _consoleService.WriteLineRegardSpace(
             $"{applicationExeName} [-[shortTerm] or [/ or --][longTerm] [argument value]] ...");
+
+        if (CommandArgument != null)
+        {
+            _consoleService.WriteLineRegardSpace(
+                "Add --help (-?) to a single command to show only the help of that command, for example: " +
+                $"{applicationExeName} -{CommandArgument.ShortTerm} <command> --help");
+            _consoleService.WriteLineRegardSpace(
+                $"Run '{applicationExeName} --help' for the command groups, " +
+                $"'{applicationExeName} --help <group>' for the commands of one group.");
+        }
+
         _consoleService.WriteLine("");
         _consoleService.WriteColumnLine(UsageNameHeader, Constants.UsageNameLength, UsageDescriptionHeader);
 
         ShowLayerUsage(0, _consoleService);
 
-        if (_sampleList.Any())
+        ShowSamples(applicationExeName, _sampleList);
+    }
+
+    /// <inheritdoc />
+    public void ShowGroupOverviewInformation(string applicationExeName, ICommandArgument commandArgument)
+    {
+        ArgumentValidation.ValidateString(nameof(applicationExeName), applicationExeName);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+
+        var groups = commandArgument.CommandValues
+            .GroupBy(x => x.Group)
+            .OrderBy(x => x.Key)
+            .ToList();
+
+        _consoleService.WriteLineRegardSpace(
+            $"{applicationExeName} groups its commands by topic. Pick a group to see its commands:");
+        _consoleService.WriteLine("");
+        _consoleService.WriteColumnLine(UsageGroupHeader, Constants.UsageNameLength, UsageCommandCountHeader);
+
+        var prefix = "".PadRight(Constants.TabCount);
+        foreach (var group in groups)
+        {
+            _consoleService.WriteColumnLine($"{prefix}{group.Key}", Constants.UsageNameLength,
+                group.Count().ToString());
+        }
+
+        _consoleService.WriteLine("");
+        _consoleService.WriteLineRegardSpace(
+            $"Run '{applicationExeName} --help <group>' for the commands of a group, " +
+            $"'{applicationExeName} -{commandArgument.ShortTerm} <command> --help' for a single command, " +
+            $"'{applicationExeName} --help {Constants.AllCommandsHelpTopic}' for every command with all arguments.");
+    }
+
+    /// <inheritdoc />
+    public void ShowGroupUsageInformation(string applicationExeName, ICommandArgument commandArgument,
+        string groupName, string? shadowedCommandValue)
+    {
+        ArgumentValidation.ValidateString(nameof(applicationExeName), applicationExeName);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+        ArgumentValidation.ValidateString(nameof(groupName), groupName);
+
+        var commandCount = commandArgument.CommandValues
+            .Count(x => string.Equals(x.Group, groupName, StringComparison.OrdinalIgnoreCase));
+
+        _consoleService.WriteLineRegardSpace(
+            $"Commands of group '{groupName}' ({commandCount}):");
+
+        commandArgument.ShowGroupUsage(0, _consoleService, groupName, false);
+
+        _consoleService.WriteLine("");
+        _consoleService.WriteLineRegardSpace(
+            $"Run '{applicationExeName} -{commandArgument.ShortTerm} <command> --help' for the arguments of a " +
+            "single command.");
+
+        if (shadowedCommandValue != null)
+        {
+            _consoleService.WriteLineRegardSpace(
+                $"Note: '{shadowedCommandValue}' is also a command — run " +
+                $"'{applicationExeName} -{commandArgument.ShortTerm} {shadowedCommandValue} --help' for its help.");
+        }
+    }
+
+    /// <inheritdoc />
+    public void ShowCommandUsageInformation(string applicationExeName, IArgument commandArgument,
+        ICommandArgumentValue commandArgumentValue, CommandDocumentation? documentation)
+    {
+        ArgumentValidation.ValidateString(nameof(applicationExeName), applicationExeName);
+        ArgumentValidation.Validate(nameof(commandArgument), commandArgument);
+        ArgumentValidation.Validate(nameof(commandArgumentValue), commandArgumentValue);
+
+        _consoleService.WriteLineRegardSpace(
+            $"Usage of command '{commandArgumentValue.Value}' (argument names case insensitive, " +
+            "arguments can be given in any order):");
+        _consoleService.WriteLineRegardSpace(
+            $"{applicationExeName} -{commandArgument.ShortTerm} {commandArgumentValue.Value} " +
+            "[-[shortTerm] or [/ or --][longTerm] [argument value]] ...");
+        _consoleService.WriteLine("");
+        _consoleService.WriteLine(commandArgumentValue.Group.ToUpper());
+        _consoleService.WriteLine("");
+        _consoleService.WriteLineRegardSpace(commandArgumentValue.Description);
+        _consoleService.WriteLine("");
+        _consoleService.WriteColumnLine(UsageNameHeader, Constants.UsageNameLength, UsageDescriptionHeader);
+
+        commandArgumentValue.ShowLayerUsage(Constants.TabCount, _consoleService);
+
+        var samplesShown = ShowSamples(applicationExeName,
+            _sampleList.Where(x => string.Equals(x.CommandValue, commandArgumentValue.Value,
+                StringComparison.OrdinalIgnoreCase)));
+        ShowNotes(documentation?.Notes, samplesShown);
+    }
+
+    /// <returns>True when samples were rendered, which leaves the output ending in an empty line.</returns>
+    private bool ShowSamples(string applicationExeName, IEnumerable<RegisteredSample> samples)
+    {
+        var sampleList = samples.ToList();
+        if (sampleList.Count == 0)
+        {
+            return false;
+        }
+
+        _consoleService.WriteLine("");
+        _consoleService.WriteLine(UsageSamplesHeader);
+        _consoleService.WriteLine("");
+
+        foreach (var entry in sampleList)
+        {
+            _consoleService.WriteLine(ComposeInvocation(applicationExeName, entry));
+            _consoleService.WriteLine("  " + entry.Sample.Description);
+            _consoleService.WriteLine("");
+        }
+
+        return true;
+    }
+
+    /// <param name="notes">The notes to render; nothing is written when there are none.</param>
+    /// <param name="isPrecededByEmptyLine">
+    ///     True when the preceding section already ended in an empty line. The separating line is written here
+    ///     only otherwise, so that the header neither sticks to the argument table nor is separated twice.
+    /// </param>
+    private void ShowNotes(IEnumerable<string>? notes, bool isPrecededByEmptyLine)
+    {
+        var noteList = notes?.ToList();
+        if (noteList == null || noteList.Count == 0)
+        {
+            return;
+        }
+
+        if (!isPrecededByEmptyLine)
         {
             _consoleService.WriteLine("");
-            _consoleService.WriteLine(UsageSamplesHeader);
-            _consoleService.WriteLine("");
-
-            foreach (var entry in _sampleList)
-            {
-                _consoleService.WriteLine(ComposeInvocation(applicationExeName, entry));
-                _consoleService.WriteLine("  " + entry.Sample.Description);
-                _consoleService.WriteLine("");
-            }
         }
+
+        _consoleService.WriteLine(UsageNotesHeader);
+        _consoleService.WriteLine("");
+
+        foreach (var note in noteList)
+        {
+            _consoleService.WriteLineRegardSpace($"- {note}");
+        }
+
+        _consoleService.WriteLine("");
     }
 
     private static string ComposeInvocation(string applicationExeName, RegisteredSample entry)
