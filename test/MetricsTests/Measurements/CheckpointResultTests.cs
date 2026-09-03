@@ -23,7 +23,7 @@ public class CheckpointResultTests
     public async Task Add()
     {
         var result = new CheckpointResult(RuntimeHelper.CreateCheckpoint());
-        await Task.Delay(10);
+        await Task.Delay(10, TestContext.Current.CancellationToken);
         result.Add(RuntimeHelper.CreateCheckpoint(delta: RuntimeHelper.DefaultDelta * 10,
             total: RuntimeHelper.DefaultTotal * 10));
 

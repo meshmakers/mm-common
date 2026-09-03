@@ -6,8 +6,7 @@
         <PackageId>Meshmakers.Common.Shared</PackageId>
         <RootNamespace>Meshmakers.Common.Shared</RootNamespace>
         <SignAssembly>false</SignAssembly>
-        <TargetFrameworks>net8.0;net9.0;netstandard2.0</TargetFrameworks>
-        <TargetFramework />
+        <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
         <Configurations>Debug;Release;DebugL</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>

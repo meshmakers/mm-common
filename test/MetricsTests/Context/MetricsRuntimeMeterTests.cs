@@ -40,7 +40,7 @@ public class MetricsRuntimeMeterTests
 
         while (metrics.GetRuntimeNames().Any())
         {
-            await Task.Delay(1);
+            await Task.Delay(1, TestContext.Current.CancellationToken);
         }
 
         Assert.Empty(metrics.GetRuntimeNames());

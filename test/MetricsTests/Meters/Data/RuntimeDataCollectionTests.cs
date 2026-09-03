@@ -41,7 +41,7 @@ public class RuntimeDataCollectionTests
     {
         var collection = new RuntimeDataCollection();
         await Task.WhenAll(new Task[100].Select(_ => AddAndPop(collection)));
-        await Task.Delay(1);
+        await Task.Delay(1, TestContext.Current.CancellationToken);
         Assert.Empty(collection.GetNames());
     }
 

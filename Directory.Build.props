@@ -12,7 +12,7 @@
         <PackageTags>Octo data mesh iot</PackageTags>
         <PackageVersion Condition="'$(Configuration)'=='DebugL'">999.0.0</PackageVersion>
         <Version Condition="'$(Configuration)'=='DebugL'">999.0.0</Version>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <TargetFrameworks>net10.0</TargetFrameworks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'DebugL' ">
         <DebugSymbols>true</DebugSymbols>

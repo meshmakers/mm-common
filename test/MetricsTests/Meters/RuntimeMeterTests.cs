@@ -17,7 +17,7 @@ public class RuntimeMeterTest
         RuntimeHelper.Simulate(meter);
         while (checkpoints.Count < 3)
         {
-            await Task.Delay(10);
+            await Task.Delay(10, TestContext.Current.CancellationToken);
         }
 
         Assert.Equal(3, checkpoints.Count);
@@ -39,7 +39,7 @@ public class RuntimeMeterTest
         Assert.Empty(checkpoints);
 
         meter.Start();
-        await Task.Delay(10);
+        await Task.Delay(10, TestContext.Current.CancellationToken);
         Assert.True(meter.IsRunning());
         Assert.Equal(2, checkpoints.Count);
     }
@@ -69,7 +69,7 @@ public class RuntimeMeterTest
         meter.Stop();
         while (checkpointsArgs is null)
         {
-            await Task.Delay(10);
+            await Task.Delay(10, TestContext.Current.CancellationToken);
         }
 
         Assert.Equal(RuntimeHelper.DefaultRuntimeName, checkpointsArgs.Name);
