@@ -1,4 +1,12 @@
 <Project>
+    <!-- Local lane hook (AB#4924): import <lane>/Octo.User.props when a checkout has one, like the other
+         OctoMesh repos. It sets RestorePackagesPath=<lane>/.nuget-packages so this repo never extracts
+         the lane's 999.0.0 packages into the shared ~/.nuget/packages that the other lane writes too.
+         Uncommitted, per checkout; absent in CI, where this is a no-op. -->
+    <PropertyGroup>
+        <OctoUserPropsFilePath>$([MSBuild]::GetPathOfFileAbove('Octo.User.props', '$(MSBuildThisFileDirectory)'))</OctoUserPropsFilePath>
+    </PropertyGroup>
+    <Import Condition="'$(OctoUserPropsFilePath)'!='' And Exists('$(OctoUserPropsFilePath)')" Project="$(OctoUserPropsFilePath)"/>
     <PropertyGroup>
         <LangVersion>latestmajor</LangVersion>
         <Nullable>enable</Nullable>
