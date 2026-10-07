@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Meshmakers.Common.Observability</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <PackageId>Meshmakers.Common.Observability</PackageId>
+        <RootNamespace>Meshmakers.Common.Observability</RootNamespace>
+        <SignAssembly>false</SignAssembly>
+        <Configurations>Debug;Release;DebugL</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <Description>NLog layout renderers that expose OpenTelemetry trace context, for correlating log records with traces.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Meshmakers.Common.ObservabilityTests" />
+    </ItemGroup>
+
+    <!--
+        NLog is the only dependency, and System.Diagnostics is in-box. That is the whole point of
+        this package existing instead of the renderers living in Meshmakers.Common.Shared: Shared
+        is in the dependency graph of effectively every project in the estate and carries three
+        tiny references today, so adding NLog there would push it onto every consumer for the sake
+        of two layout renderers.
+    -->
+    <ItemGroup>
+        <PackageReference Include="NLog" Version="6.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>LICENSE</Link>
+        </None>
+        <None Include="..\..\assets\meshmakers64.png">
+            <Pack>True</Pack>
+            <PackagePath />
+            <Link>meshmakers64.png</Link>
+        </None>
+    </ItemGroup>
+
+</Project>
