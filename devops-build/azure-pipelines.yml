@@ -5,6 +5,16 @@
 
 name: $(MajorVersion).$(MinorVersion).$(date:yyMM).$(DayOfMonth)$(rev:rrr)
 
+resources:
+  repositories:
+    # Only for the redundant-run guard (AB#6439); the other steps still use the local templates of
+    # this folder until AB#6394 moves the repo to the shared step templates.
+    - repository: pipelineTemplates
+      type: github
+      name: meshmakers/octo-pipeline-templates
+      endpoint: meshmakers-access-token
+      ref: refs/tags/tpl-v1.4.0
+
 trigger:
   batch: true
   branches:
@@ -35,6 +45,13 @@ variables:
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/main') }}
 
 steps:
+# Redundant-run guard (AB#6439, AB#6344): mm-common is the root of the library chain. The guard publishes this
+# run's own input fingerprint as the build tag inputs:<hash> = sha256(own commit | 'root'); DEH reads it as the
+# parent fingerprint, so the whole chain below gets identical fingerprints for identical inputs across waves.
+# Mode by the pipeline variable CiGuardMode (unset = report: tags only; cancel = a duplicate or superseded
+# main run cancels itself; off = disabled). Fail-open, main only. No later step needs a condition in
+# report / cancel mode.
+- template: templates/steps/guard-redundant-run.yml@pipelineTemplates
 - template: update-build-number.yml
 - template: set-version.yml
 - task: DotNetCoreCLI@2
