@@ -44,6 +44,35 @@ public class RuntimeResult
         cpResult.Add(checkpoint);
     }
 
+    /// <summary>
+    ///     Folds another, already aggregated result into this one (AB#7010): the counterpart of
+    ///     <see cref="Add" /> for callers that must not keep the individual checkpoints.
+    /// </summary>
+    internal void Merge(RuntimeResult other)
+    {
+        foreach (var otherResult in other._checkpointResults)
+        {
+            var cpResult = _checkpointResults.Find(cp => cp.Name.Equals(otherResult.Name));
+            if (cpResult == null)
+            {
+                cpResult = new CheckpointResult(otherResult.Name);
+                _checkpointResults.Add(cpResult);
+            }
+
+            cpResult.Merge(otherResult);
+        }
+    }
+
+    /// <summary>
+    ///     An independent copy: later changes to this result do not show in the copy.
+    /// </summary>
+    internal RuntimeResult Snapshot()
+    {
+        var copy = new RuntimeResult(Name);
+        copy.Merge(this);
+        return copy;
+    }
+
     public bool IsValid()
     {
         return _checkpointResults.Count > 0;

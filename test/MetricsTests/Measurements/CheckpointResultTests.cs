@@ -86,4 +86,52 @@ public class CheckpointResultTests
         result.Add(RuntimeHelper.CreateCheckpoint(delta: max, total: max));
         return result;
     }
+
+    [Fact]
+    public async Task Merge_EqualsAddingTheCheckpointsOneByOne()
+    {
+        var left = new CheckpointResult(RuntimeHelper.CreateCheckpoint(delta: 10, total: 30));
+        left.Add(RuntimeHelper.CreateCheckpoint(delta: 20, total: 40));
+        await Task.Delay(10, TestContext.Current.CancellationToken);
+        var right = new CheckpointResult(RuntimeHelper.CreateCheckpoint(delta: 5, total: 100));
+        right.Add(RuntimeHelper.CreateCheckpoint(delta: 25, total: 50));
+
+        var expected = new CheckpointResult(RuntimeHelper.CreateCheckpoint(delta: 10, total: 30));
+        expected.Add(RuntimeHelper.CreateCheckpoint(delta: 20, total: 40));
+        expected.Add(RuntimeHelper.CreateCheckpoint(delta: 5, total: 100));
+        expected.Add(RuntimeHelper.CreateCheckpoint(delta: 25, total: 50));
+
+        left.Merge(right);
+
+        Assert.Equal(4, left.Calls);
+        Assert.Equal(expected.MinOfDeltaInMs, left.MinOfDeltaInMs);
+        Assert.Equal(expected.MaxOfDeltaInMs, left.MaxOfDeltaInMs);
+        Assert.Equal(expected.MinOfTotalInMs, left.MinOfTotalInMs);
+        Assert.Equal(expected.MaxOfTotalInMs, left.MaxOfTotalInMs);
+        // 15 = (10 + 20 + 5 + 25) / 4 and 55 = (30 + 40 + 100 + 50) / 4; the weighted mean is exact here.
+        Assert.Equal(15, left.AvgOfDeltaInMs);
+        Assert.Equal(55, left.AvgOfTotalInMs);
+        Assert.True(left.FirstStart < left.LastStop);
+    }
+
+    [Fact]
+    public void Merge_IntoAnEmptyResultCopiesTheOther()
+    {
+        var empty = new CheckpointResult(RuntimeHelper.DefaultCheckpointName);
+        var other = new CheckpointResult(RuntimeHelper.CreateCheckpoint(delta: 7, total: 9));
+
+        empty.Merge(other);
+
+        Assert.Equal(1, empty.Calls);
+        Assert.Equal(7, empty.MinOfDeltaInMs);
+        Assert.Equal(9, empty.MaxOfTotalInMs);
+    }
+
+    [Fact]
+    public void Merge_InvalidName()
+    {
+        var result = new CheckpointResult(RuntimeHelper.CreateCheckpoint());
+        var other = new CheckpointResult(RuntimeHelper.CreateCheckpoint("Other"));
+        Assert.Throws<MeasurementException>(() => result.Merge(other));
+    }
 }

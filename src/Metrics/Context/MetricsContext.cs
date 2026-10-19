@@ -43,8 +43,7 @@ public class MetricsContext : IMetricsContext
     {
         try
         {
-            var data = _runtimeDataCollection.GetByName(name);
-            return new RuntimeResult(name, data);
+            return _runtimeDataCollection.GetByName(name);
         }
         catch (MeterException)
         {
@@ -56,8 +55,7 @@ public class MetricsContext : IMetricsContext
     {
         try
         {
-            var data = _runtimeDataCollection.PopByName(name);
-            return new RuntimeResult(name, data);
+            return _runtimeDataCollection.PopByName(name);
         }
         catch (MeterException)
         {
