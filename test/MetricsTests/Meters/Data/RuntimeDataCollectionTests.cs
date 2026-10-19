@@ -79,28 +79,42 @@ public class RuntimeDataCollectionTests
         return new WeakReference(checkpoint);
     }
 
+    /// <summary>
+    ///     Structural bound instead of a heap-size measurement (which depends on agent, GC mode and parallel
+    ///     tests): none of the checkpoints of many aggregated runs may stay reachable, yet every run is counted.
+    /// </summary>
     [Fact]
-    public void Add_ManyRuns_KeepsTheMemoryBoundedAndCountsEveryRun()
+    public void Add_ManyRuns_RetainsNoneOfTheirCheckpointsAndCountsEveryRun()
     {
-        const int runs = 200_000;
+        const int runs = 2_000;
         var collection = new RuntimeDataCollection();
-        for (var i = 0; i < 50_000; i++)
-        {
-            collection.Add(RuntimeHelper.RuntimeName(1), RuntimeHelper.CreateRuntimeData(2));
-        }
 
-        var before = LiveBytes();
+        var tracked = AddRunsAndTrackTheirCheckpoints(collection, runs);
 
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        var retained = tracked.Count(w => w.IsAlive);
+        Assert.True(retained == 0, $"{retained} of {tracked.Length} checkpoints are still reachable from the collection");
+        Assert.Equal(runs, collection.GetByName(RuntimeHelper.RuntimeName(1)).Runs);
+        GC.KeepAlive(collection);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static WeakReference[] AddRunsAndTrackTheirCheckpoints(RuntimeDataCollection collection, int runs)
+    {
+        var tracked = new WeakReference[runs * 2];
         for (var i = 0; i < runs; i++)
         {
-            collection.Add(RuntimeHelper.RuntimeName(1), RuntimeHelper.CreateRuntimeData(2));
+            var start = new Checkpoint(Checkpoint.StartName, 0, 0);
+            var stop = new Checkpoint(Checkpoint.StopName, 1, 1);
+            collection.Add(RuntimeHelper.RuntimeName(1), new RuntimeData([start, stop]));
+            tracked[i * 2] = new WeakReference(start);
+            tracked[i * 2 + 1] = new WeakReference(stop);
         }
 
-        var growth = LiveBytes() - before;
-
-        // 200 000 runs of four checkpoints retained about 45 MB; the aggregate is a few hundred bytes.
-        Assert.True(growth < 256 * 1024, $"the collection grew by {growth} bytes for {runs} runs");
-        Assert.Equal(runs + 50_000, collection.GetByName(RuntimeHelper.RuntimeName(1)).Runs);
+        return tracked;
     }
 
     [Fact]
@@ -181,14 +195,6 @@ public class RuntimeDataCollectionTests
 
         Assert.Equal(3, result.Runs);
         Assert.Empty(collection.GetNames());
-    }
-
-    private static long LiveBytes()
-    {
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        GC.Collect();
-        return GC.GetTotalMemory(true);
     }
 
     private static Task<int> AddAndPop(RuntimeDataCollection collection)
