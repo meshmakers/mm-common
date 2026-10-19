@@ -70,6 +70,57 @@ public class CheckpointResult
         Calls++;
     }
 
+    /// <summary>
+    ///     Folds another aggregate of the same checkpoint into this one. Used to combine pre-aggregated
+    ///     runs without keeping the individual <see cref="Checkpoint" /> objects (AB#7010).
+    /// </summary>
+    /// <remarks>
+    ///     Min, max and the first/last timestamps are exact. The average is the call-weighted mean of
+    ///     both sides, which differs from folding the raw checkpoints one by one only by the integer
+    ///     rounding of the incremental formula.
+    /// </remarks>
+    internal void Merge(CheckpointResult other)
+    {
+        if (!Name.Equals(other.Name))
+        {
+            throw new MeasurementException($"The data does not fit (Expected: '{Name}', Given: '{other.Name}')");
+        }
+
+        if (other.Calls == 0)
+        {
+            return;
+        }
+
+        if (Calls == 0)
+        {
+            MinOfDeltaInMs = other.MinOfDeltaInMs;
+            MaxOfDeltaInMs = other.MaxOfDeltaInMs;
+            AvgOfDeltaInMs = other.AvgOfDeltaInMs;
+            MinOfTotalInMs = other.MinOfTotalInMs;
+            MaxOfTotalInMs = other.MaxOfTotalInMs;
+            AvgOfTotalInMs = other.AvgOfTotalInMs;
+            _firstStart = other._firstStart;
+            _lastStop = other._lastStop;
+            Calls = other.Calls;
+            return;
+        }
+
+        MinOfDeltaInMs = Math.Min(MinOfDeltaInMs, other.MinOfDeltaInMs);
+        MaxOfDeltaInMs = Math.Max(MaxOfDeltaInMs, other.MaxOfDeltaInMs);
+        MinOfTotalInMs = Math.Min(MinOfTotalInMs, other.MinOfTotalInMs);
+        MaxOfTotalInMs = Math.Max(MaxOfTotalInMs, other.MaxOfTotalInMs);
+        AvgOfDeltaInMs = WeightedAvg(AvgOfDeltaInMs, Calls, other.AvgOfDeltaInMs, other.Calls);
+        AvgOfTotalInMs = WeightedAvg(AvgOfTotalInMs, Calls, other.AvgOfTotalInMs, other.Calls);
+        _firstStart = _firstStart <= other._firstStart ? _firstStart : other._firstStart;
+        _lastStop = _lastStop >= other._lastStop ? _lastStop : other._lastStop;
+        Calls += other.Calls;
+    }
+
+    private static long WeightedAvg(long avgA, int callsA, long avgB, int callsB)
+    {
+        return (avgA * callsA + avgB * callsB) / ((long)callsA + callsB);
+    }
+
     private void CalcMinOfDelta(Checkpoint checkpoint)
     {
         if (Calls > 0 && checkpoint.DeltaMilliseconds >= MinOfDeltaInMs)
