@@ -21,6 +21,15 @@ trigger:
     include:
       - dev/*
       - main
+  # Docs-only commits must not start CI (AB#5719). Excluded paths are
+  # never consumed by the build; a root README.md change reaches the
+  # packed NuGet readme with the next code commit.
+  paths:
+    exclude:
+      - '**/*.md'
+      - '*.md'
+      - '.claude/'
+      - 'docs/'
   tags:
     exclude:
       - '*'
