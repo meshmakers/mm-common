@@ -24,7 +24,7 @@
         of two layout renderers.
     -->
     <ItemGroup>
-        <PackageReference Include="NLog" Version="6.2.0" />
+        <PackageReference Include="NLog" Version="6.2.2" />
     </ItemGroup>
 
     <ItemGroup>
