@@ -17,5 +17,7 @@ It used to append every checkpoint of every run to a `ConcurrentBag` until someb
 adapter (about 4000 pipeline executions per hour) retained 1.6 GiB of managed heap in three days
 (gen2 22 -> 1663 MiB, LOH 27 -> 429 MiB), found with `dotnet-gcdump`: `Checkpoint` objects and their bag arrays.
 
-A new collection in a hot path must say how it is bounded, and needs a test that adds many runs and asserts the heap
-(or a `WeakReference` to a run's object) does not grow. See `RuntimeDataCollectionTests`.
+A new collection in a hot path must say how it is bounded, and needs a test that adds many runs,
+tracks (e.g. with a `WeakReference`) **every** object the collection could retain from each run, not one sample, forces
+a collection and asserts that none of them is still reachable. A single `WeakReference` can pass while another object
+of every run stays referenced. See `RuntimeDataCollectionTests`.

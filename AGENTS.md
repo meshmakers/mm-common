@@ -38,18 +38,19 @@ dotnet test Meshmakers.Common.sln -c DebugL
 1. `dotnet build Meshmakers.Common.sln -c DebugL` with 0 warnings: nullable is on and warnings are errors
    (`Directory.Build.props`).
 2. `dotnet test Meshmakers.Common.sln -c DebugL`: all five test projects green.
-3. Changed behaviour of a library: update its paragraph in `README.md` in the same commit.
+3. Changed behaviour of a library: update `README.md` (package list) and the package's own README where there is one
+   (`src/Metrics/README.md`) in the same commit.
 4. Touched `AGENTS.md` or a file in `docs/`: `Test-OctoAgentDocs -Fix` (octo-tools) reports 0 errors. It rewrites the
    generated routing table, so run it before you stage.
 
 ## Rules
 
 - **This repository is public.** No work item ids, internal hostnames, customer or tenant names, or secrets in docs
-  and in new or changed code comments and test names; remove an existing one when you touch its line (six `AB#`
+  and in new or changed code comments and test names; remove an existing one when you touch its line (five `AB#`
   comments remain under `src/` and `test/`).
 - **A collection in a hot path is bounded by names, never by runs.** `RuntimeDataCollection` keeps one aggregate per
   meter name (`src/Metrics/Context/RuntimeDataCollection.cs:28`); a new collection says how it is bounded and comes
-  with a test that adds many runs and checks that none stays reachable
+  with a test that tracks the relevant objects of many runs and asserts that none of them stays reachable
   (`RuntimeDataCollectionTests.Add_ManyRuns_RetainsNoneOfTheirCheckpointsAndCountsEveryRun`). Exception: the
   checkpoints of one run live as long as that run (`src/Metrics/Meters/Data/RuntimeData.cs:7`). Detail:
   `docs/metrics-collections.md`.
