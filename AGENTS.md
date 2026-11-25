@@ -21,10 +21,10 @@ them. The repository is public.
 
 ## Build & test
 
-Locally only `-c DebugL` builds: it sets the version `999.0.0` and packs every library into its own `bin/DebugL`
+Build locally with `-c DebugL`: it sets the version `999.0.0` and packs every library into its own `bin/DebugL`
 folder (nothing is copied to a shared feed). The pipeline `devops-build/azure-pipelines.yml` builds and tests with
-`Release`, sets the version from the build number, and pushes the packages (public feed for tags `r*`, private feed
-for `main`).
+`Release`, sets the version from the build number, and publishes the packages (tags `r*` go to the public and the
+private feed, `main` to the private feed; `devops-build/push-nuget-package.yml:15`).
 
 ```bash
 dotnet build Meshmakers.Common.sln -c DebugL
@@ -48,14 +48,17 @@ dotnet test Meshmakers.Common.sln -c DebugL
   and in new or changed code comments and test names; remove an existing one when you touch its line (six `AB#`
   comments remain under `src/` and `test/`).
 - **A collection in a hot path is bounded by names, never by runs.** `RuntimeDataCollection` keeps one aggregate per
-  meter name (`src/Metrics/Context/RuntimeDataCollection.cs:26`); a new collection says how it is bounded and comes
+  meter name (`src/Metrics/Context/RuntimeDataCollection.cs:28`); a new collection says how it is bounded and comes
   with a test that adds many runs and checks that none stays reachable
   (`RuntimeDataCollectionTests.Add_ManyRuns_RetainsNoneOfTheirCheckpointsAndCountsEveryRun`). Exception: the
   checkpoints of one run live as long as that run (`src/Metrics/Meters/Data/RuntimeData.cs:7`). Detail:
   `docs/metrics-collections.md`.
-- **New code builds without warnings, and a warning is fixed, not suppressed** (`Directory.Build.props:6`). Exception:
-  the ReSharper unused-member attributes on public helper classes of `Shared` (`src/Shared/StringExtensions.cs:8`).
+- **New code builds without warnings** (`Directory.Build.props:5`, `TreatWarningsAsErrors`): fix a warning, never add
+  `#pragma warning disable` or `NoWarn` (none exists today). ReSharper inspection suppressions are editor settings,
+  not build warnings, and this rule does not cover them.
 - **New code in `Shared` compiles for `netstandard2.0` and `net10.0`** (`src/Shared/Shared.csproj:9`; the build
   compiles both targets). The other libraries target `net10.0` only.
-- **Internal types are tested through `InternalsVisibleTo` in the library project** (`src/Metrics/Metrics.csproj:14`),
-  not by making them public; a new behaviour gets its test in the matching `test/<Library>Tests` project.
+- **Internal types are tested through `InternalsVisibleTo` in the library project** (`src/Metrics/Metrics.csproj:14`,
+  `src/CommandLineParser/CommandLineParser.csproj:14`, `src/Observability/Observability.csproj:16`), not by making
+  them public (add the entry if the project has none yet; `Shared` and `Configuration` have none). A new behaviour
+  gets its test in the matching `test/<Library>Tests` project.
