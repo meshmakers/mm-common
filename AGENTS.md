@@ -46,8 +46,8 @@ dotnet test Meshmakers.Common.sln -c DebugL
 ## Rules
 
 - **This repository is public.** No work item ids, internal hostnames, customer or tenant names, or secrets in docs
-  and in new or changed code comments and test names; remove an existing one when you touch its line (five `AB#`
-  comments remain under `src/` and `test/`).
+  and in new or changed code comments and test names; remove an existing one when you touch its line (a few
+  existing `AB#` comments remain under `src/` and `test/`).
 - **A collection in a hot path is bounded by names, never by runs.** `RuntimeDataCollection` keeps one aggregate per
   meter name (`src/Metrics/Context/RuntimeDataCollection.cs:28`); a new collection says how it is bounded and comes
   with a test that tracks the relevant objects of many runs and asserts that none of them stays reachable

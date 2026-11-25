@@ -10,12 +10,12 @@ namespace Meshmakers.Common.Metrics.Context;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         🔴 AB#7010: the collection holds an <b>aggregate</b> per name (calls, min, max, average per
+///         🔴 The collection holds an <b>aggregate</b> per name (calls, min, max, average per
 ///         checkpoint), never the individual <see cref="Checkpoint" /> objects of the runs. It used to
 ///         keep every checkpoint of every run in a bag until somebody popped it, and nobody does when no
 ///         publisher is started (<see cref="MetricsContext.InitProvider" /> is not called by any
 ///         service). The engine measures every runtime query with a meter, so a service that queries
-///         often grew without bound: the energyiq mesh adapter on prod-1 retained about 1.6 GiB in
+///         often grew without bound: a production mesh adapter retained about 1.6 GiB in
 ///         three days.
 ///     </para>
 ///     <para>
