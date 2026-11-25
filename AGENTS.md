@@ -53,12 +53,3 @@ dotnet test Meshmakers.Common.sln -c DebugL
   (`RuntimeDataCollectionTests.Add_ManyRuns_RetainsNoneOfTheirCheckpointsAndCountsEveryRun`). Exception: the
   checkpoints of one run live as long as that run (`src/Metrics/Meters/Data/RuntimeData.cs:7`). Detail:
   `docs/metrics-collections.md`.
-- **New code builds without warnings** (`Directory.Build.props:5`, `TreatWarningsAsErrors`): fix a warning, never add
-  `#pragma warning disable` or `NoWarn` (none exists today). ReSharper inspection suppressions are editor settings,
-  not build warnings, and this rule does not cover them.
-- **New code in `Shared` compiles for `netstandard2.0` and `net10.0`** (`src/Shared/Shared.csproj:9`; the build
-  compiles both targets). The other libraries target `net10.0` only.
-- **Internal types are tested through `InternalsVisibleTo` in the library project** (`src/Metrics/Metrics.csproj:14`,
-  `src/CommandLineParser/CommandLineParser.csproj:14`, `src/Observability/Observability.csproj:16`), not by making
-  them public (add the entry if the project has none yet; `Shared` and `Configuration` have none). A new behaviour
-  gets its test in the matching `test/<Library>Tests` project.
